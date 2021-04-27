@@ -4,12 +4,7 @@
 <div>
     <form method="post">
         {% csrf_token %}
-        {{ form.initialDate }}
-        {{ form.finishDate }}
-        <div class="input-field">
-            {{ form.suppliers }}
-        </div>
- 
+        {{ form }} 
         <button class="btn waves-effect waves-light" type="submit" name="action">Get Info
             <i class="material-icons right">send</i>
         </button>

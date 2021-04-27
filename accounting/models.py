@@ -12,7 +12,7 @@ class Supplier(models.Model):
         ("liquorMisc", "Liquor (Misc)"),
         ("labor", "Labor"),
         ("service", "Service"),
-        ("uncategorized", "Uncategorized")
+        ("uncategorized", "Uncategorized"),
     )
     name = models.CharField(max_length=100, unique=True)
     supplierType = models.CharField(max_length=20, choices=TYPE)
@@ -21,7 +21,7 @@ class Supplier(models.Model):
     comments = models.TextField(blank=True)
 
     def __str__(self) -> str:
-        return f"{self.name} ({self.supplierType})"
+        return f"({self.pk}) {self.name} ({self.supplierType})"
 
 
 class Expense(models.Model):
@@ -29,8 +29,11 @@ class Expense(models.Model):
         ("cash", "Cash"),
         ("primaryAccount", "Primary Account"),
         ("expensesAccount", "Expenses Account"),
+        ("notPaid", "Not Paid"),
     )
-    supplier = models.ForeignKey(Supplier, related_name="supplier_name", on_delete=CASCADE)
+    supplier = models.ForeignKey(
+        Supplier, related_name="supplier_name", on_delete=CASCADE
+    )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField()
     costCenter = models.CharField(max_length=20, choices=COST_CENTER)
@@ -40,4 +43,4 @@ class Expense(models.Model):
     comments = models.TextField(blank=True)
 
     def __str__(self) -> str:
-        return f"{self.amount} paid to {self.supplier.name} on {self.date}"
+        return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.costCenter}"

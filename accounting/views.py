@@ -1,9 +1,8 @@
-from django.http import response
 from django.shortcuts import render
 from django.db.models import Sum
 from .models import Supplier, Expense
 from .forms import ExpensesForm
-from datetime import datetime
+from .utils import getExpensesBySupplier, getExpensesBySupplierType, goalsReport
 
 # Create your views here.
 def home(request):
@@ -17,7 +16,7 @@ def home(request):
         results = (
             Expense.objects.values("supplier")
             .filter(date__range=[data["initialDate"], data["finishDate"]])
-            .order_by("supplier")
+            .order_by("supplier__name")
             .annotate(total_amount=Sum("amount"))
         )
 
@@ -28,5 +27,6 @@ def home(request):
 
     else:
         form = ExpensesForm
+        goalsReport("2021-04-05", "2021-04-11")
 
     return render(request, "accounting/home.html", {"form": form})
