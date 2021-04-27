@@ -11,19 +11,24 @@ class ExpensesForm(forms.Form):
         label="Finish Date", widget=forms.widgets.DateInput(attrs={"type": "date"})
     )
 
+    # TODO: Take all of this to __init__
+    supplier_choices = [(None, "-----")]
+    for supplier in Supplier.objects.all().order_by("name"):
+        supplier_choices.append((supplier.pk, supplier.name))
 
-    suppliers = forms.ChoiceField(required=False)
+    suppliers = forms.ChoiceField(
+        required=False, label="Suppliers", choices=supplier_choices
+    )
 
-    def __init__(self, *args, **kwargs):
+    supplierType_choices = [(None, "-----")]
+    for supplier in (
+        Supplier.objects.values("supplierType").order_by("supplierType").distinct()
+    ):
 
-        supplier_choices = [(None, "-----")]
+        supplierType_choices.append(
+            (supplier["supplierType"], supplier["supplierType"])
+        )
 
-        super().__init__(*args, **kwargs)
-        for supplier in Supplier.objects.all().order_by("name"):
-            supplier_choices.append((supplier.name, supplier.name))
-        self.fields["suppliers"].widget.choices = supplier_choices
-
-
-    # costCenter = forms.ChoiceField(
-    #     choices=(Expense.objects.get())
-    # )
+    supplier_type = forms.ChoiceField(
+        required=False, label="Supplier Type", choices=supplierType_choices
+    )

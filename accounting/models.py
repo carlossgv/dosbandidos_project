@@ -43,4 +43,4 @@ class Expense(models.Model):
     comments = models.TextField(blank=True)
 
     def __str__(self) -> str:
-        return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.costCenter}"
+        return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.get_costCenter_display()}"

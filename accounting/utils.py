@@ -1,54 +1,83 @@
 from .models import Supplier, Expense
-from django.db.models import Sum
+from django.db.models import Sum, aggregates
 
 
 def getExpensesBySupplier(supplierId, initialDate, finishDate):
-    expenses = Expense.objects.filter(
+    name = Supplier.objects.get(pk=supplierId).name
+
+    expenses = (
+        Expense.objects.filter(
+            supplier=supplierId, date__range=[initialDate, finishDate]
+        )
+        .annotate(total_amount=Sum("amount"))
+        .order_by("date")
+    )
+
+    total = Expense.objects.filter(
         supplier=supplierId, date__range=[initialDate, finishDate]
-    ).annotate(total_amount=Sum("amount"))
+    ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-    total = 0
+    if total == None:
+        total = 0
 
-    for expense in expenses:
-        # print(expense)
-        total += expense.amount
-
-    return {"total": total, "expenses": expenses}
+    return {"name": name, "total": total, "expenses": expenses}
 
 
 def getExpensesBySupplierType(supplierType, initialDate, finishDate):
-    expenses = Expense.objects.filter(
+    supplierType = Supplier.objects.filter(supplierType=supplierType)[1]
+
+    expenses = (
+        Expense.objects.filter(
+            supplier__supplierType=supplierType, date__range=[initialDate, finishDate]
+        )
+        .annotate(total_amount=Sum("amount"))
+        .order_by("date")
+    )
+
+    total = Expense.objects.filter(
         supplier__supplierType=supplierType, date__range=[initialDate, finishDate]
-    ).annotate(total_amount=Sum("amount"))
+    ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-    total = 0
-
-    for expense in expenses:
-        # print(expense)
-        total += expense.amount
-
-    return {"total": total, "expenses": expenses}
-
-
-def goalsReport(initialDate, finishDate):
-    def totalizeSuppliers(suppliersList):
+    if total == None:
         total = 0
 
+    return {"supplierType": supplierType, "total": total, "expenses": expenses}
+
+
+def getGoalsReport(initialDate, finishDate):
+    def totalizeSuppliers(suppliersList):
+        total = 0
+        suppliersTotals = []
         for supplier in suppliersList:
+            
             if supplier["type"] == "supplier":
                 supplierData = getExpensesBySupplier(
                     supplier["id"], initialDate, finishDate
                 )
-                print(supplierData["total"])
+                try:
+                    data
+                except:
+                    data = supplierData["expenses"]
+                else:
+                    data = data | supplierData["expenses"]
+
                 total += supplierData["total"]
+                suppliersTotals.append(
+                    {"name": supplierData["name"], "total": supplierData["total"]}
+                )
             else:
                 typeData = getExpensesBySupplierType(
                     supplier["type"], initialDate, finishDate
                 )
-                print(typeData["total"])
+                data = data | typeData["expenses"]
+                # print(data["total"])
                 total += typeData["total"]
+                suppliersTotals.append(
+                    {"name": typeData["supplierType"], "total": typeData["total"]}
+                )
 
-        return total
+        # print("-------------",data)
+        return {"total": total, "data": data, "suppliersTotals": suppliersTotals}
 
     # SGC (29), Paisa (31), Mil Arcos (30), Sams (32), Walmart (33)
     foodSuppliers = [
@@ -70,5 +99,8 @@ def goalsReport(initialDate, finishDate):
         {"type": "liquorMisc"},
     ]
 
-    print(totalizeSuppliers(foodSuppliers))
-    print(totalizeSuppliers(liquorSuppliers))
+    food = totalizeSuppliers(foodSuppliers)
+    # print(food["total"])
+    liquor = totalizeSuppliers(liquorSuppliers)
+
+    return {"food": food, "liquor": liquor}
