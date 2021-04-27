@@ -5,27 +5,41 @@
     <form method="post">
         {% csrf_token %}
         {{ form }} 
-        <button class="btn waves-effect waves-light" type="submit" name="action">Get Info
+        <button class="btn waves-effect waves-light" type="submit" name="getInfo">Get Info
             <i class="material-icons right">send</i>
         </button>
-        <button class="btn waves-effect waves-light" type="submit" name="action">Get Goals Report
+        <button class="btn waves-effect waves-light" type="submit" name="getReport">Get Goals Report
             <i class="material-icons right">assignment</i>
         </button>
     </form>
     {% if request.method == "POST" %}
-        <table class="striped">
-            {% for supplier in food.suppliersTotals %}
-                <tr>
-                    <td>{{ supplier.name }}</td>
-                    <td>{{ supplier.total }}</td>
-                </tr>
-            {% endfor %}
-                <tr>
-                    
-                    <td><strong>TOTAL:</strong></td>
-                    <td><strong>{{ food.total }}</strong></td>
-                </tr>
-        </table>
+        {% if food %}
+            <table class="striped">
+                {% for supplier in food.suppliersTotals %}
+                    <tr>
+                        <td>{{ supplier.name }}</td>
+                        <td>{{ supplier.total }}</td>
+                    </tr>
+                {% endfor %}
+                    <tr>        
+                        <td><strong>TOTAL FOOD:</strong></td>
+                        <td><strong>{{ food.total }}</strong></td>
+                    </tr>
+            </table>
+            <br>
+            <table class="striped">
+                {% for supplier in liquor.suppliersTotals %}
+                    <tr>
+                        <td>{{ supplier.name }}</td>
+                        <td>{{ supplier.total }}</td>
+                    </tr>
+                {% endfor %}
+                    <tr>
+                        <td><strong>TOTAL LIQUOR:</strong></td>
+                        <td><strong>{{ liquor.total }}</strong></td>
+                    </tr>
+            </table>
+        {% endif %}
     {% endif %}
 </div>
 

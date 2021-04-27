@@ -15,15 +15,7 @@ def home(request):
             initialDate = data["initialDate"]
             finishDate = data["finishDate"]
 
-            if data["suppliers"] != "":
-                print(getExpensesBySupplier(data["suppliers"], initialDate, finishDate))
-            elif data["supplier_type"] != "":
-                print(
-                    getExpensesBySupplierType(
-                        data["supplier_type"], initialDate, finishDate
-                    )
-                )
-            else:
+            if request.POST['getReport'] == '':
                 goalsReport = getGoalsReport(initialDate, finishDate)
                 food = goalsReport["food"]
                 liquor = goalsReport["liquor"]
@@ -35,6 +27,16 @@ def home(request):
                     "accounting/home.html",
                     {"form": form, "food": food, "liquor": liquor},
                 )
+
+            if data["suppliers"] != "":
+                print(getExpensesBySupplier(data["suppliers"], initialDate, finishDate))
+            elif data["supplier_type"] != "":
+                print(
+                    getExpensesBySupplierType(
+                        data["supplier_type"], initialDate, finishDate
+                    )
+                )
+
         # return render(
         #     request,
         #     "accounting/home.html",

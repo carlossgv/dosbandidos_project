@@ -20,11 +20,11 @@ def getExpensesBySupplier(supplierId, initialDate, finishDate):
     if total == None:
         total = 0
 
-    return {"name": name, "total": total, "expenses": expenses}
+    return {"name": name, "total": round(total, 2), "expenses": expenses}
 
 
 def getExpensesBySupplierType(supplierType, initialDate, finishDate):
-    supplierType = Supplier.objects.filter(supplierType=supplierType)[1]
+    supplierType = Supplier.objects.filter(supplierType=supplierType)[1].supplierType
 
     expenses = (
         Expense.objects.filter(
@@ -41,7 +41,7 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate):
     if total == None:
         total = 0
 
-    return {"supplierType": supplierType, "total": total, "expenses": expenses}
+    return {"supplierType": supplierType, "total": round(total,2), "expenses": expenses}
 
 
 def getGoalsReport(initialDate, finishDate):
