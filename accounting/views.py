@@ -15,41 +15,50 @@ def home(request):
             initialDate = data["initialDate"]
             finishDate = data["finishDate"]
 
-            if request.POST['getReport'] == '':
+            # if request.POST['getReport'] == '':
+            if "getReport" in request.POST:
                 goalsReport = getGoalsReport(initialDate, finishDate)
                 food = goalsReport["food"]
                 liquor = goalsReport["liquor"]
-
-                print(food['suppliersTotals'])
 
                 return render(
                     request,
                     "accounting/home.html",
                     {"form": form, "food": food, "liquor": liquor},
                 )
+            else:
+                if data["suppliers"] != "":
+                    supplierData = getExpensesBySupplier(
+                        data["suppliers"], initialDate, finishDate
+                    )
+                    print(
+                        getExpensesBySupplier(
+                            data["suppliers"], initialDate, finishDate
+                        )
+                    )
 
-            if data["suppliers"] != "":
-                print(getExpensesBySupplier(data["suppliers"], initialDate, finishDate))
-            elif data["supplier_type"] != "":
-                print(
-                    getExpensesBySupplierType(
+                elif data["supplier_type"] != "":
+                    supplierData = getExpensesBySupplierType(
                         data["supplier_type"], initialDate, finishDate
                     )
+
+                return render(
+                    request,
+                    "accounting/home.html",
+                    {"form": form, "supplierData": supplierData},
                 )
-
-        # return render(
-        #     request,
-        #     "accounting/home.html",
-        #     {"form": form, "foodData": foodData, "liquorData": liquorData},
-        #     )
-
-    else:
-        form = ExpensesForm
-
-        print(getExpensesBySupplier(29, '2021-04-05', '2021-04-11'))
 
         return render(
             request,
             "accounting/home.html",
-            {"form": form },
+            {"form": form},
+        )
+
+    else:
+        form = ExpensesForm
+
+        return render(
+            request,
+            "accounting/home.html",
+            {"form": form},
         )

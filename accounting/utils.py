@@ -41,7 +41,11 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate):
     if total == None:
         total = 0
 
-    return {"supplierType": supplierType, "total": round(total,2), "expenses": expenses}
+    return {
+        "name": supplierType,
+        "total": round(total, 2),
+        "expenses": expenses,
+    }
 
 
 def getGoalsReport(initialDate, finishDate):
@@ -49,7 +53,7 @@ def getGoalsReport(initialDate, finishDate):
         total = 0
         suppliersTotals = []
         for supplier in suppliersList:
-            
+
             if supplier["type"] == "supplier":
                 supplierData = getExpensesBySupplier(
                     supplier["id"], initialDate, finishDate
@@ -70,13 +74,11 @@ def getGoalsReport(initialDate, finishDate):
                     supplier["type"], initialDate, finishDate
                 )
                 data = data | typeData["expenses"]
-                # print(data["total"])
                 total += typeData["total"]
                 suppliersTotals.append(
-                    {"name": typeData["supplierType"], "total": typeData["total"]}
+                    {"name": typeData["name"], "total": typeData["total"]}
                 )
 
-        # print("-------------",data)
         return {"total": total, "data": data, "suppliersTotals": suppliersTotals}
 
     # SGC (29), Paisa (31), Mil Arcos (30), Sams (32), Walmart (33)
@@ -100,7 +102,6 @@ def getGoalsReport(initialDate, finishDate):
     ]
 
     food = totalizeSuppliers(foodSuppliers)
-    # print(food["total"])
     liquor = totalizeSuppliers(liquorSuppliers)
 
     return {"food": food, "liquor": liquor}

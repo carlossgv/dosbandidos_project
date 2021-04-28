@@ -20,17 +20,19 @@
 
     <script type="text/javascript">
         document.addEventListener('DOMContentLoaded', function() {
-        console.log('i load')
         var elems = document.querySelectorAll('select');
         var instances = M.FormSelect.init(elems, {});
+        var elems = document.querySelectorAll('.sidenav');
+        var instances = M.Sidenav.init(elems, {});
         });
     </script>
 
 </head>
 <body>
     <nav>
-        <div class="nav-wrapper">
-          <a href="{% url 'accounting-home'  %}" class="brand-logo">DOS BANDIDOS</a>
+        <div class="nav-wrapper container">
+          <a href="{% url 'accounting-home'  %}" class="brand-logo">DB</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="#">Expenses</a></li>
             <li><a href="#">Incomes</a></li>
@@ -42,9 +44,21 @@
             {% endif %}
           </ul>
         </div>
-      </nav>
+    </nav>
 
-    <div class="container">
+    <ul id="mobile-demo" class="sidenav">
+      <li><a href="#">Expenses</a></li>
+      <li><a href="#">Incomes</a></li>
+      {% if user.is_authenticated %}
+          <li><a href="#">Sign Out</a></li>
+      {% else %}
+          <li><a href="#">Log In</a></li>
+          <li><a href="#">Register</a></li>
+      {% endif %}
+    </ul>
+
+
+    <div class="container" id="body">
       {% block body %}{% endblock body %}
     </div>
     
