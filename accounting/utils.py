@@ -105,3 +105,11 @@ def getGoalsReport(initialDate, finishDate):
     liquor = totalizeSuppliers(liquorSuppliers)
 
     return {"food": food, "liquor": liquor}
+
+def getCashReport(initialCash, initialDate, finishDate):
+    total = Expense.objects.filter(
+        costCenter='cash', date__range=[initialDate, finishDate]
+    ).annotate(day_amount=Sum("amount"))
+
+    for day in total:
+        print(day)

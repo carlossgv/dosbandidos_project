@@ -32,3 +32,5 @@ class ExpensesForm(forms.Form):
     supplier_type = forms.ChoiceField(
         required=False, label="Supplier Type", choices=supplierType_choices
     )
+
+    cash = forms.DecimalField(label="Initial Cash", decimal_places=2)

@@ -18,15 +18,6 @@
         <title>Dos Bandidos</title>      
     {% endif %}
 
-    <script type="text/javascript">
-        document.addEventListener('DOMContentLoaded', function() {
-        var elems = document.querySelectorAll('select');
-        var instances = M.FormSelect.init(elems, {});
-        var elems = document.querySelectorAll('.sidenav');
-        var instances = M.Sidenav.init(elems, {});
-        });
-    </script>
-
 </head>
 <body>
     <nav>
@@ -64,5 +55,8 @@
     
     <!-- Compiled and minified JavaScript -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+    <script type="text/javascript" src="{% static 'accounting/js/main.js' %}"></script>
+
 </body>
 </html>

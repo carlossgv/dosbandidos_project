@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.db.models import Sum
 from .models import Supplier, Expense
 from .forms import ExpensesForm
-from .utils import getExpensesBySupplier, getExpensesBySupplierType, getGoalsReport
+from .utils import getCashReport, getExpensesBySupplier, getExpensesBySupplierType, getGoalsReport
 
 # Create your views here.
 def home(request):
@@ -56,6 +56,8 @@ def home(request):
 
     else:
         form = ExpensesForm
+
+        getCashReport(344, "2021-04-05", "2021-04-11")
 
         return render(
             request,
