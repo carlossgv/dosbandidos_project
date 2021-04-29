@@ -112,9 +112,9 @@ def getFinancialsReport(initialDate, finishDate):
     supplier_types = [
         "service",
         "operationFood",
-        "miscFood",
+        "foodMisc",
         "operationLiquor",
-        "miscLiquor",
+        "liquorMisc",
         "labor",
         "uncategorized",
     ]
@@ -141,8 +141,6 @@ def getFinancialsReport(initialDate, finishDate):
 
         results.append({ "name": supplier_type ,"expenses": expenses, "total": total })
         financialsTotal+=total
-
-    # results["financialTotal"] = financialTotal
 
     return {"results": results, "total": financialsTotal}
 

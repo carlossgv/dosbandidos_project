@@ -68,17 +68,17 @@
                     {% for expense in supplierType.expenses %}
                         <tr>
                             <td>{{expense.supplier__name}}</td>
-                            <td>{{expense.total_amount}}</td>
+                            <td>{{expense.total_amount | floatformat:2}}</td>
                         </tr>
                     {% endfor %}
                         <tr>
                             <td><strong>Total {{ supplierType.name }}:</strong></td>
-                            <td><strong>{{ supplierType.total }}</strong></td>
+                            <td><strong>{{ supplierType.total | floatformat:2 }}</strong></td>
                         </tr>
                 {% endfor %}
                 <tr>
                     <td><strong>Total Expenses:</strong></td>
-                    <td><strong>{{ financialsTotal }}</strong></td>
+                    <td><strong>{{ financialsTotal | floatformat:2 }}</strong></td>
                 </tr>
             </table>
 
@@ -103,7 +103,6 @@
                     <td>{{ supplier.date }}</td>
                     <td>{{ supplier.amount }}</td>
                     <td>{% if supplier.isCheck == True %}&#10004;{% else %}&times;{% endif %}</td>
-                    <!-- <td>{{ supplier.isCheck }}</td> -->
                     <td>{{ supplier.reference }}</td>
                     <td>{{ supplier.costCenter }}</td>
                 </tr>
