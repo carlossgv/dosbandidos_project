@@ -27,6 +27,8 @@ def getExpensesBySupplier(supplierId, initialDate, finishDate):
 def getExpensesBySupplierType(supplierType, initialDate, finishDate):
     supplierType = Supplier.objects.filter(supplierType=supplierType)[1].supplierType
 
+    name = Supplier.objects.filter(supplierType=supplierType)[1].get_supplierType_display()
+
     expenses = (
         Expense.objects.filter(
             supplier__supplierType=supplierType, date__range=[initialDate, finishDate]
@@ -43,7 +45,7 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate):
         total = 0
 
     return {
-        "name": supplierType,
+        "name": name,
         "total": round(total, 2),
         "expenses": expenses,
     }
@@ -123,6 +125,8 @@ def getFinancialsReport(initialDate, finishDate):
     financialsTotal = 0
 
     for supplier_type in supplier_types:
+        name = Supplier.objects.filter(supplierType=supplier_type)[1].get_supplierType_display()
+
         expenses = (
             Expense.objects.values("supplier__name")
             .filter(
@@ -139,7 +143,7 @@ def getFinancialsReport(initialDate, finishDate):
         if total == None:
             total = 0
 
-        results.append({ "name": supplier_type ,"expenses": expenses, "total": total })
+        results.append({ "name": name ,"expenses": expenses, "total": total })
         financialsTotal+=total
 
     return {"results": results, "total": financialsTotal}

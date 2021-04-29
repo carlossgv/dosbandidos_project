@@ -26,7 +26,7 @@ class ExpensesForm(forms.Form):
     ):
 
         supplierType_choices.append(
-            (supplier["supplierType"], supplier["supplierType"])
+            (supplier["supplierType"], supplier["supplierType"] )
         )
 
     supplier_type = forms.ChoiceField(

@@ -1,0 +1,10 @@
+.row-title {
+    font-size: 1.5rem;
+    font-weight: bolder;
+    text-transform: uppercase;
+}
+
+.row-subtitle {
+    font-size: 1.5rem;
+    color: crimson;
+}

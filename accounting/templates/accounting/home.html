@@ -58,27 +58,30 @@
 
         {% if financialsData %}          
             <table class="striped responsive-table">
-                <thead>
+                <!-- <thead>
                     <tr>
                         <th>Name</th>
                         <th>Amount</th>
                     </tr>
-                </thead>
+                </thead> -->
                 {% for supplierType in financialsData %}
+                    <tr class="row-title">
+                        <td colspan=2>{{ supplierType.name }}</td>
+                    </tr>
                     {% for expense in supplierType.expenses %}
                         <tr>
                             <td>{{expense.supplier__name}}</td>
                             <td>{{expense.total_amount | floatformat:2}}</td>
                         </tr>
                     {% endfor %}
-                        <tr>
-                            <td><strong>Total {{ supplierType.name }}:</strong></td>
-                            <td><strong>{{ supplierType.total | floatformat:2 }}</strong></td>
+                        <tr class="row-subtitle">
+                            <td>Total {{ supplierType.name }}:</td>
+                            <td>{{ supplierType.total | floatformat:2 }}</td>
                         </tr>
                 {% endfor %}
-                <tr>
-                    <td><strong>Total Expenses:</strong></td>
-                    <td><strong>{{ financialsTotal | floatformat:2 }}</strong></td>
+                <tr class="row-title">
+                    <td>Total Expenses:</td>
+                    <td>{{ financialsTotal | floatformat:2 }}</td>
                 </tr>
             </table>
 

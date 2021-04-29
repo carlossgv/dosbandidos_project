@@ -6,12 +6,12 @@ from django.db.models.fields import CommaSeparatedIntegerField
 # Create your models here.
 class Supplier(models.Model):
     TYPE = (
-        ("operationFood", "Operation (Food)"),
-        ("operationLiquor", "Operation (Liquor)"),
-        ("foodMisc", "Operation (Misc)"),
-        ("liquorMisc", "Liquor (Misc)"),
+        ("operationFood", "Food"),
+        ("operationLiquor", "Liquor"),
+        ("foodMisc", "Food (Miscellaneous)"),
+        ("liquorMisc", "Liquor (Miscellaneous)"),
         ("labor", "Labor"),
-        ("service", "Service"),
+        ("service", "Services"),
         ("uncategorized", "Uncategorized"),
     )
     name = models.CharField(max_length=100, unique=True)
@@ -24,7 +24,7 @@ class Supplier(models.Model):
         ordering = ["name"]
 
     def __str__(self) -> str:
-        return f"({self.pk}) {self.name} ({self.supplierType})"
+        return f"({self.pk}) {self.name} ({self.get_supplierType_display()})"
 
 
 class Expense(models.Model):
