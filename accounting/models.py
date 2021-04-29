@@ -20,6 +20,9 @@ class Supplier(models.Model):
     hasCredit = models.BooleanField(default=False)
     comments = models.TextField(blank=True)
 
+    class Meta:
+        ordering = ["name"]
+
     def __str__(self) -> str:
         return f"({self.pk}) {self.name} ({self.supplierType})"
 

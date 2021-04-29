@@ -1,5 +1,6 @@
 from .models import Supplier, Expense
 from django.db.models import Sum, aggregates
+import pprint
 
 
 def getExpensesBySupplier(supplierId, initialDate, finishDate):
@@ -106,10 +107,50 @@ def getGoalsReport(initialDate, finishDate):
 
     return {"food": food, "liquor": liquor}
 
-def getCashReport(initialCash, initialDate, finishDate):
-    total = Expense.objects.filter(
-        costCenter='cash', date__range=[initialDate, finishDate]
-    ).annotate(day_amount=Sum("amount"))
 
-    for day in total:
-        print(day)
+def getFinancialsReport(initialDate, finishDate):
+    supplier_types = [
+        "service",
+        "operationFood",
+        "miscFood",
+        "operationLiquor",
+        "miscLiquor",
+        "labor",
+        "uncategorized",
+    ]
+
+    results = []
+    financialsTotal = 0
+
+    for supplier_type in supplier_types:
+        expenses = (
+            Expense.objects.values("supplier__name")
+            .filter(
+                supplier__supplierType=supplier_type, date__range=[initialDate, finishDate]
+            )
+            .annotate(total_amount=Sum("amount"))
+            .order_by("supplier__name")
+        )
+
+        total = Expense.objects.filter(
+            supplier__supplierType=supplier_type, date__range=[initialDate, finishDate]
+        ).aggregate(total_amount=Sum("amount"))["total_amount"]
+
+        if total == None:
+            total = 0
+
+        results.append({ "name": supplier_type ,"expenses": expenses, "total": total })
+        financialsTotal+=total
+
+    # results["financialTotal"] = financialTotal
+
+    return {"results": results, "total": financialsTotal}
+
+
+# def getCashReport(initialCash, initialDate, finishDate):
+#     total = Expense.objects.filter(
+#         costCenter='cash', date__range=[initialDate, finishDate]
+#     ).annotate(day_amount=Sum("amount"))
+
+#     for day in total:
+#         print(day)

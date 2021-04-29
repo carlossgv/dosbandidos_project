@@ -5,15 +5,18 @@ document.addEventListener('DOMContentLoaded', function () {
   const supplierType = document.querySelector('#id_supplier_type');
 
   const goalsButton = document.querySelector('#getReport');
+  const financialsButton = document.querySelector('#getFinancials');
   //   const cashButton = document.querySelector('#getCashReport');
 
   dropdowns.forEach((element) => {
     element.addEventListener('change', () => {
       if (suppliers.value != '' || supplierType.value != '') {
         goalsButton.disabled = true;
+        financialsButton.disabled = true;
         // cashButton.disabled = true;
       } else {
         goalsButton.disabled = false;
+        financialsButton.disabled = false;
         // cashButton.disabled = false;
       }
 

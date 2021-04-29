@@ -2,6 +2,7 @@
 
 {% block body %}
 {% load static %}
+{% load customfilters %}
 <div>
     <form method="post">
         {% csrf_token %}
@@ -12,6 +13,10 @@
         <button class="btn waves-effect waves-light" type="submit" id="getReport" name="getReport">Get Goals Report
             <i class="material-icons right">assignment</i>
         </button>
+        <button class="btn waves-effect waves-light" type="submit" id="getFinancials" name="getFinancials">Get Finacials Report
+            <i class="material-icons right">assignment</i>
+        </button>
+
         <!-- <button class="btn waves-effect waves-light" type="submit" id="getCashReport" name="getCashReport">Get Cash Report
             <i class="material-icons right">attach_money</i>
         </button> -->
@@ -50,6 +55,36 @@
                     </tr>
             </table>
         {% endif %}
+
+        {% if financialsData %}          
+            <table class="striped responsive-table">
+                <thead>
+                    <tr>
+                        <th>Name</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                {% for supplierType in financialsData %}
+                    {% for expense in supplierType.expenses %}
+                        <tr>
+                            <td>{{expense.supplier__name}}</td>
+                            <td>{{expense.total_amount}}</td>
+                        </tr>
+                    {% endfor %}
+                        <tr>
+                            <td><strong>Total {{ supplierType.name }}:</strong></td>
+                            <td><strong>{{ supplierType.total }}</strong></td>
+                        </tr>
+                {% endfor %}
+                <tr>
+                    <td><strong>Total Expenses:</strong></td>
+                    <td><strong>{{ financialsTotal }}</strong></td>
+                </tr>
+            </table>
+
+            
+        {% endif %}
+
         {% if supplierData %}
         <table class="striped responsive-table">
             <thead>
