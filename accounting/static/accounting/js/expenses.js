@@ -3,13 +3,12 @@ document.addEventListener('DOMContentLoaded', function () {
 
   const suppliers = document.querySelector('#id_suppliers');
   const supplierType = document.querySelector('#id_supplier_type');
+  const cash = document.querySelector('#id_cash');
 
   const infoButton = document.querySelector('#getInfo');
   const goalsButton = document.querySelector('#getReport');
   const financialsButton = document.querySelector('#getFinancials');
-  //   const cashButton = document.querySelector('#getCashReport');
-
-  console.log('suppliers value', suppliers.value);
+  const cashButton = document.querySelector('#getCashReport');
 
   dropdowns.forEach((element) => {
     element.addEventListener('change', () => {
@@ -17,29 +16,45 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   });
 
+  cash.addEventListener('keyup', () => {
+    blockInputs();
+  });
+
   function blockInputs() {
-    if (suppliers.value != '' || supplierType.value != '') {
+    console.log('entering blockinputs');
+    console.log('cash value', cash.value);
+    if (cash.value != '') {
+      console.log('diferent from ""');
       goalsButton.disabled = true;
       financialsButton.disabled = true;
-      // cashButton.disabled = true;
+      infoButton.disabled = true;
+      return;
     } else {
       goalsButton.disabled = false;
       financialsButton.disabled = false;
-      // cashButton.disabled = false;
+      infoButton.disabled = false;
+    }
+
+    if (suppliers.value != '' || supplierType.value != '') {
+      goalsButton.disabled = true;
+      financialsButton.disabled = true;
+      cashButton.disabled = true;
+      cash.disabled = true;
     }
 
     if (suppliers.value === '' && supplierType.value === '') {
       infoButton.disabled = true;
+      goalsButton.disabled = false;
+      financialsButton.disabled = false;
+      cashButton.disabled = false;
+      cash.disabled = false;
     } else {
       infoButton.disabled = false;
     }
 
-
     // TODO: There has to be a better way to do this
     if (suppliers.value != '') {
-      console.log('i enter this shit');
       nearestInput = supplierType.closest('div').children[0];
-      console.log(nearestInput)
       nearestInput.disabled = true;
     } else {
       nearestInput = supplierType.closest('div').children[0];
@@ -53,7 +68,6 @@ document.addEventListener('DOMContentLoaded', function () {
       nearestInput = suppliers.closest('div').children[0];
       nearestInput.disabled = false;
     }
-
   }
 
   blockInputs();
