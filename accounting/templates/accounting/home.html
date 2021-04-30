@@ -57,7 +57,7 @@
         {% endif %}
 
         {% if financialsData %}          
-            <table class="striped responsive-table">
+            <table class="striped highlight responsive-table">
 
                 {% for supplierType in financialsData %}
                     <tr class="row-title">
@@ -74,7 +74,7 @@
                             <td>{{ supplierType.total | floatformat:2 }}</td>
                         </tr>
                 {% endfor %}
-                <tr class="row-title">
+                <tr style="color: crimson;"" class="row-title">
                     <td>Total Expenses:</td>
                     <td>{{ financialsTotal | floatformat:2 }}</td>
                 </tr>
