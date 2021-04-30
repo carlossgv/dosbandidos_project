@@ -1,6 +1,6 @@
 from accounting.models import Supplier
 from django import forms
-from .models import Expense, Supplier
+from .models import Supplier
 
 
 class ExpensesForm(forms.Form):

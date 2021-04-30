@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1"]
 # Application definition
 
 INSTALLED_APPS = [
+    "users",
     "accounting",
     "django.contrib.admin",
     "django.contrib.auth",
@@ -127,3 +128,5 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_REDIRECT_URL = 'accounting-home'

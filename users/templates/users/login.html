@@ -1,0 +1,14 @@
+{% extends 'accounting/layout.html' %}
+{% block body %}
+    {% if form.errors %}
+    {% endif %}
+    <form method="POST" action = "{% url 'login' %}">
+        {% csrf_token %}
+        {{form}}
+        <button class="btn waves-effect waves-light" type="submit" value="login" id="login" name="login">Log In
+            <i class="material-icons right">send</i>
+        </button>
+        <input type="hidden" name="next" value="{% url 'accounting-home' %}">
+    </form>
+
+{% endblock body %}
