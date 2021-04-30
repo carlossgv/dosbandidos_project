@@ -21,10 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
   });
 
   function blockInputs() {
-    console.log('entering blockinputs');
-    console.log('cash value', cash.value);
     if (cash.value != '') {
-      console.log('diferent from ""');
       goalsButton.disabled = true;
       financialsButton.disabled = true;
       infoButton.disabled = true;

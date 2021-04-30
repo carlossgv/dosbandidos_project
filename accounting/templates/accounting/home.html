@@ -167,7 +167,7 @@
                     <td>{{ supplier.amount }}</td>
                     <td>{% if supplier.isCheck == True %}&#10004;{% else %}&times;{% endif %}</td>
                     <td>{{ supplier.reference }}</td>
-                    <td>{{ supplier.costCenter }}</td>
+                    <td>{{ supplier.get_costCenter_display }}</td>
                 </tr>
             {% endfor %}
                 <tr> 

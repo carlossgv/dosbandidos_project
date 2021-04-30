@@ -26,11 +26,11 @@ class ExpensesForm(forms.Form):
     ):
 
         supplierType_choices.append(
-            (supplier["supplierType"], supplier["supplierType"] )
+            (supplier["supplierType"], supplier["supplierType"])
         )
 
     supplier_type = forms.ChoiceField(
         required=False, label="Supplier Type", choices=supplierType_choices
     )
 
-    cash = forms.DecimalField(label="Initial Cash", decimal_places=2)
+    cash = forms.DecimalField(label="Initial Cash", decimal_places=2, required=False)

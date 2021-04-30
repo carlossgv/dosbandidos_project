@@ -36,7 +36,6 @@ def home(request):
                 financials = getFinancialsReport(initialDate, finishDate)
 
                 financialsData = financials["results"]
-
                 financialsTotal = financials["total"]
 
                 return render(

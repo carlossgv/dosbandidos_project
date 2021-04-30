@@ -27,26 +27,26 @@
           <a href="{% url 'accounting-home'  %}" class="brand-logo">{{ request.user.last_name }}</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
-            <li><a href="#">Expenses</a></li>
+            <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
             <li><a href="#">Incomes</a></li>
             {% if user.is_authenticated %}
                 <li><a href="{% url 'logout' %}">Sign Out</a></li>
             {% else %}
                 <li><a href="{% url 'login' %}">Log In</a></li>
-                <li><a href="#">Register</a></li>
+                <!-- <li><a href="#">Register</a></li> -->
             {% endif %}
           </ul>
         </div>
     </nav>
 
     <ul id="mobile-demo" class="sidenav">
-      <li><a href="#">Expenses</a></li>
+      <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
       <li><a href="#">Incomes</a></li>
       {% if user.is_authenticated %}
-          <li><a href="#">Sign Out</a></li>
+          <li><a href="{% url 'logout' %}">Sign Out</a></li>
       {% else %}
-          <li><a href="#">Log In</a></li>
-          <li><a href="#">Register</a></li>
+          <li><a href="{% url 'login' %}">Log In</a></li>
+          <!-- <li><a href="#">Register</a></li> -->
       {% endif %}
     </ul>
 
