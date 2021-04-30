@@ -24,7 +24,13 @@
 <body>
     <nav>
         <div class="nav-wrapper container">
-          <a href="{% url 'accounting-home'  %}" class="brand-logo">{{ request.user.last_name }}</a>
+          <a href="{% url 'accounting-home'  %}" class="brand-logo">
+              {% if user.is_authenticated %}
+                {{ request.user.last_name }}
+              {% else %}
+                Dos Bandidos Accounting
+              {% endif %}
+            </a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>

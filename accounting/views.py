@@ -1,6 +1,5 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from django.db.models import Sum
-from .models import Supplier, Expense
 from .forms import ExpensesForm
 from .utils import (
     getCashReport,
@@ -11,6 +10,7 @@ from .utils import (
 )
 
 # Create your views here.
+@login_required
 def home(request):
 
     if request.method == "POST":
