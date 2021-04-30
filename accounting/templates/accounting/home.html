@@ -58,12 +58,7 @@
 
         {% if financialsData %}          
             <table class="striped responsive-table">
-                <!-- <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead> -->
+
                 {% for supplierType in financialsData %}
                     <tr class="row-title">
                         <td colspan=2>{{ supplierType.name }}</td>

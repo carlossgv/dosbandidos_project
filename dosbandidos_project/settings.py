@@ -26,7 +26,7 @@ SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ["192.168.1.81", "192.168.1.112", "0.0.0.0", "127.0.0.1"]
+ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1"]
 
 
 # Application definition

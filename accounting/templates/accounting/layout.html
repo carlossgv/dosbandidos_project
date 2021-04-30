@@ -24,7 +24,7 @@
 <body>
     <nav>
         <div class="nav-wrapper container">
-          <a href="{% url 'accounting-home'  %}" class="brand-logo">DB</a>
+          <a href="{% url 'accounting-home'  %}" class="brand-logo">{{ request.user.last_name }}</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="#">Expenses</a></li>

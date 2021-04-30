@@ -1,7 +1,6 @@
 from django.db import models
-from django.db.models.deletion import CASCADE
-from django.db.models.fields import CommaSeparatedIntegerField
-
+from django.db.models.deletion import CASCADE, PROTECT
+from django.contrib.auth.models import User
 
 # Create your models here.
 class Supplier(models.Model):
@@ -34,6 +33,7 @@ class Expense(models.Model):
         ("expensesAccount", "Expenses Account"),
         ("notPaid", "Not Paid"),
     )
+    restaurant = models.ForeignKey(User, on_delete=PROTECT, related_name="restaurant_expense")
     supplier = models.ForeignKey(
         Supplier, related_name="supplier_name", on_delete=CASCADE
     )

@@ -20,7 +20,6 @@ def home(request):
             initialDate = data["initialDate"]
             finishDate = data["finishDate"]
 
-            # if request.POST['getReport'] == '':
             if "getReport" in request.POST:
                 goalsReport = getGoalsReport(initialDate, finishDate)
                 food = goalsReport["food"]
