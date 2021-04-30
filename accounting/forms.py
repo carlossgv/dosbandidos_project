@@ -20,14 +20,27 @@ class ExpensesForm(forms.Form):
         required=False, label="Suppliers", choices=supplier_choices
     )
 
-    supplierType_choices = [(None, "-----")]
-    for supplier in (
-        Supplier.objects.values("supplierType").order_by("supplierType").distinct()
-    ):
+    # TODO: populate supplier choices dinamically
 
-        supplierType_choices.append(
-            (supplier["supplierType"], supplier["supplierType"])
-        )
+    supplierType_choices = [
+        (None, "-----"),
+        ("operationFood", "Food"),
+        ("operationLiquor", "Liquor"),
+        ("foodMisc", "Food (Miscellaneous)"),
+        ("liquorMisc", "Liquor (Miscellaneous)"),
+        ("labor", "Labor"),
+        ("service", "Services"),
+        ("uncategorized", "Uncategorized"),
+    ]
+    # for supplier in (
+    #     Supplier.objects.order_by("supplierType").distinct()
+    # ):
+
+    #     print(supplier)
+
+    # supplierType_choices.append(
+    #     (supplier["supplierType"], supplier['supplierType'])
+    # )
 
     supplier_type = forms.ChoiceField(
         required=False, label="Supplier Type", choices=supplierType_choices
