@@ -16,10 +16,9 @@
         <button class="btn waves-effect waves-light" type="submit" id="getFinancials" name="getFinancials">Get Finacials Report
             <i class="material-icons right">assignment</i>
         </button>
-
-        <!-- <button class="btn waves-effect waves-light" type="submit" id="getCashReport" name="getCashReport">Get Cash Report
+        <button class="btn waves-effect waves-light" type="submit" id="getCashReport" name="getCashReport">Get Cash Report
             <i class="material-icons right">attach_money</i>
-        </button> -->
+        </button>
 
     </form>
     <div id="responses">
@@ -82,6 +81,70 @@
 
             
         {% endif %}
+
+        {% if cashData %}          
+        <!-- TODO: THERE HAS TO BE A BETTER WAY TO POPULATE BY COLUMNS -->
+        <table class="striped highlight responsive-table">
+                <tr>
+                    <td></td>
+                    {% for day in cashData %}
+                    <td>{{ day.date }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Balance:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.initialCash }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Cash Sales:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.cashSales }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Card Auto Grat:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.cardAuto }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Card Tips:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.cardTips }}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="row-subtitle">
+                    <td >Cash Out:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.cashOut }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Cash Purchases:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.cashPurchases |floatformat:2 }}</td>
+                    {% endfor %}
+                </tr>
+                <tr>
+                    <td>Modifications:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.cashModifications }}</td>
+                    {% endfor %}
+                </tr>
+                <tr class="row-title">
+                    <td>Total:</td>
+                    {% for day in cashData %}
+                    <td>{{ day.finalCash }}</td>
+                    {% endfor %}
+                </tr>
+
+
+        </table>
+
+        
+    {% endif %}
 
         {% if supplierData %}
         <table class="striped responsive-table">

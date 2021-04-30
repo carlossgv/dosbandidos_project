@@ -33,4 +33,4 @@ class ExpensesForm(forms.Form):
         required=False, label="Supplier Type", choices=supplierType_choices
     )
 
-    # cash = forms.DecimalField(label="Initial Cash", decimal_places=2)
+    cash = forms.DecimalField(label="Initial Cash", decimal_places=2)

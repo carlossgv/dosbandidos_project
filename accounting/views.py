@@ -3,6 +3,7 @@ from django.db.models import Sum
 from .models import Supplier, Expense
 from .forms import ExpensesForm
 from .utils import (
+    getCashReport,
     getExpensesBySupplier,
     getExpensesBySupplierType,
     getFinancialsReport,
@@ -47,6 +48,19 @@ def home(request):
                         "financialsTotal": financialsTotal,
                     },
                 )
+            elif "getCashReport" in request.POST:
+                initialCash = data['cash']
+                cashData = getCashReport(initialCash, initialDate,finishDate)
+
+                return render(
+                    request,
+                    "accounting/home.html",
+                    {
+                        "form": form,
+                        "cashData": cashData
+                    },
+                )
+
 
             else:
                 if data["suppliers"] != "":

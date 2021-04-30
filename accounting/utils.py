@@ -1,6 +1,7 @@
-from .models import Supplier, Expense
-from django.db.models import Sum, aggregates
-import pprint
+import datetime
+from .models import CashLog, Supplier, Expense
+from django.db.models import Sum
+from datetime import timedelta
 
 
 def getExpensesBySupplier(supplierId, initialDate, finishDate):
@@ -27,7 +28,9 @@ def getExpensesBySupplier(supplierId, initialDate, finishDate):
 def getExpensesBySupplierType(supplierType, initialDate, finishDate):
     supplierType = Supplier.objects.filter(supplierType=supplierType)[1].supplierType
 
-    name = Supplier.objects.filter(supplierType=supplierType)[1].get_supplierType_display()
+    name = Supplier.objects.filter(supplierType=supplierType)[
+        1
+    ].get_supplierType_display()
 
     expenses = (
         Expense.objects.filter(
@@ -125,12 +128,15 @@ def getFinancialsReport(initialDate, finishDate):
     financialsTotal = 0
 
     for supplier_type in supplier_types:
-        name = Supplier.objects.filter(supplierType=supplier_type)[1].get_supplierType_display()
+        name = Supplier.objects.filter(supplierType=supplier_type)[
+            1
+        ].get_supplierType_display()
 
         expenses = (
             Expense.objects.values("supplier__name")
             .filter(
-                supplier__supplierType=supplier_type, date__range=[initialDate, finishDate]
+                supplier__supplierType=supplier_type,
+                date__range=[initialDate, finishDate],
             )
             .annotate(total_amount=Sum("amount"))
             .order_by("supplier__name")
@@ -143,16 +149,55 @@ def getFinancialsReport(initialDate, finishDate):
         if total == None:
             total = 0
 
-        results.append({ "name": name ,"expenses": expenses, "total": total })
-        financialsTotal+=total
+        results.append({"name": name, "expenses": expenses, "total": total})
+        financialsTotal += total
 
     return {"results": results, "total": financialsTotal}
 
 
-# def getCashReport(initialCash, initialDate, finishDate):
-#     total = Expense.objects.filter(
-#         costCenter='cash', date__range=[initialDate, finishDate]
-#     ).annotate(day_amount=Sum("amount"))
+def getCashReport(initialCash, initialDate, finishDate):
+    # initialDate = datetime.datetime.strptime(initialDate, "%Y-%m-%d").date()
+    # finishDate = datetime.datetime.strptime(finishDate, "%Y-%m-%d").date()
 
-#     for day in total:
-#         print(day)
+    results = []
+
+    date = initialDate
+
+    initialCash = round(initialCash,2)
+
+    while date != finishDate + timedelta(days=1):
+        cashPurchases = (Expense.objects.filter(costCenter="cash", date=date).aggregate(
+            total_amount=Sum("amount")
+        )["total_amount"])
+
+        if cashPurchases == None:
+            cashPurchases = 0 
+     
+
+        cashData = CashLog.objects.get(date=date)
+
+        
+        cashSales = cashData.cash_sales
+        cardAuto = cashData.card_auto_grat
+        cardTips = cashData.card_tips
+        cashOut =  cashSales - cardAuto - cardTips
+        cashModifications = cashData.modifications
+
+        finalCash = round(initialCash + cashOut - cashPurchases - cashModifications,2)
+
+        results.append({ 
+            "date": date, 
+            "initialCash": initialCash, 
+            "cashSales": cashSales,
+            "cardAuto": cardAuto,
+            "cardTips": cardTips,
+            "cashOut": cashOut,
+            "cashPurchases": cashPurchases,
+            "cashModifications": cashModifications,
+            "finalCash": finalCash
+            })
+
+        initialCash = finalCash
+        date = date + timedelta(days=1)
+
+    return results

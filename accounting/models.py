@@ -33,7 +33,9 @@ class Expense(models.Model):
         ("expensesAccount", "Expenses Account"),
         ("notPaid", "Not Paid"),
     )
-    restaurant = models.ForeignKey(User, on_delete=PROTECT, related_name="restaurant_expense")
+    restaurant = models.ForeignKey(
+        User, on_delete=PROTECT, related_name="restaurant_expense"
+    )
     supplier = models.ForeignKey(
         Supplier, related_name="supplier_name", on_delete=CASCADE
     )
@@ -47,3 +49,18 @@ class Expense(models.Model):
 
     def __str__(self) -> str:
         return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.get_costCenter_display()}"
+
+
+class CashLog(models.Model):
+    restaurant = models.ForeignKey(
+        User, on_delete=PROTECT, related_name="restaurant_cashlog"
+    )
+    date = models.DateField()
+    cash_sales = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    card_auto_grat = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    card_tips = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    modifications = models.DecimalField(max_digits=8, decimal_places=2, default=0)
+    comments = models.TextField(blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.date}: Cash Sales {self.cash_sales}, Card Auto Grat: {self.card_auto_grat}, Card Tips: {self.card_tips}"
