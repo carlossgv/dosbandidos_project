@@ -25,8 +25,10 @@ document.addEventListener('DOMContentLoaded', function () {
       goalsButton.disabled = true;
       financialsButton.disabled = true;
       infoButton.disabled = true;
+      cashButton.disabled = false;
       return;
     } else {
+      cashButton.disabled = true;
       goalsButton.disabled = false;
       financialsButton.disabled = false;
       infoButton.disabled = false;
@@ -43,7 +45,6 @@ document.addEventListener('DOMContentLoaded', function () {
       infoButton.disabled = true;
       goalsButton.disabled = false;
       financialsButton.disabled = false;
-      cashButton.disabled = false;
       cash.disabled = false;
     } else {
       infoButton.disabled = false;

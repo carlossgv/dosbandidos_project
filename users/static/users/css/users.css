@@ -1,0 +1,11 @@
+.login-container {
+    margin: 2rem auto;
+    width: 100%;
+    min-width: 300px;
+}
+
+@media (min-width: 400px) {
+    .login-container {
+        width: 400px;
+    }
+}

@@ -1,3 +1,4 @@
+from django.forms import widgets
 from accounting.models import Supplier
 from django import forms
 from .models import Supplier
@@ -5,10 +6,12 @@ from .models import Supplier
 
 class ExpensesForm(forms.Form):
     initialDate = forms.DateField(
-        label="Initial Date", widget=forms.widgets.DateInput(attrs={"type": "date"})
+        label="Initial Date",
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
     finishDate = forms.DateField(
-        label="Finish Date", widget=forms.widgets.DateInput(attrs={"type": "date"})
+        label="Finish Date",
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
 
     # TODO: Take all of this to __init__
@@ -17,7 +20,10 @@ class ExpensesForm(forms.Form):
         supplier_choices.append((supplier.pk, supplier.name))
 
     suppliers = forms.ChoiceField(
-        required=False, label="Suppliers", choices=supplier_choices
+        required=False,
+        label="Suppliers",
+        choices=supplier_choices,
+        widget=forms.Select(attrs={"class": "validate"}),
     )
 
     # TODO: populate supplier choices dinamically
@@ -46,4 +52,9 @@ class ExpensesForm(forms.Form):
         required=False, label="Supplier Type", choices=supplierType_choices
     )
 
-    cash = forms.DecimalField(label="Initial Cash", decimal_places=2, required=False)
+    cash = forms.DecimalField(
+        label="Initial Cash",
+        decimal_places=2,
+        required=False,
+        widget=forms.NumberInput(attrs={"class": "validate"}),
+    )

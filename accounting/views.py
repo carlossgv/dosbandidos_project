@@ -59,8 +59,6 @@ def home(request):
                         "cashData": cashData
                     },
                 )
-
-
             else:
                 if data["suppliers"] != "":
                     supplierData = getExpensesBySupplier(
