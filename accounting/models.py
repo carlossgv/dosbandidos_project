@@ -26,6 +26,7 @@ class Supplier(models.Model):
         return f"({self.pk}) {self.name} ({self.get_supplierType_display()})"
 
 
+# TODO: check exact use of "related_name"
 class Expense(models.Model):
     COST_CENTER = (
         ("cash", "Cash"),
@@ -37,7 +38,7 @@ class Expense(models.Model):
         User, on_delete=PROTECT, related_name="restaurant_expense"
     )
     supplier = models.ForeignKey(
-        Supplier, related_name="supplier_name", on_delete=CASCADE
+        Supplier, related_name="expense_supplier_name", on_delete=CASCADE
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField()
@@ -49,6 +50,22 @@ class Expense(models.Model):
 
     def __str__(self) -> str:
         return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.get_costCenter_display()}"
+
+
+class Income(models.Model):
+    restaurant = models.ForeignKey(
+        User, on_delete=PROTECT, related_name="restaurant_income"
+    )
+    supplier = models.ForeignKey(
+        Supplier, related_name="income_supplier_name", on_delete=CASCADE
+    )
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    initialDate = models.DateField(null=True, blank=True)
+    date = models.DateField()
+    comments = models.TextField(blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.amount} sold from {self.supplier.name} ({self.supplier.pk}) from {self.initialDate} to {self.date})"
 
 
 class CashLog(models.Model):
@@ -64,3 +81,28 @@ class CashLog(models.Model):
 
     def __str__(self) -> str:
         return f"{self.date}: Cash Sales {self.cash_sales}, Card Auto Grat: {self.card_auto_grat}, Card Tips: {self.card_tips}"
+
+
+class Metric(models.Model):
+    METRIC_TYPE = (
+        (77, "Order Count"),
+        (76, "Gross Sales"),
+        (75, "Labor"),
+    )
+
+    restaurant = models.ForeignKey(
+        User, on_delete=PROTECT, related_name="restaurant_metric"
+    )
+    supplier = models.ForeignKey(
+        Supplier,
+        related_name="metric_supplier_name",
+        on_delete=CASCADE,
+        choices=METRIC_TYPE,
+    )
+    amount = models.DecimalField(max_digits=8, decimal_places=2)
+    initialDate = models.DateField(blank=True, null=True)
+    date = models.DateField()
+    comments = models.TextField(blank=True)
+
+    def __str__(self) -> str:
+        return f"{self.restaurant__name} | {self.supplier__name} | {self.date}"

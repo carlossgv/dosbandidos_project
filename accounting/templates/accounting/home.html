@@ -93,7 +93,23 @@
 
         {% if financialsData %}          
             <table class="striped highlight responsive-table">
+                <tr class="row-title">
+                    <td colspan=2>INCOMES</td>
+                </tr>
+                {% for income in incomesData %}
+                    <tr>
+                        <td>{{income.name}}</td>
+                        <td>{{income.total | floatformat:2}}</td>
+                    </tr>
+                {% endfor %}
+                <tr style="color: green; border-bottom: gray 2px solid;"" class="row-title">
+                    <td>Total Incomes:</td>
+                    <td>{{ incomesTotal | floatformat:2 }}</td>
+                </tr>
 
+                <tr class="row-title">
+                    <td colspan=2>EXPENSES</td>
+                </tr>
                 {% for supplierType in financialsData %}
                     <tr class="row-title">
                         <td colspan=2>{{ supplierType.name }}</td>
