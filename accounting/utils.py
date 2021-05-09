@@ -57,27 +57,29 @@ def getIncomes(initialDate, finishDate, userId):
     supplier_list = Supplier.objects.filter(supplierType="sales")
     incomes = []
     total = 0
+    lavuSales = 0
 
     for supplier in supplier_list:
         incomeData = getIncomeBySupplier(supplier.pk, initialDate, finishDate, userId)
         incomes.append(incomeData)
         total += incomeData["total"]
+        if supplier.name == 'Lavu Sales':
+            lavuSales = incomeData['total']
 
-    return {"incomes": incomes, "total": total}
+    return {"incomes": incomes, "total": total, 'lavuSales': lavuSales}
 
 
 def getMetrics(initialDate, finishDate, userId):
 
     metrics_list = Supplier.objects.filter(supplierType="lavuInfo")
-    metrics = []
-    total = 0
+    metrics = {}
 
     for supplier in metrics_list:
+        print(supplier.name)
         metricData = getMetricBySupplier(supplier.pk, initialDate, finishDate, userId)
-        metrics.append(metricData)
-        total += metricData["total"]
+        metrics[supplier.name] = metricData
 
-    return {"metrics": metrics, "total": total}
+    return metrics
 
 
 def getExpensesBySupplierType(supplierType, initialDate, finishDate, userId):
@@ -121,7 +123,7 @@ def getGoalsReport(initialDate, finishDate, userId):
 
             if supplier["type"] == "supplier":
                 supplierData = getExpensesBySupplier(
-                    supplier["id"], initialDate, finishDate
+                    supplier["id"], initialDate, finishDate, userId
                 )
                 try:
                     data
@@ -136,7 +138,7 @@ def getGoalsReport(initialDate, finishDate, userId):
                 )
             else:
                 typeData = getExpensesBySupplierType(
-                    supplier["type"], initialDate, finishDate
+                    supplier["type"], initialDate, finishDate, userId
                 )
                 data = data | typeData["expenses"]
                 total += typeData["total"]

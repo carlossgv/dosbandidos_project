@@ -9,6 +9,7 @@ from .utils import (
     getFinancialsReport,
     getGoalsReport,
     getIncomes,
+    getMetrics,
 )
 
 # Create your views here.
@@ -28,6 +29,23 @@ def home(request):
                 goalsReport = getGoalsReport(initialDate, finishDate, userId)
                 food = goalsReport["food"]
                 liquor = goalsReport["liquor"]
+
+                incomes = getIncomes(initialDate, finishDate, userId)
+                incomesData = incomes["incomes"]
+                incomesTotal = incomes["total"]
+                lavuSales = incomes["lavuSales"]
+
+                metrics = getMetrics(initialDate, finishDate, userId)
+
+                metrics["orderAvg"] = round(
+                    metrics["Lavu Gross Sales"]["total"]
+                    / metrics["Lavu Order Count"]["total"],
+                    2,
+                )
+                metrics['laborGoal'] = round(metrics['Lavu Labor']['total']/lavuSales * 100)
+
+                foodCost = food['total']/lavuSales
+
 
                 return render(
                     request,
