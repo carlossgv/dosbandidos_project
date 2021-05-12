@@ -235,7 +235,7 @@ def getCashReport(initialCash, initialDate, finishDate, userId):
         if cashPurchases == None:
             cashPurchases = 0
 
-        cashData = CashLog.objects.get(date=date)
+        cashData = CashLog.objects.get(date=date, restaurant_id=userId)
 
         cashSales = cashData.cash_sales
         cardAuto = cashData.card_auto_grat
