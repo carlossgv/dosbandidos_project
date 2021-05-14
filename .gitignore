@@ -3,3 +3,4 @@ dosbandidos_env
 *.pyc
 __pycache__
 dbInfo
+.vscode
