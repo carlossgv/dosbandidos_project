@@ -37,14 +37,20 @@ def home(request):
 
                 metrics = getMetrics(initialDate, finishDate, userId)
 
-                metrics["orderAvg"] = round(
-                    metrics["Lavu Gross Sales"]["total"]
-                    / metrics["Lavu Order Count"]["total"],
-                    2,
-                )
-                metrics['laborGoal'] = round(metrics['Lavu Labor']['total']/lavuSales * 100)
+                print(metrics["Lavu Order Count"]["total"])
 
-                foodCost = food['total']/lavuSales
+                if metrics["Lavu Order Count"]["total"] != 0:
+                    metrics["orderAvg"] = round(
+                        metrics["Lavu Gross Sales"]["total"]
+                        / metrics["Lavu Order Count"]["total"],
+                        2,
+                    )
+                    metrics['laborGoal'] = round(metrics['Lavu Labor']['total']/lavuSales * 100)
+
+                    foodCost = food['total']/lavuSales
+                else:
+                    metrics["orderAvg"] = "No info"
+                    metrics['laborGoal'] = "No info"
 
 
                 return render(
