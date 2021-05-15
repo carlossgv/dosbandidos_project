@@ -243,7 +243,7 @@ def getCashReport(initialCash, initialDate, finishDate, userId):
         cashOut = cashSales - cardAuto - cardTips
         cashModifications = cashData.modifications
 
-        finalCash = round(initialCash + cashOut - cashPurchases - cashModifications, 2)
+        finalCash = round(initialCash + cashOut - cashPurchases + cashModifications, 2)
 
         results.append(
             {
