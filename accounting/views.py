@@ -12,6 +12,7 @@ from .utils import (
     getMetrics,
 )
 
+
 # Create your views here.
 @login_required
 def home(request):
@@ -37,26 +38,52 @@ def home(request):
 
                 metrics = getMetrics(initialDate, finishDate, userId)
 
-                print(metrics["Lavu Order Count"]["total"])
-
-                if metrics["Lavu Order Count"]["total"] != 0:
-                    metrics["orderAvg"] = round(
-                        metrics["Lavu Gross Sales"]["total"]
-                        / metrics["Lavu Order Count"]["total"],
-                        2,
-                    )
-                    metrics['laborGoal'] = round(metrics['Lavu Labor']['total']/lavuSales * 100)
+                if metrics["LavuOrderCount"]["total"] != 0:
+                    metrics["orderAvg"] = {
+                        'name': 'Order Average',
+                        'total': round(
+                        metrics["LavuGrossSales"]["total"]
+                        / metrics["LavuOrderCount"]["total"],
+                        2)
+                    }
+                    metrics['laborGoal'] = {
+                        "name": 'Labor Goal',
+                        "total": round(metrics['LavuLabor']['total'] / lavuSales * 100)
+                    }
 
                     foodCost = food['total']/lavuSales
+                    metrics['foodCost'] = {
+                        'name': 'Food Cost',
+                        'total': round(foodCost*100)
+                    }
+
+                    liquorCost = liquor['total']/metrics['LavuLiquorSales']['total']
+                    metrics['liquorCost'] = {
+                        'name': 'Liquor Cost',
+                        'total': round(liquorCost*100)
+                    }
+
+                    costAvg = (metrics['foodCost']['total'] + metrics['liquorCost']['total'])/2
+                    metrics['costAvg'] = {
+                        'name': 'Cost Average',
+                        'total': costAvg
+                    }
+
+                    metrics['FoodNetSales'] = {
+                        'name': 'Food Net Sales',
+                        'total': metrics['LavuNetSales']['total'] - metrics['LavuLiquorSales']['total']
+                    }
+
                 else:
                     metrics["orderAvg"] = "No info"
                     metrics['laborGoal'] = "No info"
 
+                print(metrics)
 
                 return render(
                     request,
                     "accounting/home.html",
-                    {"form": form, "food": food, "liquor": liquor},
+                    {"form": form, "food": food, "liquor": liquor, 'metrics': metrics},
                 )
 
             elif "getFinancials" in request.POST:

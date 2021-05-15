@@ -46,7 +46,7 @@ def getMetricBySupplier(supplierId, initialDate, finishDate, userId):
         supplier=supplierId, date__range=[initialDate, finishDate], restaurant_id=userId
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-    if total == None:
+    if total is None:
         total = 0
 
     return {"name": name, "total": round(total, 2)}
@@ -63,7 +63,7 @@ def getIncomes(initialDate, finishDate, userId):
         incomeData = getIncomeBySupplier(supplier.pk, initialDate, finishDate, userId)
         incomes.append(incomeData)
         total += incomeData["total"]
-        if supplier.name == 'Lavu Sales':
+        if supplier.name == 'Lavu Net Sales':
             lavuSales = incomeData['total']
 
     return {"incomes": incomes, "total": total, 'lavuSales': lavuSales}
@@ -75,9 +75,10 @@ def getMetrics(initialDate, finishDate, userId):
     metrics = {}
 
     for supplier in metrics_list:
-        print(supplier.name)
         metricData = getMetricBySupplier(supplier.pk, initialDate, finishDate, userId)
-        metrics[supplier.name] = metricData
+        metrics[''.join(x for x in supplier.name.title() if not x.isspace())] = metricData
+
+    metrics['LavuNetSales'] = getIncomeBySupplier(68, initialDate, finishDate,userId)
 
     return metrics
 

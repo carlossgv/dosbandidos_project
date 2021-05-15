@@ -61,22 +61,21 @@
                     </tr>
                 </thead> -->
                 <tr class="row-title">
-                    <td colspan=2>Food</td>
+                    <td colspan=2>Food Expenses</td>
                 </tr>
                 {% for supplier in food.suppliersTotals %}
-
-                <tr>
-                    <td>{{ supplier.name }}</td>
-                    <td>{{ supplier.total }}</td>
-                </tr>
-            {% endfor %}
+                    <tr>
+                        <td>{{ supplier.name }}</td>
+                        <td>{{ supplier.total }}</td>
+                    </tr>
+                {% endfor %}
                 <tr class="row-subtitle">        
-                    <td><strong>TOTAL FOOD:</strong></td>
+                    <td><strong>TOTAL FOOD EXPENSES:</strong></td>
                     <td><strong>{{ food.total }}</strong></td>
                 </tr>
                 
                 <tr class="row-title">
-                    <td colspan=2>Liquor</td>
+                    <td colspan=2>Liquor Expenses</td>
                 </tr>
             {% for supplier in liquor.suppliersTotals %}
                 <tr>
@@ -85,8 +84,74 @@
                 </tr>
             {% endfor %}
                 <tr class="row-subtitle">
-                    <td><strong>TOTAL LIQUOR:</strong></td>
+                    <td><strong>TOTAL LIQUOR EXPENSES:</strong></td>
                     <td><strong>{{ liquor.total }}</strong></td>
+                </tr>
+            </table>
+
+            <table class="striped responsive-table">
+                <tr class="row-title">
+                        <td colspan=2>Goals</td>
+                </tr>
+                <tr>
+                    <td>{{ metrics.LavuOrderCount.name }}</td>
+                    <td>{{ metrics.LavuOrderCount.total }}</td>
+                </tr>
+                <tr>
+                    <td>{{ metrics.LavuGrossSales.name }}</td>
+                    <td>{{ metrics.LavuGrossSales.total }}</td>
+                </tr>
+                <tr class="row-subtitle" style="color: green" >
+                    <td>{{ metrics.orderAvg.name }} (Goal: 37.5)</td>
+                    <td>{{ metrics.orderAvg.total }}</td>
+                </tr>
+
+                <tr>
+                    <td>{{ metrics.LavuLabor.name }}</td>
+                    <td>{{ metrics.LavuLabor.total }}</td>
+                </tr>
+                <tr>
+                    <td>{{ metrics.LavuNetSales.name }}</td>
+                    <td>{{ metrics.LavuNetSales.total }}</td>
+                </tr>
+                <tr class="row-subtitle" style="color: green" >
+                    <td>{{ metrics.laborGoal.name }} (Goal: 19%)</td>
+                    <td>{{ metrics.laborGoal.total }}%</td>
+                </tr>
+            </table>
+
+            <table class="striped responsive-table">
+                <tr class="row-title">
+                        <td colspan=2>Cost Average</td>
+                </tr>
+                <tr>
+                    <td>Food Expenses</td>
+                    <td>{{ food.total }}</td>
+                </tr>
+                <tr>
+                    <td>{{ metrics.FoodNetSales.name }}</td>
+                    <td>{{ metrics.FoodNetSales.total }}</td>
+                </tr>
+                <tr class="row-subtitle">
+                    <td>{{ metrics.foodCost.name }}</td>
+                    <td>{{ metrics.foodCost.total }}%</td>
+                </tr>
+
+                <tr>
+                    <td>Liquor Expenses</td>
+                    <td>{{ liquor.total }}</td>
+                </tr>
+                <tr>
+                    <td>{{ metrics.LavuLiquorSales.name }}</td>
+                    <td>{{ metrics.LavuLiquorSales.total }}</td>
+                </tr>
+                <tr class="row-subtitle">
+                    <td>{{ metrics.liquorCost.name }}</td>
+                    <td>{{ metrics.liquorCost.total }}%</td>
+                </tr>
+                <tr class="row-subtitle">
+                    <td><strong>{{ metrics.costAvg.name }}</strong></td>
+                    <td><strong>{{ metrics.costAvg.total }}%</strong></td>
                 </tr>
             </table>
         {% endif %}
