@@ -6,7 +6,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const cash = document.querySelector('#id_cash');
 
   const infoButton = document.querySelector('#getInfo');
-  const goalsButton = document.querySelector('#getReport');
+  const goalsButton = document.querySelector('#getGoals');
   const financialsButton = document.querySelector('#getFinancials');
   const cashButton = document.querySelector('#getCashReport');
 
