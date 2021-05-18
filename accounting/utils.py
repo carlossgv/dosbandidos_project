@@ -57,28 +57,28 @@ def getIncomes(initialDate, finishDate, userId):
     supplier_list = Supplier.objects.filter(supplierType="sales")
     incomes = []
     total = 0
-    lavuSales = 0
+    restaurantSales = 0
 
     for supplier in supplier_list:
         incomeData = getIncomeBySupplier(supplier.pk, initialDate, finishDate, userId)
         incomes.append(incomeData)
         total += incomeData["total"]
-        if supplier.name == 'Lavu Net Sales':
-            lavuSales = incomeData['total']
+        if supplier.name == 'Restaurant Net Sales':
+            restaurantSales = incomeData['total']
 
-    return {"incomes": incomes, "total": total, 'lavuSales': lavuSales}
+    return {"incomes": incomes, "total": total, 'restaurantSales': restaurantSales}
 
 
 def getMetrics(initialDate, finishDate, userId):
 
-    metrics_list = Supplier.objects.filter(supplierType="lavuInfo")
+    metrics_list = Supplier.objects.filter(supplierType="restaurantInfo")
     metrics = {}
 
     for supplier in metrics_list:
         metricData = getMetricBySupplier(supplier.pk, initialDate, finishDate, userId)
         metrics[''.join(x for x in supplier.name.title() if not x.isspace())] = metricData
 
-    metrics['LavuNetSales'] = getIncomeBySupplier(68, initialDate, finishDate,userId)
+    metrics['RestaurantNetSales'] = getIncomeBySupplier(68, initialDate, finishDate,userId)
 
     return metrics
 

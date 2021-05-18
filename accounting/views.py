@@ -34,30 +34,30 @@ def home(request):
                 incomes = getIncomes(initialDate, finishDate, userId)
                 incomesData = incomes["incomes"]
                 incomesTotal = incomes["total"]
-                lavuSales = incomes["lavuSales"]
+                restaurantSales = incomes["restaurantSales"]
 
                 metrics = getMetrics(initialDate, finishDate, userId)
 
-                if metrics["LavuOrderCount"]["total"] != 0:
+                if metrics["RestaurantOrderCount"]["total"] != 0:
                     metrics["orderAvg"] = {
                         'name': 'Order Average',
                         'total': round(
-                        metrics["LavuGrossSales"]["total"]
-                        / metrics["LavuOrderCount"]["total"],
+                        metrics["RestaurantGrossSales"]["total"]
+                        / metrics["RestaurantOrderCount"]["total"],
                         2)
                     }
                     metrics['laborGoal'] = {
                         "name": 'Labor Goal',
-                        "total": round(metrics['LavuLabor']['total'] / lavuSales * 100)
+                        "total": round(metrics['RestaurantLabor']['total'] / restaurantSales * 100)
                     }
 
-                    foodCost = food['total']/lavuSales
+                    foodCost = food['total']/restaurantSales
                     metrics['foodCost'] = {
                         'name': 'Food Cost',
                         'total': round(foodCost*100)
                     }
 
-                    liquorCost = liquor['total']/metrics['LavuLiquorSales']['total']
+                    liquorCost = liquor['total']/metrics['RestaurantLiquorSales']['total']
                     metrics['liquorCost'] = {
                         'name': 'Liquor Cost',
                         'total': round(liquorCost*100)
@@ -71,7 +71,7 @@ def home(request):
 
                     metrics['FoodNetSales'] = {
                         'name': 'Food Net Sales',
-                        'total': metrics['LavuNetSales']['total'] - metrics['LavuLiquorSales']['total']
+                        'total': metrics['RestaurantNetSales']['total'] - metrics['RestaurantLiquorSales']['total']
                     }
 
                 else:
