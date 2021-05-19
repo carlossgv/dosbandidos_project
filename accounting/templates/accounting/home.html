@@ -54,12 +54,6 @@
     {% if request.method == "POST" %}
         {% if food %}
             <table class="striped responsive-table">
-                <!-- <thead>
-                    <tr>
-                        <th>Name</th>
-                        <th>Amount</th>
-                    </tr>
-                </thead> -->
                 <tr class="row-title">
                     <td colspan=2>Food Expenses</td>
                 </tr>
@@ -167,7 +161,7 @@
                         <td>{{income.total | floatformat:2}}</td>
                     </tr>
                 {% endfor %}
-                <tr style="color: green; border-bottom: gray 2px solid;"" class="row-title">
+                <tr style="color: green; border-bottom: gray 2px solid;" class="row-title">
                     <td>Total Incomes:</td>
                     <td>{{ incomesTotal | floatformat:2 }}</td>
                 </tr>
@@ -190,7 +184,7 @@
                             <td>{{ supplierType.total | floatformat:2 }}</td>
                         </tr>
                 {% endfor %}
-                <tr style="color: crimson;"" class="row-title">
+                <tr style="color: crimson;" class="row-title">
                     <td>Total Expenses:</td>
                     <td>{{ financialsTotal | floatformat:2 }}</td>
                 </tr>
