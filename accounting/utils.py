@@ -1,3 +1,6 @@
+import datetime
+import pytz as pytz
+
 from .models import CashLog, Supplier, Expense, Income, Metric
 from django.db.models import Sum
 from datetime import timedelta
@@ -115,6 +118,25 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate, userId):
         "expenses": expenses,
     }
 
+
+def transform_to_epoch(date, date_type, location='US/Central'):
+
+    offset = pytz.timezone(location).localize(datetime.datetime(date.year, date.month, date.day)).strftime('%z')
+    offset = int(offset) * -1/100
+
+    if date_type == 'initial':
+        hour = 0
+        minute = 0
+    elif date_type == 'finish':
+        hour = 23
+        minute = 59
+
+    date = datetime.datetime(date.year, date.month, date.day, hour, minute, tzinfo=datetime.timezone.utc) + \
+              datetime.timedelta(hours=offset)
+
+    date = int(date.timestamp()) * 1000
+
+    return date
 
 def getGoalsReport(initialDate, finishDate, userId):
     def totalizeSuppliers(suppliersList):

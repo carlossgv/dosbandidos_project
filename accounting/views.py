@@ -78,8 +78,6 @@ def home(request):
                     metrics["orderAvg"] = "No info"
                     metrics['laborGoal'] = "No info"
 
-                print(metrics)
-
                 return render(
                     request,
                     "accounting/home.html",
