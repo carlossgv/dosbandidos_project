@@ -1,9 +1,7 @@
-import datetime
-import pytz as pytz
-
 from .models import CashLog, Supplier, Expense, Income, Metric
 from django.db.models import Sum
 from datetime import timedelta
+from .utils_api_clover import daily_cash_data_clover
 
 
 def getExpensesBySupplier(supplierId, initialDate, finishDate, userId):
@@ -119,24 +117,7 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate, userId):
     }
 
 
-def transform_to_epoch(date, date_type, location='US/Central'):
 
-    offset = pytz.timezone(location).localize(datetime.datetime(date.year, date.month, date.day)).strftime('%z')
-    offset = int(offset) * -1/100
-
-    if date_type == 'initial':
-        hour = 0
-        minute = 0
-    elif date_type == 'finish':
-        hour = 23
-        minute = 59
-
-    date = datetime.datetime(date.year, date.month, date.day, hour, minute, tzinfo=datetime.timezone.utc) + \
-              datetime.timedelta(hours=offset)
-
-    date = int(date.timestamp()) * 1000
-
-    return date
 
 def getGoalsReport(initialDate, finishDate, userId):
     def totalizeSuppliers(suppliersList):
@@ -242,47 +223,60 @@ def getFinancialsReport(initialDate, finishDate, userId):
     return {"results": results, "total": financialsTotal}
 
 
-def getCashReport(initialCash, initialDate, finishDate, userId):
+def getCashReport(initial_cash, initial_date, finish_date, user_id):
 
     results = []
+    date = initial_date
+    initial_cash = round(float(initial_cash), 2)
 
-    date = initialDate
-
-    initialCash = round(initialCash, 2)
-
-    while date != finishDate + timedelta(days=1):
-        cashPurchases = Expense.objects.filter(
-            costCenter="cash", date=date, restaurant_id=userId
+    while date != finish_date + timedelta(days=1):
+        cash_purchases = Expense.objects.filter(
+            costCenter="cash", date=date, restaurant_id=user_id
         ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-        if cashPurchases == None:
-            cashPurchases = 0
+        if cash_purchases is None:
+            cash_purchases = 0
+        else:
+            cash_purchases = float(cash_purchases)
 
-        cashData = CashLog.objects.get(date=date, restaurant_id=userId)
+        if user_id == 1:
+            cash_data = CashLog.objects.get(date=date, restaurant_id=user_id)
 
-        cashSales = cashData.cash_sales
-        cardAuto = cashData.card_auto_grat
-        cardTips = cashData.card_tips
-        cashOut = cashSales - cardAuto - cardTips
-        cashModifications = cashData.modifications
+            cash_sales = cash_data.cash_sales
+            card_auto = cash_data.card_auto_grat
+            card_tips = cash_data.card_tips
+            cash_modifications = cash_data.modifications
 
-        finalCash = round(initialCash + cashOut - cashPurchases + cashModifications, 2)
+        elif user_id == 2:
+            cash_data = daily_cash_data_clover('459RV00NPJJ11', date)
+
+            cash_sales = round(cash_data['cash_sales'], 2)
+            card_auto = round(cash_data['card_auto'], 2)
+            card_tips = round(cash_data['card_tips'], 2)
+            cash_modifications = float(CashLog.objects.get(date=date, restaurant_id=user_id).modifications)
+
+        cash_out = round(cash_sales - card_auto - card_tips, 2)
+
+        final_cash = round(initial_cash + cash_out - cash_purchases + cash_modifications, 2)
 
         results.append(
             {
                 "date": date,
-                "initialCash": initialCash,
-                "cashSales": cashSales,
-                "cardAuto": cardAuto,
-                "cardTips": cardTips,
-                "cashOut": cashOut,
-                "cashPurchases": cashPurchases,
-                "cashModifications": cashModifications,
-                "finalCash": finalCash,
+                "initialCash": initial_cash,
+                "cashSales": cash_sales,
+                "cardAuto": card_auto,
+                "cardTips": card_tips,
+                "cashOut": cash_out,
+                "cashPurchases": cash_purchases,
+                "cashModifications": cash_modifications,
+                "finalCash": final_cash,
             }
         )
 
-        initialCash = finalCash
+        initial_cash = final_cash
         date = date + timedelta(days=1)
 
     return results
+
+
+
