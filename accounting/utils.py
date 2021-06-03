@@ -79,10 +79,11 @@ def getIncomes(initialDate, finishDate, userId):
         incomes.append(incomeData)
         total += incomeData["total"]
         if supplier.name == 'Restaurant Net Sales':
-            if userId == 1:
-                restaurantSales = incomeData['total']
-            elif userId == 2:
-                pass
+            restaurantSales = incomeData['total']
+            # if userId == 1:
+            #     restaurantSales = incomeData['total']
+            # elif userId == 2:
+            #     pass
 
     print(incomes)
     print(total)
