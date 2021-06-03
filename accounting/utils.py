@@ -53,23 +53,6 @@ def getMetricBySupplier(supplierId, initialDate, finishDate, userId):
     return {"name": name, "total": round(total, 2)}
 
 
-def getIncomes(initialDate, finishDate, userId):
-
-    supplier_list = Supplier.objects.filter(supplierType="sales")
-    incomes = []
-    total = 0
-    restaurantSales = 0
-
-    for supplier in supplier_list:
-        incomeData = getIncomeBySupplier(supplier.pk, initialDate, finishDate, userId)
-        incomes.append(incomeData)
-        total += incomeData["total"]
-        if supplier.name == 'Restaurant Net Sales':
-            restaurantSales = incomeData['total']
-
-    return {"incomes": incomes, "total": total, 'restaurantSales': restaurantSales}
-
-
 def getMetrics(initialDate, finishDate, userId):
 
     metrics_list = Supplier.objects.filter(supplierType="restaurantInfo")
@@ -82,6 +65,30 @@ def getMetrics(initialDate, finishDate, userId):
     metrics['RestaurantNetSales'] = getIncomeBySupplier(68, initialDate, finishDate,userId)
 
     return metrics
+
+
+def getIncomes(initialDate, finishDate, userId):
+
+    supplier_list = Supplier.objects.filter(supplierType="sales")
+    incomes = []
+    total = 0
+    restaurantSales = 0
+
+    for supplier in supplier_list:
+        incomeData = getIncomeBySupplier(supplier.pk, initialDate, finishDate, userId)
+        incomes.append(incomeData)
+        total += incomeData["total"]
+        if supplier.name == 'Restaurant Net Sales':
+            if userId == 1:
+                restaurantSales = incomeData['total']
+            elif userId == 2:
+                pass
+
+    print(incomes)
+    print(total)
+    print(restaurantSales)
+
+    return {"incomes": incomes, "total": total, 'restaurantSales': restaurantSales}
 
 
 def getExpensesBySupplierType(supplierType, initialDate, finishDate, userId):
@@ -115,8 +122,6 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate, userId):
         "total": round(total, 2),
         "expenses": expenses,
     }
-
-
 
 
 def getGoalsReport(initialDate, finishDate, userId):
@@ -214,7 +219,7 @@ def getFinancialsReport(initialDate, finishDate, userId):
             restaurant_id=userId,
         ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-        if total == None:
+        if total is None:
             total = 0
 
         results.append({"name": name, "expenses": expenses, "total": total})
@@ -245,7 +250,7 @@ def getCashReport(initial_cash, initial_date, finish_date, user_id):
             cash_sales = cash_data.cash_sales
             card_auto = cash_data.card_auto_grat
             card_tips = cash_data.card_tips
-            cash_modifications = cash_data.modifications
+            cash_modifications = float(cash_data.modifications)
 
         elif user_id == 2:
             cash_data = daily_cash_data_clover('459RV00NPJJ11', date)
@@ -255,7 +260,7 @@ def getCashReport(initial_cash, initial_date, finish_date, user_id):
             card_tips = round(cash_data['card_tips'], 2)
             cash_modifications = float(CashLog.objects.get(date=date, restaurant_id=user_id).modifications)
 
-        cash_out = round(cash_sales - card_auto - card_tips, 2)
+        cash_out = round(float(cash_sales - card_auto - card_tips), 2)
 
         final_cash = round(initial_cash + cash_out - cash_purchases + cash_modifications, 2)
 
