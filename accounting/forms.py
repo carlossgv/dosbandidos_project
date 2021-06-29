@@ -27,7 +27,6 @@ class ExpensesForm(forms.Form):
     )
 
     # TODO: populate supplier choices dinamically
-
     supplierType_choices = [
         (None, "-----"),
         ("operationFood", "Food"),

@@ -54,7 +54,6 @@ def getMetricBySupplier(supplierId, initialDate, finishDate, userId):
 
 
 def getMetrics(initialDate, finishDate, userId):
-
     metrics_list = Supplier.objects.filter(supplierType="restaurantInfo")
     metrics = {}
 
@@ -68,7 +67,6 @@ def getMetrics(initialDate, finishDate, userId):
 
 
 def getIncomes(initialDate, finishDate, userId):
-
     supplier_list = Supplier.objects.filter(supplierType="sales")
     incomes = []
     total = 0
@@ -84,10 +82,6 @@ def getIncomes(initialDate, finishDate, userId):
             #     restaurantSales = incomeData['total']
             # elif userId == 2:
             #     pass
-
-    print(incomes)
-    print(total)
-    print(restaurantSales)
 
     return {"incomes": incomes, "total": total, 'restaurantSales': restaurantSales}
 
