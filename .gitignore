@@ -4,3 +4,6 @@ dosbandidos_env
 __pycache__
 dbInfo
 .vscode
+.idea/
+.idea/dosbandidos_project.iml
+.idea/misc.xml
