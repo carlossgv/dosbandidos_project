@@ -44,8 +44,8 @@ class Expense(models.Model):
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField()
     costCenter = models.CharField(max_length=20, choices=COST_CENTER)
-    isPaid = models.BooleanField(default=True)
-    isCheck = models.BooleanField(default=False)
+    # isPaid = models.BooleanField(default=True)
+    # isCheck = models.BooleanField(default=False)
     reference = models.CharField(max_length=50, blank=True)
     comments = models.TextField(blank=True)
 
