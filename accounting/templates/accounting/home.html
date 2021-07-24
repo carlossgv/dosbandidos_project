@@ -264,29 +264,29 @@
                     <th>Name</th>
                     <th>Date</th>
                     <th>Amount</th>
-                    <th>Check</th>
                     <th>Reference</th>
                     <th>Center Cost</th>
                 </tr>
             </thead>
-            {% for supplier in supplierData.expenses %}
-                <tr>
-                    <td>{{ supplier.supplier.name }}</td>
-                    <td>{{ supplier.date }}</td>
-                    <td>{{ supplier.amount }}</td>
-                    <td>{% if supplier.isCheck == True %}&#10004;{% else %}&times;{% endif %}</td>
-                    <td>{{ supplier.reference }}</td>
-                    <td>{{ supplier.get_costCenter_display }}</td>
-                </tr>
-            {% endfor %}
-                <tr> 
-                    <td></td>       
-                    <td><strong>Total {{ supplierData.name }}:</strong></td>
-                    <td><strong>{{ supplierData.total }}</strong></td>
-                    <td></td>       
-                    <td></td>       
-                    <td></td>       
-                </tr>
+            <tbody>
+                {% for supplier in supplierData.expenses %}
+                    <tr>
+                        <td>{{ supplier.supplier.name }}</td>
+                        <td>{{ supplier.date }}</td>
+                        <td>{{ supplier.amount }}</td>
+                        <td>{{ supplier.reference }}</td>
+                        <td>{{ supplier.get_costCenter_display }}</td>
+                    </tr>
+                {% endfor %}
+                    <tr> 
+                        <td></td>       
+                        <td><strong>Total {{ supplierData.name }}:</strong></td>
+                        <td><strong>{{ supplierData.total }}</strong></td>
+                        <td></td>       
+                        <td></td>       
+                        <td></td>       
+                    </tr>
+            </tbody>
         </table>
         {% endif %}
     {% endif %}
