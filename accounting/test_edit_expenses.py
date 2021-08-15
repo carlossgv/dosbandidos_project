@@ -1,6 +1,5 @@
 from django.test import TestCase
-from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
-from .models import Expense, Supplier, Rule
+from .models import Expense, Supplier
 from django.contrib.auth.models import User
 
 from .utils_edit_expenses import get_expenses_by_date

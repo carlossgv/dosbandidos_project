@@ -21,7 +21,7 @@ def getExpensesBySupplier(supplierId, initialDate, finishDate, userId):
         supplier=supplierId, date__range=[initialDate, finishDate], restaurant_id=userId
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-    if total == None:
+    if total is None:
         total = 0
 
     return {"name": name, "total": round(total, 2), "expenses": expenses}
@@ -34,7 +34,7 @@ def getIncomeBySupplier(supplierId, initialDate, finishDate, userId):
         supplier=supplierId, date__range=[initialDate, finishDate], restaurant_id=userId
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-    if total == None:
+    if total is None:
         total = 0
 
     return {"name": name, "total": round(total, 2)}
