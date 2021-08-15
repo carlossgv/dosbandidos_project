@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.db.models.expressions import F
 from django.shortcuts import render
-from .forms import ExpensesForm
+from .forms import ExpensesForm, EditExpensesForm
 from .utils import (
     getCashReport,
     getExpensesBySupplier,
@@ -13,7 +13,15 @@ from .utils import (
 )
 
 
-# Create your views here.
+@login_required
+def edit_expenses(request):
+    form = EditExpensesForm
+    return render(
+        request,
+        "accounting/home.html",
+        {"form": form},
+    )
+
 @login_required
 def home(request):
 
