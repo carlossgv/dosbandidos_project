@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
-from django.db.models.expressions import F
 from django.shortcuts import render
 from .forms import ExpensesForm, EditExpensesForm
+from .models import Supplier
 from .utils import (
     getCashReport,
     getExpensesBySupplier,
@@ -11,16 +11,36 @@ from .utils import (
     getIncomes,
     getMetrics,
 )
+from .utils_edit_expenses import get_expenses_by_date
 
 
 @login_required
 def edit_expenses(request):
     form = EditExpensesForm
+
+    expenses = get_expenses_by_date("2021-08-02", "2021-08-08", request.user.pk)
+
+    supplier_choices = [(None, "-----")]
+    for supplier in Supplier.objects.all().order_by("name"):
+        supplier_choices.append((supplier.pk, supplier.name))
+
+    cost_center_choices = (
+        (None, "-----"),
+        ("cash", "Cash"),
+        ("primaryAccount", "Primary Account"),
+        ("expensesAccount", "Expenses Account"),
+        ("notPaid", "Not Paid"),
+        ("standBy", "Standby"),
+    )
+
     return render(
         request,
         "accounting/edit-expenses.html",
-        {"form": form},
+        {"form": form, "expenses": expenses,
+         "supplier_choices": supplier_choices,
+         "cost_center_choices": cost_center_choices},
     )
+
 
 @login_required
 def home(request):
