@@ -3,7 +3,14 @@ from django.db.models.deletion import CASCADE, PROTECT
 from django.contrib.auth.models import User
 
 
-# Create your models here.
+class Rule(models.Model):
+    description = models.CharField(max_length=200, unique=True)
+    supplier_id = models.IntegerField()
+
+    def __str__(self) -> str:
+        return f"({self.pk}) '{self.description}' | Supplier: ({self.supplier_id})"
+
+
 class Supplier(models.Model):
     TYPE = (
         ("operationFood", "Food"),
