@@ -1,48 +1,52 @@
 <form method="POST">
+    {% csrf_token %}
     <table class="striped highlight responsive-table">
         <thead>
-          <tr>
+        <tr>
             <th>Date</th>
             <th>Cost Center</th>
             <th>Amount</th>
             <th>Supplier</th>
             <th>Restaurant</th>
-          </tr>
+        </tr>
         </thead>
         <tbody>
         {% for expense in expenses %}
-            <tr id="expense-id-{{ expense.pk }}">
-                <td><input type="text" id="expense-date-{{ expense.pk }}" value="{{ expense.date|date:'Y-m-d' }}"></td>
-                <td>
-                    <div class="input-field">
-                        <select name="cost-center-choices" id="cost-center-choices">
-                            {% for option in cost_center_choices %}
-                                {% if option.0 == expense.costCenter %}
-                                    <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
-                                {% else %}
-                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                </td>
-                <td><input type="text" id="expense-amount-{{ expense.pk }}" value="{{ expense.amount }}"></td>
-                <td>
-                    <div class="input-field">
-                        <select name="supplier-choices" id="supplier-choices">
-                            {% for option in supplier_choices %}
-                                {% if option.0 == expense.supplier.id %}
-                                    <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
-                                {% else %}
-                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
-                                {% endif %}
-                            {% endfor %}
-                        </select>
-                    </div>
-                </td>
-                <td><input type="text" id="expense-restaurant-{{ expense.pk }}" value="{{ expense.restaurant }}"></td>
-            </tr>
+        <tr id="{{expense.pk}}-expense-row">
+            <td><input type="text" name="{{expense.pk}}-expense-date" id="{{expense.pk}}-expense-date" value="{{ expense.date|date:'Y-m-d' }}"></td>
+            <td>
+                <div class="input-field">
+                    <select name="cost-center-choices" id="cost-center-choices-{{expense.pk}}">
+                        {% for option in cost_center_choices %}
+                        {% if option.0 == expense.costCenter %}
+                            <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                        {% else %}
+                            <option value="{{ option.0 }}">{{ option.1 }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td><input type="text" name="{{expense.pk}}-expense-amount" id="{{expense.pk}}-expense-amount" value="{{ expense.amount }}"></td>
+            <td>
+                <div class="input-field">
+                    <select name="supplier-choices" id="supplier-choices-{{expense.pk}}">
+                        {% for option in supplier_choices %}
+                        {% if option.0 == expense.supplier.id %}
+                        <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                        {% else %}
+                        <option value="{{ option.0 }}">{{ option.1 }}</option>
+                        {% endif %}
+                        {% endfor %}
+                    </select>
+                </div>
+            </td>
+            <td>{{ expense.restaurant }}</td>
+        </tr>
         {% endfor %}
         </tbody>
     </table>
+    <button class="btn waves-effect waves-light" type="submit" id="edit-expenses" name="edit-expenses">Edit Expenses
+        <i class="material-icons right">send</i>
+    </button>
 </form>
