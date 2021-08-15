@@ -109,7 +109,7 @@ def getExpensesBySupplierType(supplierType, initialDate, finishDate, userId):
         restaurant_id=userId,
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
-    if total == None:
+    if total is None:
         total = 0
 
     return {
