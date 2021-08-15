@@ -2,7 +2,7 @@ from django.test import TestCase
 from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
 from .models import Expense, Supplier, Rule
 from django.contrib.auth.models import User
-
+import decimal
 
 class CsvReading(TestCase):
     def setUp(self):
@@ -32,14 +32,14 @@ class CsvReading(TestCase):
         filepath = "./testsdata/AccountHistory.csv"
         delimiter = ","
         data = read_csv(filepath, delimiter)
-        self.assertTrue(data, True)
+        self.assertEqual(data, True)
 
     def test_transform_date_to_django_format(self):
         date = '8/6/2021'
 
         formatted_date = format_date(date)
 
-        self.assertTrue(formatted_date, '2021-08-06')
+        self.assertEqual(formatted_date, '2021-08-06')
 
     def test_create_expense_by_row_if_no_rule(self):
         # Superior ID: 25
@@ -47,14 +47,14 @@ class CsvReading(TestCase):
 
         cost_center = 'primaryAccount'
 
-        csv_create_expense(row, cost_center, 1)
+        csv_create_expense(row, 1, cost_center)
 
         expense = Expense.objects.all().order_by('-id')[0]
         print(expense)
 
-        self.assertTrue(expense.supplier.pk, 100)
-        self.assertTrue(expense.amount, 615.58)
-        self.assertTrue(expense.costCenter, 'primaryAccount')
+        self.assertEqual(expense.supplier.pk, 100)
+        self.assertEqual(float(expense.amount), 615.58)
+        self.assertEqual(expense.costCenter, 'primaryAccount')
 
     def test_create_expense_by_row_if_rule_exist(self):
         # Superior ID: 25
@@ -62,18 +62,18 @@ class CsvReading(TestCase):
                '97.50', '', 'Posted', '']
         cost_center = 'primaryAccount'
 
-        csv_create_expense(row, cost_center, 1)
+        csv_create_expense(row, 1, cost_center)
 
         expense = Expense.objects.all().order_by('-id')[0]
         print(expense)
 
-        self.assertTrue(expense.supplier.pk, 2)
-        self.assertTrue(expense.amount, 97.50)
-        self.assertTrue(expense.costCenter, 'primaryAccount')
+        self.assertEqual(expense.supplier.pk, 2)
+        self.assertEqual(expense.amount, 97.50)
+        self.assertEqual(expense.costCenter, 'primaryAccount')
 
     def test_load_expenses_to_db(self):
         filepath = "./testsdata/AccountHistory.csv"
         delimiter = ","
         data = load_csv_expenses(filepath, delimiter, 1)
 
-        self.assertTrue(data, True)
+        self.assertEqual(data, True)
