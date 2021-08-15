@@ -12,7 +12,7 @@
         <tbody>
         {% for expense in expenses %}
             <tr id="expense-id-{{ expense.pk }}">
-                <td><input type="text" id="expense-date-{{ expense.pk }}" value="{{ expense.date }}"></td>
+                <td><input type="text" id="expense-date-{{ expense.pk }}" value="{{ expense.date|date:'Y-m-d' }}"></td>
                 <td>
                     <div class="input-field">
                         <select name="cost-center-choices" id="cost-center-choices">
