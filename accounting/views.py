@@ -18,7 +18,7 @@ def edit_expenses(request):
     form = EditExpensesForm
     return render(
         request,
-        "accounting/home.html",
+        "accounting/edit-expenses.html",
         {"form": form},
     )
 
