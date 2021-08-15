@@ -41,6 +41,7 @@ class Expense(models.Model):
         ("primaryAccount", "Primary Account"),
         ("expensesAccount", "Expenses Account"),
         ("notPaid", "Not Paid"),
+        ("standBy", "Standby"),
     )
     restaurant = models.ForeignKey(
         User, on_delete=PROTECT, related_name="restaurant_expense"
