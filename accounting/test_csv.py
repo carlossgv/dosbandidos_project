@@ -1,5 +1,5 @@
 from django.test import TestCase
-from .utils_csv_handling import read_csv, csv_create_expense, format_date
+from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
 from .models import Expense, Supplier, Rule
 from django.contrib.auth.models import User
 
@@ -47,7 +47,7 @@ class CsvReading(TestCase):
 
         cost_center = 'primaryAccount'
 
-        csv_create_expense(row, cost_center)
+        csv_create_expense(row, cost_center, 1)
 
         expense = Expense.objects.all().order_by('-id')[0]
         print(expense)
@@ -62,7 +62,7 @@ class CsvReading(TestCase):
                '97.50', '', 'Posted', '']
         cost_center = 'primaryAccount'
 
-        csv_create_expense(row, cost_center)
+        csv_create_expense(row, cost_center, 1)
 
         expense = Expense.objects.all().order_by('-id')[0]
         print(expense)
@@ -70,3 +70,10 @@ class CsvReading(TestCase):
         self.assertTrue(expense.supplier.pk, 2)
         self.assertTrue(expense.amount, 97.50)
         self.assertTrue(expense.costCenter, 'primaryAccount')
+
+    def test_load_expenses_to_db(self):
+        filepath = "./testsdata/AccountHistory.csv"
+        delimiter = ","
+        data = load_csv_expenses(filepath, delimiter, 1)
+
+        self.assertTrue(data, True)
