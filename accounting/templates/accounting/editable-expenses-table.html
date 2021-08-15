@@ -1,0 +1,48 @@
+<form method="POST">
+    <table class="striped highlight responsive-table">
+        <thead>
+          <tr>
+            <th>Date</th>
+            <th>Cost Center</th>
+            <th>Amount</th>
+            <th>Supplier</th>
+            <th>Restaurant</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for expense in expenses %}
+            <tr id="expense-id-{{ expense.pk }}">
+                <td><input type="text" id="expense-date-{{ expense.pk }}" value="{{ expense.date }}"></td>
+                <td>
+                    <div class="input-field">
+                        <select name="cost-center-choices" id="cost-center-choices">
+                            {% for option in cost_center_choices %}
+                                {% if option.0 == expense.costCenter %}
+                                    <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                {% else %}
+                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </td>
+                <td><input type="text" id="expense-amount-{{ expense.pk }}" value="{{ expense.amount }}"></td>
+                <td>
+                    <div class="input-field">
+                        <select name="supplier-choices" id="supplier-choices">
+                            {% for option in supplier_choices %}
+                                {% if option.0 == expense.supplier.id %}
+                                    <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
+                                {% else %}
+                                    <option value="{{ option.0 }}">{{ option.1 }}</option>
+                                {% endif %}
+                            {% endfor %}
+                        </select>
+                    </div>
+                </td>
+                <td><input type="text" id="expense-restaurant-{{ expense.pk }}" value="{{ expense.restaurant }}"></td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</form>
