@@ -16,56 +16,58 @@
 
 
     {% if title %}
-        <title>Dos Bandidos - {{ title }}</title>
+    <title>Dos Bandidos - {{ title }}</title>
     {% else %}
-        <title>Dos Bandidos</title>      
+    <title>Dos Bandidos</title>
     {% endif %}
 
 </head>
 <body>
-    <nav>
-        <div class="nav-wrapper container">
-          <a href="{% url 'accounting-home'  %}" class="brand-logo">
-              {% if user.is_authenticated %}
-                {{ request.user.last_name }}
-              {% else %}
-                Dos Bandidos Accounting
-              {% endif %}
-            </a>
-          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul id="nav-mobile" class="right hide-on-med-and-down">
+<nav>
+    <div class="nav-wrapper container">
+        <a href="{% url 'accounting-home'  %}" class="brand-logo">
+            {% if user.is_authenticated %}
+            {{ request.user.last_name }}
+            {% else %}
+            Dos Bandidos Accounting
+            {% endif %}
+        </a>
+        <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
+        <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
+            <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
             <li><a href="#">Incomes</a></li>
             {% if user.is_authenticated %}
-                <li><a href="{% url 'logout' %}">Sign Out</a></li>
+            <li><a href="{% url 'logout' %}">Sign Out</a></li>
             {% else %}
-                <li><a href="{% url 'login' %}">Log In</a></li>
-                <!-- <li><a href="#">Register</a></li> -->
+            <li><a href="{% url 'login' %}">Log In</a></li>
+            <!-- <li><a href="#">Register</a></li> -->
             {% endif %}
-          </ul>
-        </div>
-    </nav>
-
-    <ul id="mobile-demo" class="sidenav">
-      <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
-      <li><a href="#">Incomes</a></li>
-      {% if user.is_authenticated %}
-          <li><a href="{% url 'logout' %}">Sign Out</a></li>
-      {% else %}
-          <li><a href="{% url 'login' %}">Log In</a></li>
-          <!-- <li><a href="#">Register</a></li> -->
-      {% endif %}
-    </ul>
-
-
-    <div class="container" id="body">
-      {% block body %}{% endblock body %}
+        </ul>
     </div>
-    
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+</nav>
 
-    <script type="text/javascript" src="{% static 'accounting/js/main.js' %}"></script>
+<ul id="mobile-demo" class="sidenav">
+    <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
+    <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
+    <li><a href="#">Incomes</a></li>
+    {% if user.is_authenticated %}
+    <li><a href="{% url 'logout' %}">Sign Out</a></li>
+    {% else %}
+    <li><a href="{% url 'login' %}">Log In</a></li>
+    <!-- <li><a href="#">Register</a></li> -->
+    {% endif %}
+</ul>
+
+
+<div class="container" id="body">
+    {% block body %}{% endblock body %}
+</div>
+
+<!-- Compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+
+<script type="text/javascript" src="{% static 'accounting/js/main.js' %}"></script>
 
 </body>
 </html>
