@@ -1,0 +1,38 @@
+<table class="striped highlight responsive-table">
+    <tr class="row-title">
+        <td colspan=2>INCOMES</td>
+    </tr>
+    {% for income in incomesData %}
+        <tr>
+            <td>{{income.name}}</td>
+            <td>{{income.total | floatformat:2}}</td>
+        </tr>
+    {% endfor %}
+    <tr style="color: green; border-bottom: gray 2px solid;" class="row-title">
+        <td>Total Incomes:</td>
+        <td>{{ incomesTotal | floatformat:2 }}</td>
+    </tr>
+
+    <tr class="row-title">
+        <td colspan=2>EXPENSES</td>
+    </tr>
+    {% for supplierType in financialsData %}
+        <tr class="row-title">
+            <td colspan=2>{{ supplierType.name }}</td>
+        </tr>
+        {% for expense in supplierType.expenses %}
+            <tr>
+                <td>{{expense.supplier__name}}</td>
+                <td>{{expense.total_amount | floatformat:2}}</td>
+            </tr>
+        {% endfor %}
+            <tr class="row-subtitle">
+                <td>Total {{ supplierType.name }}:</td>
+                <td>{{ supplierType.total | floatformat:2 }}</td>
+            </tr>
+    {% endfor %}
+    <tr style="color: crimson;" class="row-title">
+        <td>Total Expenses:</td>
+        <td>{{ financialsTotal | floatformat:2 }}</td>
+    </tr>
+</table>
