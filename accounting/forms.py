@@ -37,15 +37,6 @@ class ExpensesForm(forms.Form):
         ("service", "Services"),
         ("uncategorized", "Uncategorized"),
     ]
-    # for supplier in (
-    #     Supplier.objects.order_by("supplierType").distinct()
-    # ):
-
-    #     print(supplier)
-
-    # supplierType_choices.append(
-    #     (supplier["supplierType"], supplier['supplierType'])
-    # )
 
     supplier_type = forms.ChoiceField(
         required=False, label="Supplier Type", choices=supplierType_choices
