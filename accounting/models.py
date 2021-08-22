@@ -3,8 +3,6 @@ from django.db.models.deletion import CASCADE, PROTECT
 from django.contrib.auth.models import User
 
 
-
-
 class Supplier(models.Model):
     TYPE = (
         ("operationFood", "Food"),
