@@ -53,14 +53,16 @@ class EditExpenses(TestCase):
     def test_get_all_expenses_by_date(self):
         initial_date = '2021-05-01'
         finish_date = '2021-06-08'
-        expenses = get_expenses_by_date(initial_date, finish_date)
+        restaurant_id = 1
+        expenses = get_expenses_by_date(initial_date, finish_date, restaurant_id)
         self.assertEqual(len(expenses), 3)
 
     def test_get_all_expenses_by_date_and_supplier(self):
         initial_date = '2021-05-01'
         finish_date = '2021-06-08'
+        restaurant_id = 1
         supplier_id = 3
-        expenses = get_expenses_by_date(initial_date, finish_date, supplier_id)
+        expenses = get_expenses_by_date(initial_date, finish_date, restaurant_id, supplier_id)
         self.assertEqual(len(expenses), 1)
 
 
