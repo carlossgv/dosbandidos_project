@@ -19,11 +19,11 @@ from .utils_edit_expenses import get_expenses_by_date
 @login_required
 def edit_expenses(request):
     form = EditExpensesForm
+    expenses = ""
 
     if request.method == 'POST':
         print(request.POST)
 
-    expenses = get_expenses_by_date("2021-05-02", "2021-08-08", request.user.pk, 100)
 
     supplier_choices = [(None, "-----")]
     for supplier in Supplier.objects.all().order_by("name"):
