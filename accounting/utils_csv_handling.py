@@ -42,6 +42,7 @@ def csv_create_expense(row, cost_center, restaurant_id):
     if data['debit'] == '':
         return
 
+    # TODO: CHANGE EQUAL TO CONTAINS
     try:
         rule = Rule.objects.get(description=data['description'])
     except:
