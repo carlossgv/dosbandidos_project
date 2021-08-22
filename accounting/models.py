@@ -3,12 +3,6 @@ from django.db.models.deletion import CASCADE, PROTECT
 from django.contrib.auth.models import User
 
 
-class Rule(models.Model):
-    description = models.CharField(max_length=200, unique=True)
-    supplier_id = models.IntegerField()
-
-    def __str__(self) -> str:
-        return f"({self.pk}) '{self.description}' | Supplier: ({self.supplier_id})"
 
 
 class Supplier(models.Model):
@@ -32,6 +26,16 @@ class Supplier(models.Model):
 
     def __str__(self) -> str:
         return f"({self.pk}) {self.name} ({self.get_supplierType_display()})"
+
+
+class Rule(models.Model):
+    description = models.CharField(max_length=200, unique=True)
+    supplier = models.ForeignKey(
+        Supplier, related_name="rule_supplier", on_delete=CASCADE, default=100
+    )
+
+    def __str__(self) -> str:
+        return f"({self.pk}) '{self.description}' | Supplier: ({self.supplier.name})"
 
 
 # TODO: check exact use of "related_name"

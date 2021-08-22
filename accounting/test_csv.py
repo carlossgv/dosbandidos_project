@@ -50,7 +50,6 @@ class CsvReading(TestCase):
         csv_create_expense(row, 1, cost_center)
 
         expense = Expense.objects.all().order_by('-id')[0]
-        print(expense)
 
         self.assertEqual(expense.supplier.pk, 100)
         self.assertEqual(float(expense.amount), 615.58)
@@ -65,7 +64,6 @@ class CsvReading(TestCase):
         csv_create_expense(row, 1, cost_center)
 
         expense = Expense.objects.all().order_by('-id')[0]
-        print(expense)
 
         self.assertEqual(expense.supplier.pk, 2)
         self.assertEqual(expense.amount, 97.50)
