@@ -18,7 +18,7 @@ def load_csv_expenses(filepath, delimiter, restaurant_id, cost_center="primaryAc
         next(read_file)
 
         for row in read_file:
-            csv_create_expense(row, cost_center, restaurant_id)
+            csv_create_expense(row, restaurant_id, cost_center)
 
         return True
 
@@ -28,7 +28,7 @@ def format_date(date):
     return formatted_date
 
 
-def csv_create_expense(row, cost_center, restaurant_id):
+def csv_create_expense(row, restaurant_id, cost_center):
     data = {
         'date': row[1],
         'check': row[2],
@@ -49,7 +49,7 @@ def csv_create_expense(row, cost_center, restaurant_id):
         supplier_id = 100
         cost_center = "standBy"
     else:
-        supplier_id = rule.supplier_id
+        supplier_id = rule.supplier.pk
 
     expense = Expense(amount=data['debit'],
                       date=format_date(data['date']),
