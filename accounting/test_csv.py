@@ -4,6 +4,7 @@ from .models import Expense, Supplier, Rule
 from django.contrib.auth.models import User
 import decimal
 
+
 class CsvReading(TestCase):
     def setUp(self):
         User.objects.create_user(username='bixby',
@@ -53,7 +54,7 @@ class CsvReading(TestCase):
 
         self.assertEqual(expense.supplier.pk, 100)
         self.assertEqual(float(expense.amount), 615.58)
-        self.assertEqual(expense.costCenter, 'primaryAccount')
+        self.assertEqual(expense.costCenter, 'standBy')
 
     def test_create_expense_by_row_if_rule_exist(self):
         # Superior ID: 25
