@@ -2,7 +2,7 @@ from pprint import pprint
 
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
-from .forms import ExpensesForm, EditExpensesForm
+from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm
 from .models import Supplier
 from .utils import (
     getCashReport,
@@ -13,16 +13,29 @@ from .utils import (
     getIncomes,
     getMetrics,
 )
+from .utils_csv_handling import load_csv_expenses_from_file, load_csv_expenses
 from .utils_edit_expenses import get_expenses_by_date
 
 
 @login_required
 def edit_expenses(request):
-    form = EditExpensesForm
+    edit_form = EditExpensesForm
     expenses = ""
 
+    load_form = LoadExpensesForm
+
     if request.method == 'POST':
-        print(request.POST)
+        try:
+            request.POST['path']
+        except:
+            pass
+        else:
+            print('loading')
+            print(request.POST)
+            path = request.POST['path']
+            delimiter = request.POST['delimiter']
+            user_id = request.user.pk
+            load_csv_expenses(path, delimiter, user_id)
 
 
     supplier_choices = [(None, "-----")]
@@ -41,7 +54,7 @@ def edit_expenses(request):
     return render(
         request,
         "accounting/edit-expenses.html",
-        {"form": form, "expenses": expenses,
+        {"editForm": edit_form, "loadForm": load_form, "expenses": expenses,
          "supplier_choices": supplier_choices,
          "cost_center_choices": cost_center_choices},
     )
