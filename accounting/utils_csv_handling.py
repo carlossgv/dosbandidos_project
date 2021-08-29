@@ -42,14 +42,17 @@ def csv_create_expense(row, restaurant_id, cost_center):
     if data['debit'] == '':
         return
 
-    # TODO: CHANGE EQUAL TO CONTAINS
-    try:
-        rule = Rule.objects.get(description=data['description'])
-    except:
-        supplier_id = 100
+    rules = Rule.objects.all()
+    supplier_id = 100
+
+    for rule in rules:
+        if rule.description in data['description']:
+            supplier_id = rule.supplier.pk
+            cost_center = cost_center
+            break
+
+    if supplier_id == 100:
         cost_center = "standBy"
-    else:
-        supplier_id = rule.supplier.pk
 
     expense = Expense(amount=data['debit'],
                       date=format_date(data['date']),

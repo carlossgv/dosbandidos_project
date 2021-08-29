@@ -26,7 +26,7 @@ class CsvReading(TestCase):
                                supplier_id=1,
                                restaurant_id=1
                                )
-        Rule.objects.create(description="ACH Debit - ACH Bill.com   Superior Linen - Dos Bandidos - Broken",
+        Rule.objects.create(description="ACH Debit - ACH Bill.com   Superior Linen - Dos Bandidos",
                             supplier_id=2)
 
     def test_can_read_csv(self):
@@ -56,7 +56,7 @@ class CsvReading(TestCase):
         self.assertEqual(float(expense.amount), 615.58)
         self.assertEqual(expense.costCenter, 'standBy')
 
-    def test_create_expense_by_row_if_rule_exist(self):
+    def test_create_expense_by_row_if_description_contains_a_rule(self):
         # Superior ID: 25
         row = ['XXXXXX4583', '8/6/2021', '', 'ACH Debit - ACH Bill.com   Superior Linen - Dos Bandidos - Broken',
                '97.50', '', 'Posted', '']
