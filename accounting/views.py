@@ -13,8 +13,7 @@ from .utils import (
     getIncomes,
     getMetrics,
 )
-from .utils_csv_handling import load_csv_expenses_from_file, load_csv_expenses
-from .utils_edit_expenses import get_expenses_by_date
+from .utils_csv_handling import  load_csv_expenses
 
 
 @login_required
@@ -30,13 +29,10 @@ def edit_expenses(request):
         except:
             pass
         else:
-            print('loading')
-            print(request.POST)
             path = request.POST['path']
             delimiter = request.POST['delimiter']
             user_id = request.user.pk
             load_csv_expenses(path, delimiter, user_id)
-
 
     supplier_choices = [(None, "-----")]
     for supplier in Supplier.objects.all().order_by("name"):
