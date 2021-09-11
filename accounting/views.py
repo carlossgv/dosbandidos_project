@@ -1,5 +1,3 @@
-from pprint import pprint
-
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render
 from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm
@@ -13,7 +11,7 @@ from .utils import (
     getIncomes,
     getMetrics,
 )
-from .utils_csv_handling import  load_csv_expenses
+from .utils_csv_handling import load_csv_expenses
 
 
 @login_required
