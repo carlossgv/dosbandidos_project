@@ -31,6 +31,11 @@ class LoadExpensesForm(forms.Form):
     delimiter = forms.ChoiceField(choices=[(",", ","), (";", ";")],
                                   label="Delimiter",
                                   widget=forms.Select(attrs={"class": "validate"}))
+    cost_center = forms.ChoiceField(choices=[(None, "-----"),
+                                             ("primaryAccount", "Primary Account"),
+                                             ("expensesAccount", "Expenses Account")],
+                                    label="Cost Center",
+                                    widget=forms.Select(attrs={"class": "validate"}))
 
 
 class ExpensesForm(forms.Form):

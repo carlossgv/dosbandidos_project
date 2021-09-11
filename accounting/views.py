@@ -29,8 +29,9 @@ def edit_expenses(request):
         else:
             path = request.POST['path']
             delimiter = request.POST['delimiter']
+            cost_center = request.POST['cost_center']
             user_id = request.user.pk
-            load_csv_expenses(path, delimiter, user_id)
+            load_csv_expenses(path, delimiter, user_id, cost_center)
 
     supplier_choices = [(None, "-----")]
     for supplier in Supplier.objects.all().order_by("name"):

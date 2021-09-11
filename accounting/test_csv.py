@@ -2,7 +2,6 @@ from django.test import TestCase
 from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
 from .models import Expense, Supplier, Rule
 from django.contrib.auth.models import User
-import decimal
 
 
 class CsvReading(TestCase):
@@ -73,6 +72,7 @@ class CsvReading(TestCase):
     def test_load_expenses_to_db(self):
         filepath = "./testsdata/AccountHistory.csv"
         delimiter = ","
-        data = load_csv_expenses(filepath, delimiter, 1, "primaryAccount")
+        cost_center = "primaryAccount"
+        data = load_csv_expenses(filepath, delimiter, 1, cost_center)
 
         self.assertEqual(data, True)
