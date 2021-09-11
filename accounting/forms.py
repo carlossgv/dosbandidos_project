@@ -24,6 +24,7 @@ class EditExpensesForm(forms.Form):
     )
 
 
+# TODO: ADD DROPDOWN LIST TO SELECT COST CENTER
 class LoadExpensesForm(forms.Form):
     # file = forms.FileField(label="Select file")
     path = forms.CharField(max_length=None)
