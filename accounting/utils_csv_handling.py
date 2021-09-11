@@ -51,9 +51,6 @@ def csv_create_expense(row, restaurant_id, cost_center):
             cost_center = cost_center
             break
 
-    if supplier_id == 100:
-        cost_center = "standBy"
-
     expense = Expense(amount=data['debit'],
                       date=format_date(data['date']),
                       costCenter=cost_center,

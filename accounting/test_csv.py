@@ -54,7 +54,7 @@ class CsvReading(TestCase):
 
         self.assertEqual(expense.supplier.pk, 100)
         self.assertEqual(float(expense.amount), 615.58)
-        self.assertEqual(expense.costCenter, 'standBy')
+        self.assertEqual(expense.costCenter, cost_center)
 
     def test_create_expense_by_row_if_description_contains_a_rule(self):
         # Superior ID: 25
