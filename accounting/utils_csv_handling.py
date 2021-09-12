@@ -1,5 +1,7 @@
 import csv
 import datetime
+import os
+
 from .models import Expense, Rule
 
 
@@ -19,6 +21,8 @@ def load_csv_expenses(filepath, delimiter, restaurant_id, cost_center):
 
         for row in read_file:
             csv_create_expense(row, restaurant_id, cost_center)
+
+        os.remove(filepath)
 
         return True
 

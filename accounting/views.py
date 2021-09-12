@@ -1,4 +1,5 @@
 from django.contrib.auth.decorators import login_required
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm
 from .models import Supplier
@@ -12,6 +13,7 @@ from .utils import (
     getMetrics,
 )
 from .utils_csv_handling import load_csv_expenses
+from dosbandidos_project.settings import MEDIA_ROOT, BASE_DIR
 
 
 @login_required
@@ -23,15 +25,20 @@ def edit_expenses(request):
 
     if request.method == 'POST':
         try:
-            request.POST['path']
+            request.FILES['file']
         except:
             pass
         else:
-            path = request.POST['path']
+            file = request.FILES['file']
+            fss = FileSystemStorage()
+            file = fss.save(file.name, file)
+
+            file_url = str(BASE_DIR) + fss.url(file)
             delimiter = request.POST['delimiter']
             cost_center = request.POST['cost_center']
             user_id = request.user.pk
-            load_csv_expenses(path, delimiter, user_id, cost_center)
+
+            load_csv_expenses(file_url, delimiter, user_id, cost_center)
 
     supplier_choices = [(None, "-----")]
     for supplier in Supplier.objects.all().order_by("name"):

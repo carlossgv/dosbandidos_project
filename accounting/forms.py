@@ -25,9 +25,8 @@ class EditExpensesForm(forms.Form):
 
 
 class LoadExpensesForm(forms.Form):
-    # file = forms.FileField(label="Select file")
-    path = forms.CharField(max_length=None)
-    delimiter = forms.ChoiceField(choices=[(",", ","), (";", ";")],
+    file = forms.FileField(label="Select file")
+    delimiter = forms.ChoiceField(choices=[(None, "-----"), (",", ","), (";", ";")],
                                   label="Delimiter",
                                   widget=forms.Select(attrs={"class": "validate"}))
     cost_center = forms.ChoiceField(choices=[(None, "-----"),
