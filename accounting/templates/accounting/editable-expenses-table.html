@@ -18,7 +18,7 @@
                 <div class="input-field">
                     <select name="cost-center-choices" id="cost-center-choices-{{expense.pk}}">
                         {% for option in cost_center_choices %}
-                        {% if option.0 == expense.costCenter %}
+                        {% if option.0 == expense.cost_center %}
                             <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
                         {% else %}
                             <option value="{{ option.0 }}">{{ option.1 }}</option>

@@ -2,56 +2,56 @@
 <table class="striped highlight responsive-table">
         <tr>
             <td></td>
-            {% for day in cashData %}
+            {% for day in cash_data %}
             <td>{{ day.date }}</td>
             {% endfor %}
         </tr>
         <tr>
             <td>Balance:</td>
-            {% for day in cashData %}
-            <td>{{ day.initialCash }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.initial_cash }}</td>
             {% endfor %}
         </tr>
         <tr>
             <td>Cash Sales:</td>
-            {% for day in cashData %}
-            <td>{{ day.cashSales }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.cash_sales }}</td>
             {% endfor %}
         </tr>
         <tr>
             <td>Card Auto Grat:</td>
-            {% for day in cashData %}
-            <td>{{ day.cardAuto }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.card_auto }}</td>
             {% endfor %}
         </tr>
         <tr>
             <td>Card Tips:</td>
-            {% for day in cashData %}
-            <td>{{ day.cardTips }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.card_tips }}</td>
             {% endfor %}
         </tr>
         <tr class="row-subtitle">
             <td >Cash Out:</td>
-            {% for day in cashData %}
-            <td>{{ day.cashOut }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.cash_out }}</td>
             {% endfor %}
         </tr>
         <tr>
             <td>Cash Purchases:</td>
-            {% for day in cashData %}
-            <td>{{ day.cashPurchases |floatformat:2 }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.cash_purchases | floatformat:2 }}</td>
             {% endfor %}
         </tr>
         <tr>
             <td>Modifications:</td>
-            {% for day in cashData %}
-            <td>{{ day.cashModifications }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.cash_modifications }}</td>
             {% endfor %}
         </tr>
         <tr class="row-title">
             <td>Total:</td>
-            {% for day in cashData %}
-            <td>{{ day.finalCash }}</td>
+            {% for day in cash_data %}
+            <td>{{ day.final_cash }}</td>
             {% endfor %}
         </tr>
 

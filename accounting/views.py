@@ -4,13 +4,13 @@ from django.shortcuts import render
 from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm
 from .models import Supplier
 from .utils import (
-    getCashReport,
-    getExpensesBySupplier,
-    getExpensesBySupplierType,
-    getFinancialsReport,
-    getGoalsReport,
-    getIncomes,
-    getMetrics,
+    get_cash_report,
+    get_expenses_by_supplier,
+    get_expenses_by_supplier_type,
+    get_financials_report,
+    get_goals_report,
+    get_incomes,
+    get_metrics,
 )
 from .utils_csv_handling import load_csv_expenses
 from dosbandidos_project.settings import BASE_DIR
@@ -67,64 +67,63 @@ def home(request):
 
     if request.method == "POST":
         form = ExpensesForm(request.POST)
-        userId = request.user.pk
+        user_id = request.user.pk
 
         if form.is_valid():
             data = form.cleaned_data
-            initialDate = data["initialDate"]
-            finishDate = data["finishDate"]
+            initial_date = data["initial_date"]
+            finish_date = data["finish_date"]
 
             if "getGoals" in request.POST:
-                goalsReport = getGoalsReport(initialDate, finishDate, userId)
-                food = goalsReport["food"]
-                liquor = goalsReport["liquor"]
+                goals_report = get_goals_report(initial_date, finish_date, user_id)
+                food = goals_report["food"]
+                liquor = goals_report["liquor"]
 
-                incomes = getIncomes(initialDate, finishDate, userId)
-                incomesData = incomes["incomes"]
-                incomesTotal = incomes["total"]
-                restaurantSales = incomes["restaurantSales"]
+                incomes = get_incomes(initial_date, finish_date, user_id)
+                restaurant_sales = incomes["restaurant_sales"]
 
-                metrics = getMetrics(initialDate, finishDate, userId)
+                metrics = get_metrics(initial_date, finish_date, user_id)
 
-                if metrics["RestaurantOrderCount"]["total"] != 0:
-                    metrics["orderAvg"] = {
+                if metrics["restaurant_order_count"]["total"] != 0:
+                    metrics["order_average"] = {
                         'name': 'Order Average',
                         'total': round(
-                        metrics["RestaurantGrossSales"]["total"]
-                        / metrics["RestaurantOrderCount"]["total"],
-                        2)
+                            metrics["restaurant_gross_sales"]["total"]
+                            / metrics["restaurant_order_count"]["total"],
+                            2
+                        )
                     }
-                    metrics['laborGoal'] = {
+                    metrics['labor_goal'] = {
                         "name": 'Labor Goal',
-                        "total": round(metrics['RestaurantLabor']['total'] / restaurantSales * 100)
+                        "total": round(metrics['restaurant_labor']['total'] / restaurant_sales * 100)
                     }
 
-                    foodCost = food['total']/restaurantSales
-                    metrics['foodCost'] = {
+                    food_cost = food['total']/restaurant_sales
+                    metrics['food_cost'] = {
                         'name': 'Food Cost',
-                        'total': round(foodCost*100)
+                        'total': round(food_cost*100)
                     }
 
-                    liquorCost = liquor['total']/metrics['RestaurantLiquorSales']['total']
-                    metrics['liquorCost'] = {
+                    liquor_cost = liquor['total']/metrics['restaurant_liquor_sales']['total']
+                    metrics['liquor_cost'] = {
                         'name': 'Liquor Cost',
-                        'total': round(liquorCost*100)
+                        'total': round(liquor_cost*100)
                     }
 
-                    costAvg = (metrics['foodCost']['total'] + metrics['liquorCost']['total'])/2
-                    metrics['costAvg'] = {
+                    cost_average = (metrics['food_cost']['total'] + metrics['liquor_cost']['total'])/2
+                    metrics['cost_average'] = {
                         'name': 'Cost Average',
-                        'total': costAvg
+                        'total': cost_average
                     }
 
-                    metrics['FoodNetSales'] = {
+                    metrics['food_net_sales'] = {
                         'name': 'Food Net Sales',
-                        'total': metrics['RestaurantNetSales']['total'] - metrics['RestaurantLiquorSales']['total']
+                        'total': metrics['restaurant_net_sales']['total'] - metrics['restaurant_liquor_sales']['total']
                     }
 
                 else:
-                    metrics["orderAvg"] = "No info"
-                    metrics['laborGoal'] = "No info"
+                    metrics["order_average"] = "No info"
+                    metrics['labor_goal'] = "No info"
 
                 return render(
                     request,
@@ -133,49 +132,50 @@ def home(request):
                 )
 
             elif "getFinancials" in request.POST:
-                financials = getFinancialsReport(initialDate, finishDate, userId)
-                financialsData = financials["results"]
-                financialsTotal = financials["total"]
+                financials = get_financials_report(initial_date, finish_date, user_id)
+                financials_data = financials["results"]
+                financials_total = financials["total"]
 
-                incomes = getIncomes(initialDate, finishDate, userId)
-                incomesData = incomes["incomes"]
-                incomesTotal = incomes["total"]
+                incomes = get_incomes(initial_date, finish_date, user_id)
+                incomes_data = incomes["incomes"]
+                incomes_total = incomes["total"]
 
                 return render(
                     request,
                     "accounting/home.html",
                     {
                         "form": form,
-                        "financialsData": financialsData,
-                        "financialsTotal": financialsTotal,
-                        "incomesData": incomesData,
-                        "incomesTotal": incomesTotal,
+                        "financials_data": financials_data,
+                        "financials_total": financials_total,
+                        "incomes_data": incomes_data,
+                        "incomes_total": incomes_total,
                     },
                 )
             elif "getCashReport" in request.POST:
-                initialCash = data["cash"]
-                cashData = getCashReport(initialCash, initialDate, finishDate, userId)
+                initial_cash = data["cash"]
+                cash_data = get_cash_report(initial_cash, initial_date, finish_date, user_id)
 
                 return render(
                     request,
                     "accounting/home.html",
-                    {"form": form, "cashData": cashData},
+                    {"form": form, "cash_data": cash_data},
                 )
             else:
+                supplier_data = ""
                 if data["suppliers"] != "":
-                    supplierData = getExpensesBySupplier(
-                        data["suppliers"], initialDate, finishDate, userId
+                    supplier_data = get_expenses_by_supplier(
+                        data["suppliers"], initial_date, finish_date, user_id
                     )
 
                 elif data["supplier_type"] != "":
-                    supplierData = getExpensesBySupplierType(
-                        data["supplier_type"], initialDate, finishDate, userId
+                    supplier_data = get_expenses_by_supplier_type(
+                        data["supplier_type"], initial_date, finish_date, user_id
                     )
 
                 return render(
                     request,
                     "accounting/home.html",
-                    {"form": form, "supplierData": supplierData},
+                    {"form": form, "supplier_data": supplier_data},
                 )
 
         return render(

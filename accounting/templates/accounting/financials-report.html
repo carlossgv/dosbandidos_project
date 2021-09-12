@@ -2,37 +2,37 @@
     <tr class="row-title">
         <td colspan=2>INCOMES</td>
     </tr>
-    {% for income in incomesData %}
+    {% for income in incomes_data %}
         <tr>
-            <td>{{income.name}}</td>
-            <td>{{income.total | floatformat:2}}</td>
+            <td>{{ income.name }}</td>
+            <td>{{ income.total | floatformat:2 }}</td>
         </tr>
     {% endfor %}
     <tr style="color: green; border-bottom: gray 2px solid;" class="row-title">
         <td>Total Incomes:</td>
-        <td>{{ incomesTotal | floatformat:2 }}</td>
+        <td>{{ incomes_total | floatformat:2 }}</td>
     </tr>
 
     <tr class="row-title">
         <td colspan=2>EXPENSES</td>
     </tr>
-    {% for supplierType in financialsData %}
+    {% for supplier_type in financials_data %}
         <tr class="row-title">
-            <td colspan=2>{{ supplierType.name }}</td>
+            <td colspan=2>{{ supplier_type.name }}</td>
         </tr>
-        {% for expense in supplierType.expenses %}
+        {% for expense in supplier_type.expenses %}
             <tr>
-                <td>{{expense.supplier__name}}</td>
-                <td>{{expense.total_amount | floatformat:2}}</td>
+                <td>{{ expense.supplier__name }}</td>
+                <td>{{ expense.total_amount | floatformat:2 }}</td>
             </tr>
         {% endfor %}
             <tr class="row-subtitle">
-                <td>Total {{ supplierType.name }}:</td>
-                <td>{{ supplierType.total | floatformat:2 }}</td>
+                <td>Total {{ supplier_type.name }}:</td>
+                <td>{{ supplier_type.total | floatformat:2 }}</td>
             </tr>
     {% endfor %}
     <tr style="color: crimson;" class="row-title">
         <td>Total Expenses:</td>
-        <td>{{ financialsTotal | floatformat:2 }}</td>
+        <td>{{ financials_total | floatformat:2 }}</td>
     </tr>
 </table>

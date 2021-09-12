@@ -57,7 +57,7 @@ def csv_create_expense(row, restaurant_id, cost_center):
 
     expense = Expense(amount=data['debit'],
                       date=format_date(data['date']),
-                      costCenter=cost_center,
+                      cost_center=cost_center,
                       reference=data['check'],
                       comments=data['description'],
                       supplier_id=supplier_id,

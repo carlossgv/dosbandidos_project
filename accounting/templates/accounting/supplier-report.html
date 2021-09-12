@@ -9,19 +9,19 @@
         </tr>
     </thead>
     <tbody>
-        {% for supplier in supplierData.expenses %}
+        {% for supplier in supplier_data.expenses %}
             <tr>
                 <td>{{ supplier.supplier.name }}</td>
                 <td>{{ supplier.date }}</td>
                 <td>{{ supplier.amount }}</td>
                 <td>{{ supplier.reference }}</td>
-                <td>{{ supplier.get_costCenter_display }}</td>
+                <td>{{ supplier.get_cost_center_display }}</td>
             </tr>
         {% endfor %}
             <tr>
                 <td></td>
-                <td><strong>Total {{ supplierData.name }}:</strong></td>
-                <td><strong>{{ supplierData.total }}</strong></td>
+                <td><strong>Total {{ supplier_data.name }}:</strong></td>
+                <td><strong>{{ supplier_data.total }}</strong></td>
                 <td></td>
                 <td></td>
                 <td></td>

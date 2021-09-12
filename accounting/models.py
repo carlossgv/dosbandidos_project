@@ -14,7 +14,7 @@ class Supplier(models.Model):
         ("uncategorized", "Uncategorized"),
     )
     name = models.CharField(max_length=100, unique=True)
-    supplierType = models.CharField(max_length=20, choices=TYPE)
+    supplier_type = models.CharField(max_length=20, choices=TYPE)
     comments = models.TextField(blank=True)
 
     class Meta:
@@ -56,7 +56,7 @@ class Expense(models.Model):
     comments = models.TextField(blank=True)
 
     def __str__(self) -> str:
-        return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.get_costCenter_display()}"
+        return f"{self.amount} paid to {self.supplier.name} ({self.supplier.pk}) on {self.date} from {self.get_cost_center_display()}"
 
 
 class Income(models.Model):
@@ -72,7 +72,7 @@ class Income(models.Model):
     comments = models.TextField(blank=True)
 
     def __str__(self) -> str:
-        return f"{self.amount} sold from {self.supplier.name} ({self.supplier.pk}) from {self.initialDate} to {self.date})"
+        return f"{self.amount} sold from {self.supplier.name} ({self.supplier.pk}) from {self.initial_date} to {self.date})"
 
 
 class CashLog(models.Model):
@@ -87,7 +87,9 @@ class CashLog(models.Model):
     comments = models.TextField(blank=True)
 
     def __str__(self) -> str:
-        return f"{self.date}: Cash Sales {self.cash_sales}, Card Auto Grat: {self.card_auto_grat}, Card Tips: {self.card_tips}"
+        return f"{self.date}: Cash Sales {self.cash_sales}, " \
+               f"Card Auto Grat: {self.card_auto_grat}, " \
+               f"Card Tips: {self.card_tips} "
 
 
 class Metric(models.Model):

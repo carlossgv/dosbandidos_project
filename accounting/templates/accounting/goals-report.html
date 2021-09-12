@@ -2,7 +2,7 @@
     <tr class="row-title">
         <td colspan=2>Food Expenses</td>
     </tr>
-    {% for supplier in food.suppliersTotals %}
+    {% for supplier in food.suppliers_totals %}
         <tr>
             <td>{{ supplier.name }}</td>
             <td>{{ supplier.total }}</td>
@@ -16,7 +16,7 @@
     <tr class="row-title">
         <td colspan=2>Liquor Expenses</td>
     </tr>
-    {% for supplier in liquor.suppliersTotals %}
+    {% for supplier in liquor.suppliers_totals %}
         <tr>
             <td>{{ supplier.name }}</td>
             <td>{{ supplier.total }}</td>
@@ -33,29 +33,29 @@
             <td colspan=2>Goals</td>
     </tr>
     <tr>
-        <td>{{ metrics.RestaurantOrderCount.name }}</td>
-        <td>{{ metrics.RestaurantOrderCount.total }}</td>
+        <td>{{ metrics.restaurant_order_count.name }}</td>
+        <td>{{ metrics.restaurant_order_count.total }}</td>
     </tr>
     <tr>
-        <td>{{ metrics.RestaurantGrossSales.name }}</td>
-        <td>{{ metrics.RestaurantGrossSales.total }}</td>
+        <td>{{ metrics.restaurant_gross_sales.name }}</td>
+        <td>{{ metrics.restaurant_gross_sales.total }}</td>
     </tr>
     <tr class="row-subtitle" style="color: green" >
-        <td>{{ metrics.orderAvg.name }} (Goal: 37.5)</td>
-        <td>{{ metrics.orderAvg.total }}</td>
+        <td>{{ metrics.order_average.name }} (Goal: 37.5)</td>
+        <td>{{ metrics.order_average.total }}</td>
     </tr>
 
     <tr>
-        <td>{{ metrics.RestaurantLabor.name }}</td>
-        <td>{{ metrics.RestaurantLabor.total }}</td>
+        <td>{{ metrics.restaurant_labor.name }}</td>
+        <td>{{ metrics.restaurant_labor.total }}</td>
     </tr>
     <tr>
-        <td>{{ metrics.RestaurantNetSales.name }}</td>
-        <td>{{ metrics.RestaurantNetSales.total }}</td>
+        <td>{{ metrics.restaurant_net_sales.name }}</td>
+        <td>{{ metrics.restaurant_net_sales.total }}</td>
     </tr>
     <tr class="row-subtitle" style="color: green" >
-        <td>{{ metrics.laborGoal.name }} (Goal: 19%)</td>
-        <td>{{ metrics.laborGoal.total }}%</td>
+        <td>{{ metrics.labor_goal.name }} (Goal: 19%)</td>
+        <td>{{ metrics.labor_goal.total }}%</td>
     </tr>
 </table>
 
@@ -68,12 +68,12 @@
         <td>{{ food.total }}</td>
     </tr>
     <tr>
-        <td>{{ metrics.FoodNetSales.name }}</td>
-        <td>{{ metrics.FoodNetSales.total }}</td>
+        <td>{{ metrics.food_net_sales.name }}</td>
+        <td>{{ metrics.food_net_sales.total }}</td>
     </tr>
     <tr class="row-subtitle">
-        <td>{{ metrics.foodCost.name }}</td>
-        <td>{{ metrics.foodCost.total }}%</td>
+        <td>{{ metrics.food_cost.name }}</td>
+        <td>{{ metrics.food_cost.total }}%</td>
     </tr>
 
     <tr>
@@ -81,15 +81,15 @@
         <td>{{ liquor.total }}</td>
     </tr>
     <tr>
-        <td>{{ metrics.RestaurantLiquorSales.name }}</td>
-        <td>{{ metrics.RestaurantLiquorSales.total }}</td>
+        <td>{{ metrics.restaurant_liquor_sales.name }}</td>
+        <td>{{ metrics.restaurant_liquor_sales.total }}</td>
     </tr>
     <tr class="row-subtitle">
-        <td>{{ metrics.liquorCost.name }}</td>
-        <td>{{ metrics.liquorCost.total }}%</td>
+        <td>{{ metrics.liquor_cost.name }}</td>
+        <td>{{ metrics.liquor_cost.total }}%</td>
     </tr>
     <tr class="row-subtitle">
-        <td><strong>{{ metrics.costAvg.name }}</strong></td>
-        <td><strong>{{ metrics.costAvg.total }}%</strong></td>
+        <td><strong>{{ metrics.cost_average.name }}</strong></td>
+        <td><strong>{{ metrics.cost_average.total }}%</strong></td>
     </tr>
 </table>

@@ -12,40 +12,40 @@ class EditExpenses(TestCase):
                                  password='bixby')
 
         Supplier.objects.create(name="Carlos Gonzalez",
-                                supplierType="labor")
+                                supplier_type="labor")
         Supplier.objects.create(name="Superior",
-                                supplierType="service")
+                                supplier_type="service")
         Supplier.objects.create(name="KFC",
-                                supplierType="service")
+                                supplier_type="service")
 
         Supplier.objects.create(name="Stand By",
-                                supplierType="standBy",
+                                supplier_type="standBy",
                                 pk=100)
 
         Expense.objects.create(amount=100,
                                date='2021-05-01',
-                               costCenter='test',
+                               cost_center='test',
                                supplier_id=1,
                                restaurant_id=1
                                )
 
         Expense.objects.create(amount=25,
                                date='2021-05-06',
-                               costCenter='test',
+                               cost_center='test',
                                supplier_id=2,
                                restaurant_id=1
                                )
 
         Expense.objects.create(amount=15,
                                date='2021-06-08',
-                               costCenter='test',
+                               cost_center='test',
                                supplier_id=3,
                                restaurant_id=1
                                )
 
         Expense.objects.create(amount=90,
                                date='2021-07-10',
-                               costCenter='test',
+                               cost_center='test',
                                supplier_id=3,
                                restaurant_id=1
                                )

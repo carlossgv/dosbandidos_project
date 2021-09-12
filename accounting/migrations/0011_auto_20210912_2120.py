@@ -17,12 +17,12 @@ class Migration(migrations.Migration):
         ),
         migrations.RenameField(
             model_name='income',
-            old_name='initialDate',
+            old_name='initial_date',
             new_name='initial_date',
         ),
         migrations.RenameField(
             model_name='metric',
-            old_name='initialDate',
+            old_name='initial_date',
             new_name='initial_date',
         ),
     ]

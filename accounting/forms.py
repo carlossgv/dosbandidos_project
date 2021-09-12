@@ -3,11 +3,11 @@ from .models import Supplier
 
 
 class EditExpensesForm(forms.Form):
-    initialDate = forms.DateField(
+    initial_date = forms.DateField(
         label="Initial Date",
         widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
-    finishDate = forms.DateField(
+    finish_date = forms.DateField(
         label="Finish Date",
         widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
@@ -37,11 +37,11 @@ class LoadExpensesForm(forms.Form):
 
 
 class ExpensesForm(forms.Form):
-    initialDate = forms.DateField(
+    initial_date = forms.DateField(
         label="Initial Date",
         widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
-    finishDate = forms.DateField(
+    finish_date = forms.DateField(
         label="Finish Date",
         widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
@@ -59,7 +59,7 @@ class ExpensesForm(forms.Form):
     )
 
     # TODO: populate supplier choices dinamically
-    supplierType_choices = [
+    supplier_type_choices = [
         (None, "-----"),
         ("operationFood", "Food"),
         ("operationLiquor", "Liquor"),
@@ -71,7 +71,7 @@ class ExpensesForm(forms.Form):
     ]
 
     supplier_type = forms.ChoiceField(
-        required=False, label="Supplier Type", choices=supplierType_choices
+        required=False, label="Supplier Type", choices=supplier_type_choices
     )
 
     cash = forms.DecimalField(

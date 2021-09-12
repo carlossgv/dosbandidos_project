@@ -15,12 +15,12 @@ class Migration(migrations.Migration):
     operations = [
         migrations.RenameField(
             model_name='income',
-            old_name='finishDate',
+            old_name='finish_date',
             new_name='date',
         ),
         migrations.AlterField(
             model_name='income',
-            name='initialDate',
+            name='initial_date',
             field=models.DateField(blank=True, null=True),
         ),
         migrations.CreateModel(
@@ -28,7 +28,7 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('amount', models.DecimalField(decimal_places=2, max_digits=8)),
-                ('initialDate', models.DateField(blank=True, null=True)),
+                ('initial_date', models.DateField(blank=True, null=True)),
                 ('date', models.DateField()),
                 ('comments', models.TextField(blank=True)),
                 ('restaurant', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, related_name='restaurant_metric', to=settings.AUTH_USER_MODEL)),
