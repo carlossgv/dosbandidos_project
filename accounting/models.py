@@ -21,7 +21,7 @@ class Supplier(models.Model):
         ordering = ["name"]
 
     def __str__(self) -> str:
-        return f"({self.pk}) {self.name} ({self.get_supplierType_display()})"
+        return f"({self.pk}) {self.name} ({self.get_supplier_type_display()})"
 
 
 class Rule(models.Model):
@@ -51,9 +51,7 @@ class Expense(models.Model):
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField()
-    costCenter = models.CharField(max_length=20, choices=COST_CENTER)
-    # isPaid = models.BooleanField(default=True)
-    # isCheck = models.BooleanField(default=False)
+    cost_center = models.CharField(max_length=20, choices=COST_CENTER)
     reference = models.CharField(max_length=50, blank=True)
     comments = models.TextField(blank=True)
 
@@ -69,7 +67,7 @@ class Income(models.Model):
         Supplier, related_name="income_supplier_name", on_delete=CASCADE
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
-    initialDate = models.DateField(null=True, blank=True)
+    initial_date = models.DateField(null=True, blank=True)
     date = models.DateField()
     comments = models.TextField(blank=True)
 
@@ -109,7 +107,7 @@ class Metric(models.Model):
         choices=METRIC_TYPE,
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
-    initialDate = models.DateField(blank=True, null=True)
+    initial_date = models.DateField(blank=True, null=True)
     date = models.DateField()
     comments = models.TextField(blank=True)
 
