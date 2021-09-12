@@ -13,7 +13,7 @@ def read_csv(filepath, delimiter):
             return True
 
 
-def load_csv_expenses(filepath, delimiter, restaurant_id, cost_center, isTest=False):
+def load_csv_expenses(filepath, delimiter, restaurant_id, cost_center, is_test=False):
     with open(filepath, newline='') as file:
         read_file = csv.reader(file, delimiter=delimiter)
         # Skip header:
@@ -22,8 +22,8 @@ def load_csv_expenses(filepath, delimiter, restaurant_id, cost_center, isTest=Fa
         for row in read_file:
             csv_create_expense(row, restaurant_id, cost_center)
 
-        if isTest:
-            return isTest
+        if is_test:
+            return is_test
 
         os.remove(filepath)
 
