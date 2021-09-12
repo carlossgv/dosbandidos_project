@@ -73,6 +73,6 @@ class CsvReading(TestCase):
         filepath = "./testsdata/AccountHistory.csv"
         delimiter = ","
         cost_center = "primaryAccount"
-        data = load_csv_expenses(filepath, delimiter, 1, cost_center)
+        data = load_csv_expenses(filepath, delimiter, 1, cost_center, True)
 
         self.assertEqual(data, True)
