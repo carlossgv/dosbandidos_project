@@ -23,7 +23,7 @@ def load_csv_expenses(filepath, delimiter, restaurant_id, cost_center, isTest=Fa
             csv_create_expense(row, restaurant_id, cost_center)
 
         if isTest:
-            return
+            return isTest
 
         os.remove(filepath)
 
