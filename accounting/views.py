@@ -13,7 +13,7 @@ from .utils import (
     getMetrics,
 )
 from .utils_csv_handling import load_csv_expenses
-from dosbandidos_project.settings import MEDIA_ROOT, BASE_DIR
+from dosbandidos_project.settings import BASE_DIR
 
 
 @login_required
