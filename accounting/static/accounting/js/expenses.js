@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function () {
   const infoButton = document.querySelector('#getInfo');
   const goalsButton = document.querySelector('#getGoals');
   const financialsButton = document.querySelector('#getFinancials');
-  const cashButton = document.querySelector('#get_cash_report');
+  const cashButton = document.querySelector('#getCashReport');
 
   dropdowns.forEach((element) => {
     element.addEventListener('change', () => {
