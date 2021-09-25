@@ -7,16 +7,16 @@
             <th>Cost Center</th>
             <th>Amount</th>
             <th>Supplier</th>
-            <th>Restaurant</th>
+            <th>Comments</th>
         </tr>
         </thead>
         <tbody>
         {% for expense in expenses %}
         <tr id="{{expense.pk}}-expense-row">
-            <td><input type="text" name="{{expense.pk}}-expense-date" id="{{expense.pk}}-expense-date" value="{{ expense.date|date:'Y-m-d' }}"></td>
+            <td><input type="text" name="{{expense.pk}}-date" value="{{ expense.date|date:'Y-m-d' }}"></td>
             <td>
                 <div class="input-field">
-                    <select name="cost-center-choices" id="cost-center-choices-{{expense.pk}}">
+                    <select name="{{expense.pk}}-cost_center">
                         {% for option in cost_center_choices %}
                         {% if option.0 == expense.cost_center %}
                             <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
@@ -27,10 +27,10 @@
                     </select>
                 </div>
             </td>
-            <td><input type="text" name="{{expense.pk}}-expense-amount" id="{{expense.pk}}-expense-amount" value="{{ expense.amount }}"></td>
+            <td><input type="text" name="{{expense.pk}}-amount" value="{{ expense.amount }}"></td>
             <td>
                 <div class="input-field">
-                    <select name="supplier-choices" id="supplier-choices-{{expense.pk}}">
+                    <select name="{{expense.pk}}-supplier_id">
                         {% for option in supplier_choices %}
                         {% if option.0 == expense.supplier.id %}
                         <option value="{{ option.0 }}" selected>{{ option.1 }}</option>
@@ -41,7 +41,7 @@
                     </select>
                 </div>
             </td>
-            <td>{{ expense.restaurant }}</td>
+            <td><input type="text" name="{{expense.pk}}-comments" value="{{ expense.comments }}"></td>
         </tr>
         {% endfor %}
         </tbody>

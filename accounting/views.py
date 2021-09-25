@@ -2,7 +2,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm
-from .models import Supplier
+from .models import Supplier, Expense
 from .utils import (
     get_cash_report,
     get_expenses_by_supplier,
@@ -14,6 +14,7 @@ from .utils import (
 )
 from .utils_csv_handling import load_csv_expenses
 from dosbandidos_project.settings import BASE_DIR
+from .utils_edit_expenses import get_expenses_by_date
 
 
 @login_required
@@ -40,6 +41,37 @@ def edit_expenses(request):
 
             load_csv_expenses(file_url, delimiter, user_id, cost_center)
 
+        try:
+            request.POST['retrieve-expenses']
+        except:
+            pass
+        else:
+            form = ExpensesForm(request.POST)
+
+            if form.is_valid():
+                data = form.cleaned_data
+                user_id = request.user.pk
+                initial_date = data['initial_date']
+                finish_date = data['finish_date']
+                supplier = False if data['suppliers'] == '' else data['suppliers']
+
+                expenses = get_expenses_by_date(initial_date, finish_date, user_id, supplier)
+        
+        try:
+            request.POST['edit-expenses']
+        except:
+            pass
+        else:
+            data = request.POST
+            for field in data:
+                if field == 'csrfmiddlewaretoken' or field == 'edit-expenses':
+                    continue
+                value = data[field]
+                expense_id = field.split('-')[0]
+                field = field.split('-')[1]
+                expense = Expense.objects.get(pk=expense_id)
+                setattr(expense, field, value)
+                expense.save()
 
     supplier_choices = [(None, "-----")]
     for supplier in Supplier.objects.all().order_by("name"):
@@ -65,7 +97,6 @@ def edit_expenses(request):
 
 @login_required
 def home(request):
-
     if request.method == "POST":
         form = ExpensesForm(request.POST)
         user_id = request.user.pk
@@ -99,19 +130,19 @@ def home(request):
                         "total": round(metrics['restaurant_labor']['total'] / restaurant_sales * 100)
                     }
 
-                    food_cost = food['total']/restaurant_sales
+                    food_cost = food['total'] / restaurant_sales
                     metrics['food_cost'] = {
                         'name': 'Food Cost',
-                        'total': round(food_cost*100)
+                        'total': round(food_cost * 100)
                     }
 
-                    liquor_cost = liquor['total']/metrics['restaurant_liquor_sales']['total']
+                    liquor_cost = liquor['total'] / metrics['restaurant_liquor_sales']['total']
                     metrics['liquor_cost'] = {
                         'name': 'Liquor Cost',
-                        'total': round(liquor_cost*100)
+                        'total': round(liquor_cost * 100)
                     }
 
-                    cost_average = (metrics['food_cost']['total'] + metrics['liquor_cost']['total'])/2
+                    cost_average = (metrics['food_cost']['total'] + metrics['liquor_cost']['total']) / 2
                     metrics['cost_average'] = {
                         'name': 'Cost Average',
                         'total': cost_average
