@@ -40,6 +40,7 @@ def edit_expenses(request):
 
             load_csv_expenses(file_url, delimiter, user_id, cost_center)
 
+
     supplier_choices = [(None, "-----")]
     for supplier in Supplier.objects.all().order_by("name"):
         supplier_choices.append((supplier.pk, supplier.name))
