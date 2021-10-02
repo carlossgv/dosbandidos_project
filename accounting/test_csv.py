@@ -2,8 +2,7 @@ from django.test import TestCase
 
 from .script_test_database import load_test_database
 from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
-from .models import Expense, Supplier, Rule
-from django.contrib.auth.models import User
+from .models import Expense
 
 
 class CsvReading(TestCase):

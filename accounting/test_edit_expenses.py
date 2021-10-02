@@ -1,6 +1,4 @@
 from django.test import TestCase
-from .models import Expense, Supplier
-from django.contrib.auth.models import User
 
 from .script_test_database import load_test_database
 from .utils_edit_expenses import get_expenses_by_date
@@ -24,5 +22,3 @@ class EditExpenses(TestCase):
         supplier_id = 3
         expenses = get_expenses_by_date(initial_date, finish_date, restaurant_id, supplier_id)
         self.assertEqual(len(expenses), 1)
-
-
