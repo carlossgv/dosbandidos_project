@@ -14,6 +14,10 @@ def load_test_database():
                             supplier_type="service")
     Supplier.objects.create(name="KFC",
                             supplier_type="service")
+    Supplier.objects.create(name="Clover",
+                            supplier_type="service")
+    Supplier.objects.create(name="Doordash",
+                            supplier_type="service")
 
     Supplier.objects.create(name="Stand By",
                             supplier_type="standBy",
@@ -54,3 +58,7 @@ def load_test_database():
                            )
     Rule.objects.create(description="ACH Debit - ACH Bill.com   Superior Linen - Dos Bandidos",
                         supplier_id=2)
+
+    Rule.objects.create(description="CLOVER", supplier_id=4)
+
+    Rule.objects.create(description="DoorDash", supplier_id=5)
