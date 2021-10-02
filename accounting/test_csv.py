@@ -1,4 +1,6 @@
 from django.test import TestCase
+
+from .script_test_database import load_test_database
 from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
 from .models import Expense, Supplier, Rule
 from django.contrib.auth.models import User
@@ -6,27 +8,7 @@ from django.contrib.auth.models import User
 
 class CsvReading(TestCase):
     def setUp(self):
-        User.objects.create_user(username='bixby',
-                                 email='bixby@dosbandidos.com',
-                                 password='bixby')
-
-        Supplier.objects.create(name="Carlos Gonzalez",
-                                supplier_type="labor")
-        Supplier.objects.create(name="Superior",
-                                supplier_type="service")
-
-        Supplier.objects.create(name="Stand By",
-                                supplier_type="standBy",
-                                pk=100)
-
-        Expense.objects.create(amount=100,
-                               date='2021-05-01',
-                               cost_center='test',
-                               supplier_id=1,
-                               restaurant_id=1
-                               )
-        Rule.objects.create(description="ACH Debit - ACH Bill.com   Superior Linen - Dos Bandidos",
-                            supplier_id=2)
+        load_test_database()
 
     def test_can_read_csv(self):
         filepath = "./testsdata/AccountHistory.csv"
