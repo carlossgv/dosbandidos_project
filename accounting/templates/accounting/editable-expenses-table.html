@@ -1,4 +1,4 @@
-<form method="POST">
+<form method="POST" id="edit-expenses-table-form">
     {% csrf_token %}
     <table class="striped highlight responsive-table">
         <thead>
@@ -12,7 +12,7 @@
         </thead>
         <tbody>
         {% for expense in expenses %}
-        <tr id="{{expense.pk}}-expense-row">
+        <tr id="{{expense.pk}}-expense-row" style="height: 150px">
             <td><input type="text" name="{{expense.pk}}-date" value="{{ expense.date|date:'Y-m-d' }}"></td>
             <td>
                 <div class="input-field">
@@ -41,7 +41,8 @@
                     </select>
                 </div>
             </td>
-            <td><input type="text" name="{{expense.pk}}-comments" value="{{ expense.comments }}"></td>
+<!--            <td><input type="text" name="{{expense.pk}}-comments" value="{{ expense.comments }}"></td>-->
+            <td><textarea name="{{expense.pk}}-comments" rows="5" style="height: 100%" class="materialize-textarea">{{expense.comments}}</textarea></td>
         </tr>
         {% endfor %}
         </tbody>
