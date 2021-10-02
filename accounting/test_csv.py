@@ -1,19 +1,15 @@
+from datetime import datetime
+
 from django.test import TestCase
 
 from .script_test_database import load_test_database
-from .utils_csv_handling import read_csv, csv_create_expense, format_date, load_csv_expenses
-from .models import Expense
+from .utils_csv_handling import csv_create_expense, format_date, load_csv_expenses, load_csv_incomes
+from .models import Expense, Supplier, Income
 
 
 class CsvReading(TestCase):
     def setUp(self):
         load_test_database()
-
-    def test_can_read_csv(self):
-        filepath = "./testsdata/AccountHistory.csv"
-        delimiter = ","
-        data = read_csv(filepath, delimiter)
-        self.assertEqual(data, True)
 
     def test_transform_date_to_django_format(self):
         date = '8/6/2021'
@@ -51,9 +47,22 @@ class CsvReading(TestCase):
         self.assertEqual(expense.cost_center, 'primaryAccount')
 
     def test_load_expenses_to_db(self):
-        filepath = "./testsdata/AccountHistory.csv"
+        filepath = "./tests_data/AccountHistory.csv"
         delimiter = ","
         cost_center = "primaryAccount"
-        data = load_csv_expenses(filepath, delimiter, 1, cost_center, True)
+        load_csv_expenses(filepath, delimiter, '1', cost_center)
 
-        self.assertEqual(data, True)
+        clover_id = Supplier.objects.get(pk=4)
+        test_expense = Expense.objects.get(supplier=clover_id)
+
+        self.assertEqual(str(test_expense.amount), '89.85')
+
+    def test_load_incomes_to_db(self):
+        filepath = "./tests_data/AccountHistory.csv"
+        delimiter = ","
+        load_csv_incomes(filepath, delimiter, '1')
+
+        doordash_id = Supplier.objects.get(pk=5)
+        text_income = Income.objects.get(supplier=doordash_id)
+
+        self.assertEqual(str(text_income.amount), '1021.26')
