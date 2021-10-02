@@ -14,6 +14,8 @@ def load_csv_incomes(filepath: str, delimiter: str, restaurant_id: str):
         for row in read_file:
             csv_create_income(row, restaurant_id)
 
+    os.remove(filepath)
+
 
 def load_csv_expenses(filepath: str, delimiter: str, restaurant_id: str, cost_center: str):
     with open(filepath, newline='') as file:
@@ -58,6 +60,8 @@ def csv_create_expense(row, restaurant_id, cost_center):
             supplier_id = rule.supplier.pk
             break
 
+    # TODO: Verificar si el expense existe ya
+
     expense = Expense(amount=data['debit'],
                       date=format_date(data['date']),
                       cost_center=cost_center,
@@ -92,6 +96,8 @@ def csv_create_income(row, restaurant_id: str):
         if rule.description in data['description']:
             supplier_id = rule.supplier.pk
             break
+
+    # TODO: Verificar si el income existe ya
 
     income = Income(
         amount=data['credit'],
