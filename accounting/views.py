@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
-from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm
+from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm, LoadIncomesForm
 from .models import Supplier, Expense
 from .utils import (
     get_cash_report,
@@ -12,9 +12,36 @@ from .utils import (
     get_incomes,
     get_metrics,
 )
-from .utils_csv_handling import load_csv_expenses
+from .utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
 from .utils_edit_expenses import get_expenses_by_date
+
+
+@login_required
+def incomes(request):
+    load_form = LoadIncomesForm
+
+    if request.method == 'POST':
+        try:
+            request.FILES['file']
+        except:
+            pass
+        else:
+            file = request.FILES['file']
+            fss = FileSystemStorage()
+            file = fss.save(file.name, file)
+
+            file_url = str(BASE_DIR) + fss.url(file)
+            delimiter = request.POST['delimiter']
+            user_id = request.user.pk
+
+            load_csv_incomes(file_url, delimiter, user_id)
+
+    return render(
+        request,
+        "accounting/incomes.html",
+        {"loadForm": load_form},
+    )
 
 
 @login_required
@@ -56,7 +83,7 @@ def edit_expenses(request):
                 supplier = False if data['suppliers'] == '' else data['suppliers']
 
                 expenses = get_expenses_by_date(initial_date, finish_date, user_id, supplier)
-        
+
         try:
             request.POST['edit-expenses']
         except:

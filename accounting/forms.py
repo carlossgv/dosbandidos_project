@@ -36,6 +36,13 @@ class LoadExpensesForm(forms.Form):
                                     widget=forms.Select(attrs={"class": "validate"}))
 
 
+class LoadIncomesForm(forms.Form):
+    file = forms.FileField(label="Select file")
+    delimiter = forms.ChoiceField(choices=[(None, "-----"), (",", ","), (";", ";")],
+                                  label="Delimiter",
+                                  widget=forms.Select(attrs={"class": "validate"}))
+
+
 class ExpensesForm(forms.Form):
     initial_date = forms.DateField(
         label="Initial Date",
