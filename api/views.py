@@ -1,9 +1,11 @@
 from rest_framework import generics
+from rest_framework.permissions import IsAuthenticated
 from .serializers import ExpenseSerializer
 from accounting.models import Expense
 
 
 class ExpenseList(generics.ListCreateAPIView):
+    permission_classes = [IsAuthenticated]
     serializer_class = ExpenseSerializer
 
     def get_queryset(self):
@@ -20,5 +22,6 @@ class ExpenseList(generics.ListCreateAPIView):
 
 
 class ExpenseDetail(generics.RetrieveUpdateDestroyAPIView):
+    permission_classes = [IsAuthenticated]
     queryset = Expense.objects.all()
     serializer_class = ExpenseSerializer
