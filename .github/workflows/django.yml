@@ -7,7 +7,7 @@ on:
     branches: [ main ]
 
 env:
-    SECRET_KEY: ${{secrets.DOSBANDIDOS_KEY}}
+    DOSBANDIDOS_KEY: ${{secrets.DOSBANDIDOS_KEY}}
 
 jobs:
   build:
