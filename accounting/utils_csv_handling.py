@@ -5,7 +5,7 @@ import os
 from .models import Expense, Rule, Income
 
 
-def load_csv_incomes(filepath: str, delimiter: str, restaurant_id: str):
+def load_csv_incomes(filepath: str, delimiter: str, restaurant_id: str, is_test=False):
     with open(filepath, newline='') as file:
         read_file = csv.reader(file, delimiter=delimiter)
         # Skip header:
@@ -13,6 +13,10 @@ def load_csv_incomes(filepath: str, delimiter: str, restaurant_id: str):
 
         for row in read_file:
             csv_create_income(row, restaurant_id)
+
+    # TODO: Create CSV before test
+    if filepath == "./tests_data/AccountHistory.csv":
+        return
 
     os.remove(filepath)
 
