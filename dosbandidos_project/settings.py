@@ -25,7 +25,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True'
+# DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True'
+DEBUG = True
 
 ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1", "192.168.1.7", "localhost", ".herokuapp.com",
                  "dos-bandidos.herokuapp.com"]
@@ -33,17 +34,18 @@ ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1", "192.168.1.7", "localhost", ".her
 # Application definition
 
 INSTALLED_APPS = [
-    "whitenoise.runserver_nostatic",
     "users",
     "accounting",
     "api",
+    "rest_framework",
+    "whitenoise.runserver_nostatic",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "rest_framework"
+
 ]
 
 MIDDLEWARE = [
@@ -80,13 +82,23 @@ WSGI_APPLICATION = "dosbandidos_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-print(os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True')
-if os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True':
+print(DEBUG)
+if DEBUG:
 
+    # DATABASES = {
+    #     "default": {
+    #         "ENGINE": "django.db.backends.sqlite3",
+    #         "NAME": BASE_DIR / "db.sqlite3",
+    #     }
+    # }
     DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'NAME': 'dosbandidos_local',
+            'USER': 'carlossgv',
+            'PASSWORD': 'postgres',
+            'HOST': 'localhost',
+            'PORT': '5432',
         }
     }
 
@@ -131,7 +143,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
 STATIC_URL = "/static/"
-STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'static'))
+# STATIC_ROOT = os.path.normpath(os.path.join(BASE_DIR, 'staticfiles'))
 STATICFILES_DIRS = (os.path.join(BASE_DIR, "static"),)
 
 # Default primary key field type
