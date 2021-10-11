@@ -80,7 +80,7 @@ WSGI_APPLICATION = "dosbandidos_project.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
-
+print(os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True')
 if os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True':
 
     DATABASES = {
