@@ -87,7 +87,7 @@ WSGI_APPLICATION = "dosbandidos_project.wsgi.application"
 #     }
 # }
 
-DATABASES = {'default': dj_database_url.config(default=config('DATABASE_URL'))}
+DATABASES = {'default': dj_database_url.config()}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
