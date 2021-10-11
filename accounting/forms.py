@@ -12,14 +12,14 @@ class EditExpensesForm(forms.Form):
         widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
     # TODO: Take all of this to __init__
-    # supplier_choices = [(None, "-----")]
-    # for supplier in Supplier.objects.all().order_by("name"):
-    #     supplier_choices.append((supplier.pk, supplier.name))
+    supplier_choices = [(None, "-----")]
+    for supplier in Supplier.objects.all().order_by("name"):
+        supplier_choices.append((supplier.pk, supplier.name))
 
     suppliers = forms.ChoiceField(
         required=False,
         label="Suppliers",
-        # choices=supplier_choices,
+        choices=supplier_choices,
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
@@ -54,14 +54,14 @@ class ExpensesForm(forms.Form):
     )
 
     # # TODO: Take all of this to __init__
-    # supplier_choices = [(None, "-----")]
-    # for supplier in Supplier.objects.all().order_by("name"):
-    #     supplier_choices.append((supplier.pk, supplier.name))
+    supplier_choices = [(None, "-----")]
+    for supplier in Supplier.objects.all().order_by("name"):
+        supplier_choices.append((supplier.pk, supplier.name))
 
     suppliers = forms.ChoiceField(
         required=False,
         label="Suppliers",
-        # choices=supplier_choices,
+        choices=supplier_choices,
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
