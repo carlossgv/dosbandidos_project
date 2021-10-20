@@ -26,7 +26,9 @@ def load_test_database():
     Expense.objects.create(amount=100,
                            date='2021-05-01',
                            cost_center='test',
-                           supplier_id=1,
+                           reference="",
+                           comments="",
+                           supplier_id=2,
                            restaurant_id=1
                            )
 
