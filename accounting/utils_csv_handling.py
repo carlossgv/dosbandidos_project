@@ -106,6 +106,7 @@ def csv_create_income(row, restaurant_id: str):
     income = Income(
         amount=data['credit'],
         date=format_date(data['date']),
+        reference=data['check'],
         comments=data['description'],
         supplier_id=supplier_id,
         restaurant_id=restaurant_id
