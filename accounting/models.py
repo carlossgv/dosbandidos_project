@@ -92,7 +92,7 @@ class CashLog(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"{self.date}: Cash Sales {self.cash_sales}, " \
+        return f"{self.restaurant} - {self.date}: Cash Sales {self.cash_sales}, " \
                f"Card Auto Grat: {self.card_auto_grat}, " \
                f"Card Tips: {self.card_tips} "
 
