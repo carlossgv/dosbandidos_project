@@ -23,12 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
-
 SYSTEM_ENV = os.environ.get('SYSTEM_ENV', None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True'
-DEBUG = True
+DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG")
+# DEBUG = True
 
 ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1", "192.168.1.7", "localhost", ".herokuapp.com",
                  "dos-bandidos.herokuapp.com"]
@@ -103,7 +102,7 @@ elif SYSTEM_ENV == 'TESTING_ENV':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'github_actions',
+            'NAME': 'github_actions_testing_db',
             'USER': 'postgres',
             'PASSWORD': 'postgres',
             'HOST': '127.0.0.1',
