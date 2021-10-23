@@ -66,13 +66,13 @@ def csv_create_expense(row, restaurant_id, cost_center):
 
     # TODO: Verificar si el expense existe ya
 
-    print("SUPPLIER ID IN CSV", supplier_id)
-
     expense = Expense(amount=data['debit'],
                       date=format_date(data['date']),
                       cost_center=cost_center,
                       supplier_id=supplier_id,
-                      restaurant_id=restaurant_id
+                      restaurant_id=restaurant_id,
+                      reference=data['check'],
+                      comments=data['description']
                       )
 
     expense.save()
@@ -106,7 +106,6 @@ def csv_create_income(row, restaurant_id: str):
     income = Income(
         amount=data['credit'],
         date=format_date(data['date']),
-        reference=data['check'],
         comments=data['description'],
         supplier_id=supplier_id,
         restaurant_id=restaurant_id

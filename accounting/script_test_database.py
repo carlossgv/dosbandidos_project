@@ -18,7 +18,6 @@ def load_test_database():
                             supplier_type="service")
     Supplier.objects.create(name="Doordash",
                             supplier_type="service")
-
     Supplier.objects.create(name="Stand By",
                             supplier_type="standBy",
                             pk=100)
@@ -31,21 +30,18 @@ def load_test_database():
                            supplier_id=2,
                            restaurant_id=1
                            )
-
     Expense.objects.create(amount=25,
                            date='2021-05-06',
                            cost_center='test',
                            supplier_id=2,
                            restaurant_id=1
                            )
-
     Expense.objects.create(amount=15,
                            date='2021-06-08',
                            cost_center='test',
                            supplier_id=3,
                            restaurant_id=1
                            )
-
     Expense.objects.create(amount=90,
                            date='2021-07-10',
                            cost_center='test',
@@ -58,6 +54,7 @@ def load_test_database():
                            supplier_id=1,
                            restaurant_id=1
                            )
+
     Rule.objects.create(description="ACH Debit - ACH Bill.com   Superior Linen - Dos Bandidos",
                         supplier_id=2)
 
