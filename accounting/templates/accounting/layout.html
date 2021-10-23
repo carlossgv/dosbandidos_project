@@ -35,13 +35,15 @@
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
         <ul id="nav-mobile" class="right hide-on-med-and-down">
             <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
-            <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
-            <li><a href="{% url 'incomes'  %}">Incomes</a></li>
+            {% if isAdmin %}
+                <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
+                <li><a href="{% url 'incomes'  %}">Incomes</a></li>
+            {% endif %}
             {% if user.is_authenticated %}
-            <li><a href="{% url 'logout' %}">Sign Out</a></li>
-            {% else %}
-            <li><a href="{% url 'login' %}">Log In</a></li>
-            <!-- <li><a href="#">Register</a></li> -->
+                <li><a href="{% url 'logout' %}">Sign Out</a></li>
+                {% else %}
+                <li><a href="{% url 'login' %}">Log In</a></li>
+                <!-- <li><a href="#">Register</a></li> -->
             {% endif %}
         </ul>
     </div>
@@ -49,8 +51,10 @@
 
 <ul id="mobile-demo" class="sidenav">
     <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
-    <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
-    <li><a href="#">Incomes</a></li>
+    {% if isAdmin %}
+        <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
+        <li><a href="{% url 'incomes'  %}">Incomes</a></li>
+    {% endif %}
     {% if user.is_authenticated %}
     <li><a href="{% url 'logout' %}">Sign Out</a></li>
     {% else %}

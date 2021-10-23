@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
+
+from accounting.decorators import admins_only, is_user_admin
 from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm, LoadIncomesForm
 from .models import Supplier, Expense
 from .utils import (
@@ -16,10 +18,11 @@ from .utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
 from .utils_edit_expenses import get_expenses_by_date
 
-
+@admins_only
 @login_required
 def incomes(request):
     load_form = LoadIncomesForm
+    is_admin = is_user_admin(request.user)
 
     if request.method == 'POST':
         try:
@@ -40,15 +43,15 @@ def incomes(request):
     return render(
         request,
         "accounting/incomes.html",
-        {"loadForm": load_form},
+        {"loadForm": load_form, "isAdmin": is_admin}      
     )
 
-
+@admins_only
 @login_required
 def edit_expenses(request):
     edit_form = EditExpensesForm
     expenses = ""
-
+    is_admin = is_user_admin(request.user)
     load_form = LoadExpensesForm
 
     if request.method == 'POST':
@@ -118,12 +121,14 @@ def edit_expenses(request):
         "accounting/edit-expenses.html",
         {"editForm": edit_form, "loadForm": load_form, "expenses": expenses,
          "supplier_choices": supplier_choices,
-         "cost_center_choices": cost_center_choices},
+         "cost_center_choices": cost_center_choices,
+         "isAdmin": is_admin},
     )
 
 
 @login_required
 def home(request):
+    is_admin = is_user_admin(request.user)
     if request.method == "POST":
         form = ExpensesForm(request.POST)
         user_id = request.user.pk
@@ -240,7 +245,7 @@ def home(request):
         return render(
             request,
             "accounting/home.html",
-            {"form": form},
+            {"form": form, "isAdmin": is_admin},
         )
 
     else:
@@ -249,5 +254,5 @@ def home(request):
         return render(
             request,
             "accounting/home.html",
-            {"form": form},
+            {"form": form , "isAdmin": is_admin},
         )

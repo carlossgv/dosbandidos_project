@@ -1,4 +1,3 @@
-from django.contrib.auth.models import User
 from django.test import TestCase
 
 from .script_test_database import load_test_database
