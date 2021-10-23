@@ -18,6 +18,16 @@
         </div>
         <div class="row">
             <div class="input-field col m3 s12 offset-m3">
+                {{ form.cash }}
+                {{ form.cash.label_tag }}
+            </div>
+            <div class="input-field col m3 s12">
+                {{ form.restaurant }}
+                {{ form.restaurant.label_tag }}
+            </div>
+        </div>
+        <div class="row">
+            <div class="input-field col m3 s12 offset-m3">
                 {{ form.suppliers }}
                 {{ form.suppliers.label_tag }}
             </div>
@@ -26,12 +36,7 @@
                 {{ form.supplier_type.label_tag }}
             </div>
         </div>
-        <div class="row">
-            <div class="input-field col m3 s12 offset-m3">
-                {{ form.cash }}
-                {{ form.cash.label_tag }}
-            </div>
-        </div>
+
 
         <!-- {{ form.as_p }} -->
         <div class="buttons-div">

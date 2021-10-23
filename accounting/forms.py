@@ -59,6 +59,12 @@ class ExpensesForm(forms.Form):
         widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
 
+    restaurant = forms.ChoiceField(
+        label="Restaurant",
+        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
     # TODO: Take all of this to __init__
     supplier_choices = [(None, "-----")]
 

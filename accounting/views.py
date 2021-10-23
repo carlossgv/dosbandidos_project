@@ -131,22 +131,23 @@ def home(request):
     is_admin = is_user_admin(request.user)
     if request.method == "POST":
         form = ExpensesForm(request.POST)
-        user_id = request.user.pk
+        # restaurant_id = request.user.pk
 
         if form.is_valid():
             data = form.cleaned_data
             initial_date = data["initial_date"]
             finish_date = data["finish_date"]
+            restaurant_id = data["restaurant"]
 
             if "getGoals" in request.POST:
-                goals_report = get_goals_report(initial_date, finish_date, user_id)
+                goals_report = get_goals_report(initial_date, finish_date, restaurant_id)
                 food = goals_report["food"]
                 liquor = goals_report["liquor"]
 
-                incomes = get_incomes(initial_date, finish_date, user_id)
+                incomes = get_incomes(initial_date, finish_date, restaurant_id)
                 restaurant_sales = incomes["restaurant_sales"]
 
-                metrics = get_metrics(initial_date, finish_date, user_id)
+                metrics = get_metrics(initial_date, finish_date, restaurant_id)
 
                 if metrics["restaurant_order_count"]["total"] != 0:
                     metrics["order_average"] = {
@@ -196,11 +197,11 @@ def home(request):
                 )
 
             elif "getFinancials" in request.POST:
-                financials = get_financials_report(initial_date, finish_date, user_id)
+                financials = get_financials_report(initial_date, finish_date, restaurant_id)
                 financials_data = financials["results"]
                 financials_total = financials["total"]
 
-                incomes = get_incomes(initial_date, finish_date, user_id)
+                incomes = get_incomes(initial_date, finish_date, restaurant_id)
                 incomes_data = incomes["incomes"]
                 incomes_total = incomes["total"]
 
@@ -217,7 +218,7 @@ def home(request):
                 )
             elif "getCashReport" in request.POST:
                 initial_cash = data["cash"]
-                cash_data = get_cash_report(initial_cash, initial_date, finish_date, user_id)
+                cash_data = get_cash_report(initial_cash, initial_date, finish_date, restaurant_id)
 
                 return render(
                     request,
@@ -228,12 +229,12 @@ def home(request):
                 supplier_data = ""
                 if data["suppliers"] != "":
                     supplier_data = get_expenses_by_supplier(
-                        data["suppliers"], initial_date, finish_date, user_id
+                        data["suppliers"], initial_date, finish_date, restaurant_id
                     )
 
                 elif data["supplier_type"] != "":
                     supplier_data = get_expenses_by_supplier_type(
-                        data["supplier_type"], initial_date, finish_date, user_id
+                        data["supplier_type"], initial_date, finish_date, restaurant_id
                     )
 
                 return render(
