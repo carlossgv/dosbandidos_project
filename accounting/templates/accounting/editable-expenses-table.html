@@ -7,6 +7,7 @@
             <th>Cost Center</th>
             <th>Amount</th>
             <th>Supplier</th>
+            <th>Reference</th>
             <th>Comments</th>
         </tr>
         </thead>
@@ -42,7 +43,7 @@
                 </div>
             </td>
             <td><input type="text" name="{{expense.pk}}-reference" value="{{ expense.reference }}"></td>
-<!--            <td><textarea name="{{expense.pk}}-comments" rows="5" style="height: 100%" class="materialize-textarea">{{expense.comments}}</textarea></td>-->
+            <td><textarea name="{{expense.pk}}-comments" rows="5" style="height: 100%" class="materialize-textarea">{{expense.comments}}</textarea></td>
         </tr>
         {% endfor %}
         </tbody>
