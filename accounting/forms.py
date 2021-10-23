@@ -101,9 +101,8 @@ class ExpensesForm(forms.Form):
     )
 
     cash = forms.DecimalField(
-        placeholder="For cash report only",
         label="Initial Cash",
         decimal_places=2,
         required=False,
-        widget=forms.NumberInput(attrs={"class": "validate"}),
+        widget=forms.NumberInput(attrs={"class": "validate", "placeholder": "For cash report only"}),
     )
