@@ -1,1 +1,1 @@
-web: gunicorn dosbandidos_project.wsgi --log-file -
+web: gunicorn dosbandidos_project.wsgi --log-file
