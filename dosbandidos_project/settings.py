@@ -24,6 +24,8 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
 
+SYSTEM_ENV = os.environ.get('SYSTEM_ENV', None)
+
 # SECURITY WARNING: don't run with debug turned on in production!
 # DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG") == 'True'
 DEBUG = True
@@ -91,6 +93,20 @@ if DEBUG:
             'USER': 'carlossgv',
             'PASSWORD': 'postgres',
             'HOST': 'localhost',
+            'PORT': '5432',
+        }
+    }
+
+elif SYSTEM_ENV == 'TESTING_ENV':
+    DEBUG = True
+    SECRET_KEY = SECRET_KEY
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql',
+            'NAME': 'github_actions',
+            'USER': 'postgres',
+            'PASSWORD': 'postgres',
+            'HOST': '127.0.0.1',
             'PORT': '5432',
         }
     }
