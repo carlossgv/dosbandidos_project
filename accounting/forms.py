@@ -60,6 +60,7 @@ class ExpensesForm(forms.Form):
     )
 
     restaurant = forms.ChoiceField(
+        required=True,
         label="Restaurant",
         choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
         widget=forms.Select(attrs={"class": "validate"}),
