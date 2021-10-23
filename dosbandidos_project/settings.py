@@ -26,8 +26,7 @@ SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
 SYSTEM_ENV = os.environ.get('SYSTEM_ENV', None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG")
-# DEBUG = True
+# DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG")
 
 ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1", "192.168.1.7", "localhost", ".herokuapp.com",
                  "dos-bandidos.herokuapp.com"]
@@ -84,7 +83,8 @@ WSGI_APPLICATION = "dosbandidos_project.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-if DEBUG:
+if SYSTEM_ENV == 'DEVELOPMENT':
+    DEBUG = True
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -109,11 +109,12 @@ elif SYSTEM_ENV == 'TESTING_ENV':
             'PORT': '5432',
         }
     }
+elif SYSTEM_ENV == 'PRODUCTION':
+    DEBUG = False
+    SECRET_KEY = SECRET_KEY
+    DATABASES = {'default': dj_database_url.config()}
 
-else:
-    DATABASES = {
-        'default': dj_database_url.config()
-    }
+
 
 
 # Password validation
