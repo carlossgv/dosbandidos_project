@@ -22,6 +22,13 @@ class EditExpensesForm(forms.Form):
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
+    restaurant = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
     def __init__(self, *args, **kwargs):
         supplier_choices = [(None, "-----")]
         for supplier in Supplier.objects.all().order_by("name"):
@@ -44,10 +51,24 @@ class LoadExpensesForm(forms.Form):
                                              ("expensesAccount", "Expenses Account")],
                                     label="Cost Center",
                                     widget=forms.Select(attrs={"class": "validate"}))
+    restaurant = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
 
 
 class LoadIncomesForm(forms.Form):
+    restaurant = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
     file = forms.FileField(label="Select file")
+    
     delimiter = forms.ChoiceField(choices=[(None, "-----"), (",", ","), (";", ";")],
                                   label="Delimiter",
                                   widget=forms.Select(attrs={"class": "validate"}))
