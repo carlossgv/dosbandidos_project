@@ -1,17 +1,21 @@
 from django.test import TestCase
 
 from .script_test_database import load_test_database
-from .utils_csv_handling import csv_create_expense, format_date, load_csv_expenses, load_csv_incomes
-from .models import Expense, Income, Rule, Supplier
+from accounting.utils_csv_handling import csv_create_expense, format_date, load_csv_expenses, load_csv_incomes
+from accounting.models import Expense, Income, Rule, Supplier
 
 
 class CsvReading(TestCase):
-    # def setUp(self):
-    #     load_test_database()
-
     @classmethod
     def setUpTestData(cls):
         load_test_database()
+
+    def tearDown(self) -> None:
+        """empty current database"""
+        Expense.objects.all().delete()
+        Income.objects.all().delete()
+        Supplier.objects.all().delete()
+        Rule.objects.all().delete()
 
     def test_transform_date_to_django_format(self):
         date = '8/6/2021'
@@ -21,7 +25,8 @@ class CsvReading(TestCase):
         self.assertEqual(formatted_date, '2021-08-06')
 
     def test_create_expense_by_row_if_no_rule(self):
-        row = ['XXXXXX4583', '8/2/2021', '110134', 'CHECK -  -', '615.58', '', 'Posted', '']
+        row = ['XXXXXX4583', '8/2/2021', '110134',
+               'CHECK -  -', '615.58', '', 'Posted', '']
 
         cost_center = 'primaryAccount'
 
@@ -61,7 +66,8 @@ class CsvReading(TestCase):
         self.assertEqual(str(test_expense.supplier_id), '4')
         self.assertEqual(str(test_expense.restaurant_id), '1')
         self.assertEqual(str(test_expense.reference), '')
-        self.assertEqual(str(test_expense.comments), 'ACH Debit - ACH CLOVER APP CLOVER APP MRKT - DOS BANDIDOS BA LLC')
+        self.assertEqual(str(test_expense.comments),
+                         'ACH Debit - ACH CLOVER APP CLOVER APP MRKT - DOS BANDIDOS BA LLC')
 
     def test_load_incomes_to_db(self):
         filepath = "./tests_data/AccountHistory.csv"
@@ -73,6 +79,7 @@ class CsvReading(TestCase):
 
         self.assertEqual(str(text_income.amount), '1021.26')
         self.assertEqual(str(text_income.date), '2021-09-10')
-        self.assertEqual(str(text_income.comments), 'ACH Credit - ACH 210 S Memo DoorDash, Inc. - DOS BANDIDOS BA LLC')
+        self.assertEqual(str(text_income.comments),
+                         'ACH Credit - ACH 210 S Memo DoorDash, Inc. - DOS BANDIDOS BA LLC')
         self.assertEqual(str(text_income.supplier_id), '5')
         self.assertEqual(str(text_income.restaurant_id), '1')
