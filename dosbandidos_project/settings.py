@@ -105,7 +105,7 @@ elif SYSTEM_ENV == 'TESTING_ENV':
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.postgresql',
-            'NAME': 'github_actions_testing_db',
+            'NAME': 'dosbandidos_testing',
             'USER': 'postgres',
             'PASSWORD': 'postgres',
             'HOST': '127.0.0.1',
