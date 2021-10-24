@@ -1,7 +1,7 @@
 from functools import wraps
 from django.http import HttpResponseRedirect
 
-
+# Decorator to check if user is admin
 def admins_only(function):
     @wraps(function)
     def wrap(request, *args, **kwargs):
