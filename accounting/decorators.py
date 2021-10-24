@@ -13,10 +13,10 @@ def admins_only(function):
             return function(request, *args, **kwargs)
     return wrap
 
+
 def is_user_admin(user):
     is_admin = True
     user_groups = user.groups.all()
-    print(user_groups)
 
     if 'read_only_users' in [group.name for group in user_groups]:
         is_admin = False

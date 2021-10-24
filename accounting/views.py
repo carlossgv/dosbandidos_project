@@ -129,6 +129,7 @@ def edit_expenses(request):
 @login_required
 def home(request):
     is_admin = is_user_admin(request.user)
+    print(request.POST)
     if request.method == "POST":
         form = ExpensesForm(request.POST)
         # restaurant_id = request.user.pk
@@ -140,6 +141,7 @@ def home(request):
             restaurant_id = data["restaurant"]
 
             if "getGoals" in request.POST:
+                
                 goals_report = get_goals_report(initial_date, finish_date, restaurant_id)
                 food = goals_report["food"]
                 liquor = goals_report["liquor"]

@@ -1,33 +1,37 @@
 from django import forms
+from django.db.models.query_utils import Q
 from .models import Supplier
 
 
 class EditExpensesForm(forms.Form):
     initial_date = forms.DateField(
         label="Initial Date",
-        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(
+            attrs={"type": "date", "class": "validate"}),
     )
     finish_date = forms.DateField(
         label="Finish Date",
-        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(
+            attrs={"type": "date", "class": "validate"}),
     )
-    # TODO: Take all of this to __init__
-    supplier_choices = [(None, "-----")]
-
-    try:
-        Supplier.objects.all()
-    except:
-        pass
-    else:
-        for supplier in Supplier.objects.all().order_by("name"):
-            supplier_choices.append((supplier.pk, supplier.name))
 
     suppliers = forms.ChoiceField(
         required=False,
         label="Suppliers",
-        choices=supplier_choices,
+        choices=(),
         widget=forms.Select(attrs={"class": "validate"}),
     )
+
+    def __init__(self, *args, **kwargs):
+        supplier_choices = [(None, "-----")]
+        for supplier in Supplier.objects.all().order_by("name"):
+            supplier_choices.append((supplier.pk, supplier.name))
+
+        super(EditExpensesForm, self).__init__(*args, **kwargs)
+        self.fields["suppliers"] = forms.ChoiceField(choices=supplier_choices,
+                                                     required=False,
+                                                     label="Suppliers",
+                                                     widget=forms.Select(attrs={"class": "validate"}))
 
 
 class LoadExpensesForm(forms.Form):
@@ -52,11 +56,13 @@ class LoadIncomesForm(forms.Form):
 class ExpensesForm(forms.Form):
     initial_date = forms.DateField(
         label="Initial Date",
-        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(
+            attrs={"type": "date", "class": "validate"}),
     )
     finish_date = forms.DateField(
         label="Finish Date",
-        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(
+            attrs={"type": "date", "class": "validate"}),
     )
 
     restaurant = forms.ChoiceField(
@@ -66,23 +72,23 @@ class ExpensesForm(forms.Form):
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
-    # TODO: Take all of this to __init__
-    supplier_choices = [(None, "-----")]
-
-    try:
-        Supplier.objects.all()
-    except:
-        pass
-    else:
-        for supplier in Supplier.objects.all().order_by("name"):
-            supplier_choices.append((supplier.pk, supplier.name))
-
     suppliers = forms.ChoiceField(
         required=False,
         label="Suppliers",
-        choices=supplier_choices,
+        choices=(),
         widget=forms.Select(attrs={"class": "validate"}),
     )
+
+    def __init__(self, *args, **kwargs):
+        supplier_choices = [(None, "-----")]
+        for supplier in Supplier.objects.all().order_by("name"):
+            supplier_choices.append((supplier.pk, supplier.name))
+
+        super(ExpensesForm, self).__init__(*args, **kwargs)
+        self.fields["suppliers"] = forms.ChoiceField(choices=supplier_choices,
+                                                     required=False,
+                                                     label="Suppliers",
+                                                     widget=forms.Select(attrs={"class": "validate"}))
 
     # TODO: populate supplier choices dinamically
     supplier_type_choices = [
@@ -104,5 +110,6 @@ class ExpensesForm(forms.Form):
         label="Initial Cash",
         decimal_places=2,
         required=False,
-        widget=forms.NumberInput(attrs={"class": "validate", "placeholder": "For cash report only"}),
+        widget=forms.NumberInput(
+            attrs={"class": "validate", "placeholder": "For cash report only"}),
     )

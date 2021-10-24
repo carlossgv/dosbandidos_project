@@ -15,6 +15,7 @@ import os
 import django_heroku
 import dj_database_url
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -31,20 +32,22 @@ SYSTEM_ENV = os.environ.get('SYSTEM_ENV', None)
 ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1", "192.168.1.7", "localhost", ".herokuapp.com",
                  "dos-bandidos.herokuapp.com"]
 
-# Application definition
 
+# Application definition
 INSTALLED_APPS = [
-    "users",
-    "accounting",
-    "api",
-    "rest_framework",
-    "whitenoise.runserver_nostatic",
+
+    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "users",
+    "accounting",
+    "api",
+    "rest_framework",
+    "whitenoise.runserver_nostatic",
 
 ]
 
@@ -109,6 +112,13 @@ elif SYSTEM_ENV == 'TESTING_ENV':
             'PORT': '5432',
         }
     }
+
+elif SYSTEM_ENV == 'STAGING_ENV':
+    DEBUG = True
+    SECRET_KEY = SECRET_KEY
+    DATABASES = {'default': dj_database_url.config()}
+
+
 elif SYSTEM_ENV == 'PRODUCTION':
     DEBUG = False
     SECRET_KEY = SECRET_KEY
