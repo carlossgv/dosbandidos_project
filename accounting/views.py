@@ -67,9 +67,9 @@ def edit_expenses(request):
             file_url = str(BASE_DIR) + fss.url(file)
             delimiter = request.POST['delimiter']
             cost_center = request.POST['cost_center']
-            user_id = request.user.pk
+            restaurant_id = request.POST['restaurant']
 
-            load_csv_expenses(file_url, delimiter, user_id, cost_center)
+            load_csv_expenses(file_url, delimiter, restaurant_id, cost_center)
 
         try:
             request.POST['retrieve-expenses']
@@ -80,12 +80,12 @@ def edit_expenses(request):
 
             if form.is_valid():
                 data = form.cleaned_data
-                user_id = request.user.pk
+                restaurant_id = request.POST['restaurant']
                 initial_date = data['initial_date']
                 finish_date = data['finish_date']
                 supplier = False if data['suppliers'] == '' else data['suppliers']
 
-                expenses = get_expenses_by_date(initial_date, finish_date, user_id, supplier)
+                expenses = get_expenses_by_date(initial_date, finish_date, restaurant_id, supplier)
 
         try:
             request.POST['edit-expenses']
