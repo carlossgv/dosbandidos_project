@@ -18,6 +18,7 @@ from .utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
 from .utils_edit_expenses import get_expenses_by_date
 
+
 @admins_only
 @login_required
 def incomes(request):
@@ -36,15 +37,16 @@ def incomes(request):
 
             file_url = str(BASE_DIR) + fss.url(file)
             delimiter = request.POST['delimiter']
-            user_id = request.user.pk
+            restaurant_id = request.POST['restaurant']
 
-            load_csv_incomes(file_url, delimiter, user_id)
+            load_csv_incomes(file_url, delimiter, restaurant_id)
 
     return render(
         request,
         "accounting/incomes.html",
-        {"loadForm": load_form, "isAdmin": is_admin}      
+        {"loadForm": load_form, "isAdmin": is_admin}
     )
+
 
 @admins_only
 @login_required
@@ -85,7 +87,8 @@ def edit_expenses(request):
                 finish_date = data['finish_date']
                 supplier = False if data['suppliers'] == '' else data['suppliers']
 
-                expenses = get_expenses_by_date(initial_date, finish_date, restaurant_id, supplier)
+                expenses = get_expenses_by_date(
+                    initial_date, finish_date, restaurant_id, supplier)
 
         try:
             request.POST['edit-expenses']
@@ -132,7 +135,6 @@ def home(request):
     print(request.POST)
     if request.method == "POST":
         form = ExpensesForm(request.POST)
-        # restaurant_id = request.user.pk
 
         if form.is_valid():
             data = form.cleaned_data
@@ -141,8 +143,9 @@ def home(request):
             restaurant_id = data["restaurant"]
 
             if "getGoals" in request.POST:
-                
-                goals_report = get_goals_report(initial_date, finish_date, restaurant_id)
+
+                goals_report = get_goals_report(
+                    initial_date, finish_date, restaurant_id)
                 food = goals_report["food"]
                 liquor = goals_report["liquor"]
 
@@ -171,13 +174,15 @@ def home(request):
                         'total': round(food_cost * 100)
                     }
 
-                    liquor_cost = liquor['total'] / metrics['restaurant_liquor_sales']['total']
+                    liquor_cost = liquor['total'] / \
+                        metrics['restaurant_liquor_sales']['total']
                     metrics['liquor_cost'] = {
                         'name': 'Liquor Cost',
                         'total': round(liquor_cost * 100)
                     }
 
-                    cost_average = (metrics['food_cost']['total'] + metrics['liquor_cost']['total']) / 2
+                    cost_average = (
+                        metrics['food_cost']['total'] + metrics['liquor_cost']['total']) / 2
                     metrics['cost_average'] = {
                         'name': 'Cost Average',
                         'total': cost_average
@@ -195,11 +200,13 @@ def home(request):
                 return render(
                     request,
                     "accounting/home.html",
-                    {"form": form, "food": food, "liquor": liquor, 'metrics': metrics},
+                    {"form": form, "food": food,
+                        "liquor": liquor, 'metrics': metrics},
                 )
 
             elif "getFinancials" in request.POST:
-                financials = get_financials_report(initial_date, finish_date, restaurant_id)
+                financials = get_financials_report(
+                    initial_date, finish_date, restaurant_id)
                 financials_data = financials["results"]
                 financials_total = financials["total"]
 
@@ -220,7 +227,8 @@ def home(request):
                 )
             elif "getCashReport" in request.POST:
                 initial_cash = data["cash"]
-                cash_data = get_cash_report(initial_cash, initial_date, finish_date, restaurant_id)
+                cash_data = get_cash_report(
+                    initial_cash, initial_date, finish_date, restaurant_id)
 
                 return render(
                     request,
@@ -257,5 +265,5 @@ def home(request):
         return render(
             request,
             "accounting/home.html",
-            {"form": form , "isAdmin": is_admin},
+            {"form": form, "isAdmin": is_admin},
         )
