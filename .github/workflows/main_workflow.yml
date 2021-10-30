@@ -74,7 +74,9 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Add remote
-        run: git remote add heroku https://git.heroku.com/dos-bandidos.git
+      - name: Add Heroku remote
+        run: git add remote heroku
+      - name: Create Heroku login file
+        run: echo ${HEROKU_LOGIN} > ~/.netrc
       - name: Deploy to Heroku
         run: git push heroku main
