@@ -145,7 +145,8 @@ def home(request):
             if "getGoals" in request.POST:
 
                 goals_report = get_goals_report(
-                    initial_date, finish_date, restaurant_id)
+                    initial_date, finish_date, restaurant_id
+                )
                 food = goals_report["food"]
                 liquor = goals_report["liquor"]
 
@@ -168,7 +169,9 @@ def home(request):
                         "total": round(metrics['restaurant_labor']['total'] / restaurant_sales * 100)
                     }
 
-                    food_cost = food['total'] / restaurant_sales
+                    food_cost = food['total'] / \
+                        metrics['food_net_sales']['total']
+
                     metrics['food_cost'] = {
                         'name': 'Food Cost',
                         'total': round(food_cost * 100)
@@ -188,11 +191,6 @@ def home(request):
                         'total': cost_average
                     }
 
-                    metrics['food_net_sales'] = {
-                        'name': 'Food Net Sales',
-                        'total': metrics['restaurant_net_sales']['total'] - metrics['restaurant_liquor_sales']['total']
-                    }
-
                 else:
                     metrics["order_average"] = "No info"
                     metrics['labor_goal'] = "No info"
@@ -206,7 +204,8 @@ def home(request):
 
             elif "getFinancials" in request.POST:
                 financials = get_financials_report(
-                    initial_date, finish_date, restaurant_id)
+                    initial_date, finish_date, restaurant_id
+                )
                 financials_data = financials["results"]
                 financials_total = financials["total"]
 
