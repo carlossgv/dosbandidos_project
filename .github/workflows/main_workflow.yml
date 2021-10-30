@@ -78,5 +78,7 @@ jobs:
         run: git remote add heroku https://git.heroku.com/dos-bandidos.git
       - name: Create Heroku login file
         run: echo ${HEROKU_LOGIN} > ~/.netrc
+      - name: debud netrc
+        run: cat ~/.netrc
       - name: Deploy to Heroku
         run: git push heroku main
