@@ -2,12 +2,12 @@ name: Django CI
 
 on:
   push:
-    branches: [ main ]
+    branches: [main]
   pull_request:
-    branches: [ main ]
+    branches: [main]
 
 env:
-    DOSBANDIDOS_KEY: ${{secrets.DOSBANDIDOS_KEY}}
+  DOSBANDIDOS_KEY: ${{secrets.DOSBANDIDOS_KEY}}
 
 jobs:
   build_and_test:
@@ -29,26 +29,27 @@ jobs:
         options: --mount type=tmpfs,destination=/var/lib/postgresql/data --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install --upgrade pip setuptools wheel
-        pip install -r requirements.txt
-    - name: Run tests
-      run: python manage.py test
-      env:
-        SYSTEM_ENV: TESTING_ENV
-    - name: Deploy
-      run: echo "im deploying"
-      env:
-        SYSTEM_ENV: TESTING_ENV
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
+      - name: Run tests
+        run: python manage.py test
+        env:
+          SYSTEM_ENV: TESTING_ENV
+      - name: Deploy
+        run: echo "im deploying"
+        env:
+          SYSTEM_ENV: TESTING_ENV
 
   deploy_to_heroku:
+    needs: build_and_test
     runs-on: ubuntu-latest
     strategy:
       max-parallel: 4
@@ -67,13 +68,13 @@ jobs:
         options: --mount type=tmpfs,destination=/var/lib/postgresql/data --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
 
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
-      with:
-        python-version: ${{ matrix.python-version }}
-    - name: Install Dependencies
-      run: |
-        python -m pip install --upgrade pip
-        python -m pip install --upgrade pip setuptools wheel
-        pip install -r requirements.txt  
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install Dependencies
+        run: |
+          python -m pip install --upgrade pip
+          python -m pip install --upgrade pip setuptools wheel
+          pip install -r requirements.txt
