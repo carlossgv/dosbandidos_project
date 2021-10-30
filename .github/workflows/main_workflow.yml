@@ -75,7 +75,7 @@ jobs:
         with:
           python-version: ${{ matrix.python-version }}
       - name: Add Heroku remote
-        run: git add remote heroku https://git.heroku.com/dos-bandidos.git
+        run: git remote add heroku https://git.heroku.com/dos-bandidos.git
       - name: Create Heroku login file
         run: echo ${HEROKU_LOGIN} > ~/.netrc
       - name: Deploy to Heroku
