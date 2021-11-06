@@ -144,62 +144,15 @@ def home(request):
 
             if "getGoals" in request.POST:
 
-                goals_report = get_goals_report(
+                goals_report_data = get_goals_report(
                     initial_date, finish_date, restaurant_id
                 )
-                food = goals_report["food"]
-                liquor = goals_report["liquor"]
-
-                incomes = get_incomes(initial_date, finish_date, restaurant_id)
-                restaurant_sales = incomes["restaurant_sales"]
-
-                metrics = get_metrics(initial_date, finish_date, restaurant_id)
-
-                if metrics["restaurant_order_count"]["total"] != 0:
-                    metrics["order_average"] = {
-                        'name': 'Order Average',
-                        'total': round(
-                            metrics["restaurant_gross_sales"]["total"]
-                            / metrics["restaurant_order_count"]["total"],
-                            2
-                        )
-                    }
-                    metrics['labor_goal'] = {
-                        "name": 'Labor Goal',
-                        "total": round(metrics['restaurant_labor']['total'] / restaurant_sales * 100)
-                    }
-
-                    food_cost = food['total'] / \
-                        metrics['food_net_sales']['total']
-
-                    metrics['food_cost'] = {
-                        'name': 'Food Cost',
-                        'total': round(food_cost * 100)
-                    }
-
-                    liquor_cost = liquor['total'] / \
-                        metrics['restaurant_liquor_sales']['total']
-                    metrics['liquor_cost'] = {
-                        'name': 'Liquor Cost',
-                        'total': round(liquor_cost * 100)
-                    }
-
-                    cost_average = (
-                        metrics['food_cost']['total'] + metrics['liquor_cost']['total']) / 2
-                    metrics['cost_average'] = {
-                        'name': 'Cost Average',
-                        'total': cost_average
-                    }
-
-                else:
-                    metrics["order_average"] = "No info"
-                    metrics['labor_goal'] = "No info"
 
                 return render(
                     request,
                     "accounting/home.html",
-                    {"form": form, "food": food,
-                        "liquor": liquor, 'metrics': metrics},
+                    {"form": form, "food": goals_report_data["food"],
+                        "liquor": goals_report_data["liquor"], 'metrics': goals_report_data["metrics"], },
                 )
 
             elif "getFinancials" in request.POST:

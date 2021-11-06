@@ -35,8 +35,6 @@ ALLOWED_HOSTS = ["192.168.1.112", "127.0.0.1", "192.168.1.7", "localhost", ".her
 
 # Application definition
 INSTALLED_APPS = [
-
-    
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
@@ -48,7 +46,6 @@ INSTALLED_APPS = [
     "api",
     "rest_framework",
     "whitenoise.runserver_nostatic",
-
 ]
 
 MIDDLEWARE = [
@@ -156,7 +153,6 @@ USE_L10N = True
 USE_TZ = True
 
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
@@ -172,7 +168,7 @@ REST_FRAMEWORK = {
         'rest_framework.permissions.AllowAny'
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication'
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
     )
 }
 
