@@ -174,7 +174,7 @@ def totalize_suppliers(suppliers_list, initial_date, finish_date, user_id):
     return {"total": total, "data": data, "suppliers_totals": suppliers_totals}
 
 
-def get_goals_report(initial_date, finish_date, user_id):
+def get_goals_report(initial_date, finish_date, restaurant_id):
     # SGC (29), Paisa (31), Mil Arcos (30), Sams (32), Walmart (33)
     food_suppliers = [
         {"id": 29, "type": "supplier"},
@@ -195,12 +195,57 @@ def get_goals_report(initial_date, finish_date, user_id):
         {"type": "liquorMisc"},
     ]
 
-    food = totalize_suppliers(
-        food_suppliers, initial_date, finish_date, user_id)
-    liquor = totalize_suppliers(
-        liquor_suppliers, initial_date, finish_date, user_id)
+    food_expenses = totalize_suppliers(
+        food_suppliers, initial_date, finish_date, restaurant_id)
+    liquor_expenses = totalize_suppliers(
+        liquor_suppliers, initial_date, finish_date, restaurant_id)
 
-    return {"food": food, "liquor": liquor}
+    incomes = get_incomes(initial_date, finish_date, restaurant_id)
+    restaurant_sales = incomes["restaurant_sales"]
+
+    metrics = get_metrics(initial_date, finish_date, restaurant_id)
+
+    if metrics["restaurant_order_count"]["total"] != 0:
+        metrics["order_average"] = {
+            'name': 'Order Average',
+            'total': round(
+                metrics["restaurant_gross_sales"]["total"]
+                / metrics["restaurant_order_count"]["total"],
+                2
+            )
+        }
+        metrics['labor_goal'] = {
+            "name": 'Labor Goal',
+            "total": round(metrics['restaurant_labor']['total'] / restaurant_sales * 100)
+        }
+
+        food_cost = food_expenses['total'] / \
+            metrics['food_net_sales']['total']
+
+        metrics['food_cost'] = {
+            'name': 'Food Cost',
+            'total': round(food_cost * 100)
+        }
+
+        liquor_cost = liquor_expenses['total'] / \
+            metrics['restaurant_liquor_sales']['total']
+        metrics['liquor_cost'] = {
+            'name': 'Liquor Cost',
+            'total': round(liquor_cost * 100)
+        }
+
+        cost_average = (
+            metrics['food_cost']['total'] + metrics['liquor_cost']['total']) / 2
+        metrics['cost_average'] = {
+            'name': 'Cost Average',
+            'total': cost_average
+        }
+
+    else:
+        metrics["order_average"] = "No info"
+        metrics['labor_goal'] = "No info"
+
+    return {"food": food_expenses, "liquor": liquor_expenses, "metrics": metrics}
 
 
 def get_financials_report(initial_date, finish_date, user_id):

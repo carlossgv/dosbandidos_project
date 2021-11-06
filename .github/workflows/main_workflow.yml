@@ -48,23 +48,23 @@ jobs:
       #   env:
       #     SYSTEM_ENV: TESTING_ENV
 
-  deploy_to_heroku:
-    environment: 'PRODUCTION'
-    needs: build_and_test
-    runs-on: ubuntu-latest
-    strategy:
-      max-parallel: 4
-      matrix:
-        python-version: [3.8]
-    steps:
-      - uses: actions/checkout@v2
-      - name: Add Heroku remote
-        run: git remote add heroku https://git.heroku.com/dos-bandidos.git
-      - name: debug login
-        run: echo "${HEROKU_LOGIN}"
-      - name: Create Heroku login file
-        run: echo "${HEROKU_LOGIN}" >> ~/.netrc
-      - name: debug netrc
-        run: cat ~/.netrc
-      - name: Deploy to Heroku
-        run: git push heroku main
+  # deploy_to_heroku:
+  #   environment: 'PRODUCTION'
+  #   needs: build_and_test
+  #   runs-on: ubuntu-latest
+  #   strategy:
+  #     max-parallel: 4
+  #     matrix:
+  #       python-version: [3.8]
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - name: Add Heroku remote
+  #       run: git remote add heroku https://git.heroku.com/dos-bandidos.git
+  #     - name: debug login
+  #       run: echo "${HEROKU_LOGIN}"
+  #     - name: Create Heroku login file
+  #       run: echo "${HEROKU_LOGIN}" >> ~/.netrc
+  #     - name: debug netrc
+  #       run: cat ~/.netrc
+  #     - name: Deploy to Heroku
+  #       run: git push heroku main
