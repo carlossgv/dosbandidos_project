@@ -93,7 +93,10 @@ class Income(models.Model):
 
 class CashLog(models.Model):
     restaurant = models.ForeignKey(
-        Restaurant, on_delete=PROTECT, related_name="restaurant_cashlog"
+        Restaurant,
+        on_delete=PROTECT,
+        related_name="restaurant_cashlog",
+        unique_for_date="date",
     )
     date = models.DateField()
     cash_sales = models.DecimalField(max_digits=8, decimal_places=2, default=0)
