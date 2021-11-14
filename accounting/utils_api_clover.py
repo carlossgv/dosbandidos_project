@@ -8,8 +8,6 @@ def get_orders_clover(merchant_id, initial_date, finish_date):
     initial_date = transform_to_epoch(initial_date, "initial")
     finish_date = transform_to_epoch(finish_date, "finish")
 
-    print(os.environ.get("DOSBANDIDOS_CLOVER_API"))
-
     headers = {
         "accept": "application/json",
         "authorization": f'Bearer {os.environ.get("DOSBANDIDOS_CLOVER_API")}',
@@ -21,6 +19,8 @@ def get_orders_clover(merchant_id, initial_date, finish_date):
     )
 
     orders = response.json()
+
+    print(orders)
 
     return orders
 
