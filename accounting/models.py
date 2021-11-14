@@ -117,7 +117,7 @@ class Metric(models.Model):
         Supplier,
         related_name="metric_supplier_pk",
         on_delete=CASCADE,
-        limit_choices_to={"pk__in": [77, 76, 75]},
+        limit_choices_to={"pk__in": [77, 76, 75, 74]},
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     initial_date = models.DateField(blank=True, null=True)
