@@ -1,16 +1,19 @@
+from django.contrib.auth.models import User
 from django.test import TestCase, Client
 from accounting.decorators import admins_only
-from accounting.models import User
+
 
 class TestDecorators(TestCase):
     def setUp(self):
         self.client = Client()
-        self.super_user = User.objects.create_superuser('admin', 'admin@myproject.com', 'password')
+        self.super_user = User.objects.create_superuser(
+            "admin", "admin@myproject.com", "password"
+        )
 
-    # TODO: Test the admins_only decorator    
+    # TODO: Test the admins_only decorator
     def xtest_check_if_user_is_admin(self):
-        
-        self.client.login(username='admin', password='password')
+
+        self.client.login(username="admin", password="password")
 
         @admins_only
         def test_function(request):
