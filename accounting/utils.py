@@ -18,8 +18,9 @@ def get_expenses_by_supplier(supplier_id, initial_date, finish_date, user_id):
     )
 
     total = Expense.objects.filter(
-        supplier=supplier_id, date__range=[
-            initial_date, finish_date], restaurant_id=user_id
+        supplier=supplier_id,
+        date__range=[initial_date, finish_date],
+        restaurant_id=user_id,
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
     if total is None:
@@ -32,8 +33,9 @@ def get_income_by_supplier(supplier_id, initial_date, finish_date, user_id):
     name = Supplier.objects.get(pk=supplier_id).name
 
     total = Income.objects.filter(
-        supplier=supplier_id, date__range=[
-            initial_date, finish_date], restaurant_id=user_id
+        supplier=supplier_id,
+        date__range=[initial_date, finish_date],
+        restaurant_id=user_id,
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
     if total is None:
@@ -46,8 +48,9 @@ def get_metric_by_supplier(supplier_id, initial_date, finish_date, user_id):
     name = Supplier.objects.get(pk=supplier_id).name
 
     total = Metric.objects.filter(
-        supplier=supplier_id, date__range=[
-            initial_date, finish_date], restaurant_id=user_id
+        supplier=supplier_id,
+        date__range=[initial_date, finish_date],
+        restaurant_id=user_id,
     ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
     if total is None:
@@ -59,15 +62,15 @@ def get_metric_by_supplier(supplier_id, initial_date, finish_date, user_id):
 def convert_to_camel_case(string):
     res = [string[0].lower()]
     for c in string[1:]:
-        if c in 'ABCDEFGHIJKLMNOPQRSTUVWXYZ':
-            res.append('_')
+        if c in "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+            res.append("_")
             res.append(c.lower())
-        elif c == ' ':
-            res.append('')
+        elif c == " ":
+            res.append("")
         else:
             res.append(c)
 
-    return ''.join(res)
+    return "".join(res)
 
 
 def get_metrics(initial_date, finish_date, user_id):
@@ -76,14 +79,17 @@ def get_metrics(initial_date, finish_date, user_id):
 
     for supplier in metrics_list:
         metric_data = get_metric_by_supplier(
-            supplier.pk, initial_date, finish_date, user_id)
+            supplier.pk, initial_date, finish_date, user_id
+        )
         metrics[convert_to_camel_case(supplier.name.title())] = metric_data
 
-    metrics['restaurant_net_sales'] = get_income_by_supplier(
-        68, initial_date, finish_date, user_id)
-    metrics['food_net_sales'] = {
-        'name': 'Restaurant Food Sales',
-        'total': metrics['restaurant_net_sales']['total'] - metrics['restaurant_liquor_sales']['total']
+    metrics["restaurant_net_sales"] = get_income_by_supplier(
+        68, initial_date, finish_date, user_id
+    )
+    metrics["food_net_sales"] = {
+        "name": "Restaurant Food Sales",
+        "total": metrics["restaurant_net_sales"]["total"]
+        - metrics["restaurant_liquor_sales"]["total"],
     }
 
     return metrics
@@ -97,18 +103,20 @@ def get_incomes(initial_date, finish_date, user_id):
 
     for supplier in supplier_list:
         income_data = get_income_by_supplier(
-            supplier.pk, initial_date, finish_date, user_id)
+            supplier.pk, initial_date, finish_date, user_id
+        )
         incomes.append(income_data)
         total += income_data["total"]
-        if supplier.name == 'Restaurant Net Sales':
-            restaurant_sales = income_data['total']
+        if supplier.name == "Restaurant Net Sales":
+            restaurant_sales = income_data["total"]
 
-    return {"incomes": incomes, "total": total, 'restaurant_sales': restaurant_sales}
+    return {"incomes": incomes, "total": total, "restaurant_sales": restaurant_sales}
 
 
 def get_expenses_by_supplier_type(supplier_type, initial_date, finish_date, user_id):
-    supplier_type = Supplier.objects.filter(
-        supplier_type=supplier_type)[1].supplier_type
+    supplier_type = Supplier.objects.filter(supplier_type=supplier_type)[
+        1
+    ].supplier_type
 
     name = Supplier.objects.filter(supplier_type=supplier_type)[
         1
@@ -158,8 +166,7 @@ def totalize_suppliers(suppliers_list, initial_date, finish_date, user_id):
 
             total += supplier_data["total"]
             suppliers_totals.append(
-                {"name": supplier_data["name"],
-                    "total": supplier_data["total"]}
+                {"name": supplier_data["name"], "total": supplier_data["total"]}
             )
         else:
             type_data = get_expenses_by_supplier_type(
@@ -196,9 +203,11 @@ def get_goals_report(initial_date, finish_date, restaurant_id):
     ]
 
     food_expenses = totalize_suppliers(
-        food_suppliers, initial_date, finish_date, restaurant_id)
+        food_suppliers, initial_date, finish_date, restaurant_id
+    )
     liquor_expenses = totalize_suppliers(
-        liquor_suppliers, initial_date, finish_date, restaurant_id)
+        liquor_suppliers, initial_date, finish_date, restaurant_id
+    )
 
     incomes = get_incomes(initial_date, finish_date, restaurant_id)
     restaurant_sales = incomes["restaurant_sales"]
@@ -207,43 +216,40 @@ def get_goals_report(initial_date, finish_date, restaurant_id):
 
     if metrics["restaurant_order_count"]["total"] != 0:
         metrics["order_average"] = {
-            'name': 'Order Average',
-            'total': round(
+            "name": "Order Average",
+            "total": round(
                 metrics["restaurant_gross_sales"]["total"]
                 / metrics["restaurant_order_count"]["total"],
-                2
-            )
+                2,
+            ),
         }
-        metrics['labor_goal'] = {
-            "name": 'Labor Goal',
-            "total": round(metrics['restaurant_labor']['total'] / restaurant_sales * 100)
-        }
-
-        food_cost = food_expenses['total'] / \
-            metrics['food_net_sales']['total']
-
-        metrics['food_cost'] = {
-            'name': 'Food Cost',
-            'total': round(food_cost * 100)
+        metrics["labor_goal"] = {
+            "name": "Labor Goal",
+            "total": round(
+                metrics["restaurant_labor"]["total"] / restaurant_sales * 100
+            ),
         }
 
-        liquor_cost = liquor_expenses['total'] / \
-            metrics['restaurant_liquor_sales']['total']
-        metrics['liquor_cost'] = {
-            'name': 'Liquor Cost',
-            'total': round(liquor_cost * 100)
+        food_cost = food_expenses["total"] / metrics["food_net_sales"]["total"]
+
+        metrics["food_cost"] = {"name": "Food Cost", "total": round(food_cost * 100)}
+
+        liquor_cost = (
+            liquor_expenses["total"] / metrics["restaurant_liquor_sales"]["total"]
+        )
+        metrics["liquor_cost"] = {
+            "name": "Liquor Cost",
+            "total": round(liquor_cost * 100),
         }
 
         cost_average = (
-            metrics['food_cost']['total'] + metrics['liquor_cost']['total']) / 2
-        metrics['cost_average'] = {
-            'name': 'Cost Average',
-            'total': cost_average
-        }
+            metrics["food_cost"]["total"] + metrics["liquor_cost"]["total"]
+        ) / 2
+        metrics["cost_average"] = {"name": "Cost Average", "total": cost_average}
 
     else:
         metrics["order_average"] = "No info"
-        metrics['labor_goal'] = "No info"
+        metrics["labor_goal"] = "No info"
 
     return {"food": food_expenses, "liquor": liquor_expenses, "metrics": metrics}
 
@@ -293,14 +299,14 @@ def get_financials_report(initial_date, finish_date, user_id):
     return {"results": results, "total": financials_total}
 
 
-def get_cash_report(initial_cash, initial_date, finish_date, user_id):
+def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
     results = []
     date = initial_date
     initial_cash = round(float(initial_cash), 2)
 
     while date != finish_date + timedelta(days=1):
         cash_purchases = Expense.objects.filter(
-            cost_center="cash", date=date, restaurant_id=user_id
+            cost_center="cash", date=date, restaurant_id=restaurant_id
         ).aggregate(total_amount=Sum("amount"))["total_amount"]
 
         if cash_purchases is None:
@@ -308,26 +314,32 @@ def get_cash_report(initial_cash, initial_date, finish_date, user_id):
         else:
             cash_purchases = float(cash_purchases)
 
-        if user_id == 1:
-            cash_data = CashLog.objects.get(date=date, restaurant_id=user_id)
+        print(restaurant_id, type(restaurant_id))
+
+        if restaurant_id == "1":
+            cash_data = CashLog.objects.get(date=date, restaurant_id=restaurant_id)
             cash_sales = cash_data.cash_sales
             card_auto = cash_data.card_auto_grat
             card_tips = cash_data.card_tips
             cash_modifications = float(cash_data.modifications)
 
-        elif user_id == 2:
-            cash_data = daily_cash_data_clover('459RV00NPJJ11', date)
+        elif restaurant_id == "2":
+            cash_data = daily_cash_data_clover("459RV00NPJJ11", date)
 
-            cash_sales = round(cash_data['cash_sales'], 2)
-            card_auto = round(cash_data['card_auto'], 2)
-            card_tips = round(cash_data['card_tips'], 2)
-            cash_modifications = float(CashLog.objects.get(
-                date=date, restaurant_id=user_id).modifications)
+            cash_sales = round(cash_data["cash_sales"], 2)
+            card_auto = round(cash_data["card_auto"], 2)
+            card_tips = round(cash_data["card_tips"], 2)
+            cash_modifications = float(
+                CashLog.objects.get(
+                    date=date, restaurant_id=restaurant_id
+                ).modifications
+            )
 
         cash_out = round(float(cash_sales - card_auto - card_tips), 2)
 
-        final_cash = round(initial_cash + cash_out -
-                           cash_purchases + cash_modifications, 2)
+        final_cash = round(
+            initial_cash + cash_out - cash_purchases + cash_modifications, 2
+        )
 
         results.append(
             {
