@@ -20,8 +20,6 @@ def get_orders_clover(merchant_id, initial_date, finish_date):
 
     orders = response.json()
 
-    print(orders)
-
     return orders
 
 
@@ -70,6 +68,7 @@ def get_refunds_list(merchant_id, initial_date, finish_date):
     )
 
     refunds = response.json()
+    print(refunds)
 
     return refunds
 
