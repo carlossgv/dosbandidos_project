@@ -76,7 +76,10 @@ class Income(models.Model):
         Restaurant, on_delete=PROTECT, related_name="restaurant_income"
     )
     supplier = models.ForeignKey(
-        Supplier, related_name="income_supplier_name", on_delete=CASCADE
+        Supplier,
+        related_name="income_supplier_name",
+        on_delete=CASCADE,
+        limit_choices_to={"pk__in": [68, 70, 71]},
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     initial_date = models.DateField(null=True, blank=True)
