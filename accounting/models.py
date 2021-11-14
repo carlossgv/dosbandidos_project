@@ -1,6 +1,15 @@
 from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
-from django.contrib.auth.models import User
+
+
+class Restaurant(models.Model):
+    username = models.CharField(max_length=100, unique=True)
+    name = models.CharField(max_length=100, blank=True, null=True)
+    address = models.CharField(max_length=100, blank=True, null=True)
+    objects = models.Manager()
+
+    def __str__(self) -> str:
+        return f"{self.pk} {self.name}"
 
 
 class Supplier(models.Model):
@@ -46,7 +55,7 @@ class Expense(models.Model):
         ("standBy", "Standby"),
     )
     restaurant = models.ForeignKey(
-        User, on_delete=PROTECT, related_name="restaurant_expense"
+        Restaurant, on_delete=PROTECT, related_name="restaurant_expense"
     )
     supplier = models.ForeignKey(
         Supplier, related_name="expense_supplier_name", on_delete=CASCADE
@@ -64,7 +73,7 @@ class Expense(models.Model):
 
 class Income(models.Model):
     restaurant = models.ForeignKey(
-        User, on_delete=PROTECT, related_name="restaurant_income"
+        Restaurant, on_delete=PROTECT, related_name="restaurant_income"
     )
     supplier = models.ForeignKey(
         Supplier, related_name="income_supplier_name", on_delete=CASCADE
@@ -81,7 +90,7 @@ class Income(models.Model):
 
 class CashLog(models.Model):
     restaurant = models.ForeignKey(
-        User, on_delete=PROTECT, related_name="restaurant_cashlog"
+        Restaurant, on_delete=PROTECT, related_name="restaurant_cashlog"
     )
     date = models.DateField()
     cash_sales = models.DecimalField(max_digits=8, decimal_places=2, default=0)
@@ -92,9 +101,11 @@ class CashLog(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"{self.restaurant} - {self.date}: Cash Sales {self.cash_sales}, " \
-               f"Card Auto Grat: {self.card_auto_grat}, " \
-               f"Card Tips: {self.card_tips} "
+        return (
+            f"{self.restaurant} - {self.date}: Cash Sales {self.cash_sales}, "
+            f"Card Auto Grat: {self.card_auto_grat}, "
+            f"Card Tips: {self.card_tips} "
+        )
 
 
 class Metric(models.Model):
@@ -105,8 +116,9 @@ class Metric(models.Model):
     )
 
     restaurant = models.ForeignKey(
-        User, on_delete=PROTECT, related_name="restaurant_metric"
+        Restaurant, on_delete=PROTECT, related_name="restaurant_metric"
     )
+
     supplier = models.ForeignKey(
         Supplier,
         related_name="metric_supplier_name",
