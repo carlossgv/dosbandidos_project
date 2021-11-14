@@ -101,14 +101,12 @@ class CashLog(models.Model):
     card_tips = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     modifications = models.DecimalField(max_digits=8, decimal_places=2, default=0)
     comments = models.TextField(blank=True)
+    isChecked = models.BooleanField(default=False)
+    wasSent = models.BooleanField(default=False)
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return (
-            f"{self.restaurant} - {self.date}: Cash Sales {self.cash_sales}, "
-            f"Card Auto Grat: {self.card_auto_grat}, "
-            f"Card Tips: {self.card_tips} "
-        )
+        return f"{self.restaurant} - {self.date}: (Checked: {self.isChecked}) (Sent: {self.wasSent})"
 
 
 class Metric(models.Model):
