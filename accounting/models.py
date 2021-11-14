@@ -109,21 +109,15 @@ class CashLog(models.Model):
 
 
 class Metric(models.Model):
-    METRIC_TYPE = (
-        (77, "Order Count"),
-        (76, "Gross Sales"),
-        (75, "Labor"),
-    )
-
     restaurant = models.ForeignKey(
         Restaurant, on_delete=PROTECT, related_name="restaurant_metric"
     )
 
     supplier = models.ForeignKey(
         Supplier,
-        related_name="metric_supplier_name",
+        related_name="metric_supplier_pk",
         on_delete=CASCADE,
-        choices=METRIC_TYPE,
+        limit_choices_to={"pk__in": [77, 76, 75]},
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     initial_date = models.DateField(blank=True, null=True)
