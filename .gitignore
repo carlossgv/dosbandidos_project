@@ -11,3 +11,4 @@ accounting/.env
 /expenses_uploading/
 htmlcov
 .coverage
+.env
