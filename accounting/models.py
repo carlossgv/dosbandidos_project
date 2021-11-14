@@ -132,4 +132,4 @@ class Metric(models.Model):
     objects = models.Manager()
 
     def __str__(self) -> str:
-        return f"{self.restaurant__name} | {self.supplier__name} | {self.date}"
+        return f"{self.restaurant.name} | {self.supplier.name} | {self.date}"
