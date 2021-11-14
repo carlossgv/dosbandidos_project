@@ -1,6 +1,6 @@
 import os
 import requests
-import datetime
+import time
 import pytz as pytz
 
 
@@ -69,6 +69,7 @@ def get_refunds_list(merchant_id, initial_date, finish_date):
 
     refunds = response.json()
     print(refunds)
+    time.sleep(1)
 
     return refunds
 
