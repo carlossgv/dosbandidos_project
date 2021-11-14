@@ -314,8 +314,6 @@ def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
         else:
             cash_purchases = float(cash_purchases)
 
-        print(restaurant_id, type(restaurant_id))
-
         if restaurant_id == "1":
             cash_data = CashLog.objects.get(date=date, restaurant_id=restaurant_id)
             cash_sales = cash_data.cash_sales

@@ -25,26 +25,24 @@ def incomes(request):
     load_form = LoadIncomesForm
     is_admin = is_user_admin(request.user)
 
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
-            request.FILES['file']
+            request.FILES["file"]
         except:
             pass
         else:
-            file = request.FILES['file']
+            file = request.FILES["file"]
             fss = FileSystemStorage()
             file = fss.save(file.name, file)
 
             file_url = str(BASE_DIR) + fss.url(file)
-            delimiter = request.POST['delimiter']
-            restaurant_id = request.POST['restaurant']
+            delimiter = request.POST["delimiter"]
+            restaurant_id = request.POST["restaurant"]
 
             load_csv_incomes(file_url, delimiter, restaurant_id)
 
     return render(
-        request,
-        "accounting/incomes.html",
-        {"loadForm": load_form, "isAdmin": is_admin}
+        request, "accounting/incomes.html", {"loadForm": load_form, "isAdmin": is_admin}
     )
 
 
@@ -56,25 +54,25 @@ def edit_expenses(request):
     is_admin = is_user_admin(request.user)
     load_form = LoadExpensesForm
 
-    if request.method == 'POST':
+    if request.method == "POST":
         try:
-            request.FILES['file']
+            request.FILES["file"]
         except:
             pass
         else:
-            file = request.FILES['file']
+            file = request.FILES["file"]
             fss = FileSystemStorage()
             file = fss.save(file.name, file)
 
             file_url = str(BASE_DIR) + fss.url(file)
-            delimiter = request.POST['delimiter']
-            cost_center = request.POST['cost_center']
-            restaurant_id = request.POST['restaurant']
+            delimiter = request.POST["delimiter"]
+            cost_center = request.POST["cost_center"]
+            restaurant_id = request.POST["restaurant"]
 
             load_csv_expenses(file_url, delimiter, restaurant_id, cost_center)
 
         try:
-            request.POST['retrieve-expenses']
+            request.POST["retrieve-expenses"]
         except:
             pass
         else:
@@ -82,26 +80,27 @@ def edit_expenses(request):
 
             if form.is_valid():
                 data = form.cleaned_data
-                restaurant_id = request.POST['restaurant']
-                initial_date = data['initial_date']
-                finish_date = data['finish_date']
-                supplier = False if data['suppliers'] == '' else data['suppliers']
+                restaurant_id = request.POST["restaurant"]
+                initial_date = data["initial_date"]
+                finish_date = data["finish_date"]
+                supplier = False if data["suppliers"] == "" else data["suppliers"]
 
                 expenses = get_expenses_by_date(
-                    initial_date, finish_date, restaurant_id, supplier)
+                    initial_date, finish_date, restaurant_id, supplier
+                )
 
         try:
-            request.POST['edit-expenses']
+            request.POST["edit-expenses"]
         except:
             pass
         else:
             data = request.POST
             for field in data:
-                if field == 'csrfmiddlewaretoken' or field == 'edit-expenses':
+                if field == "csrfmiddlewaretoken" or field == "edit-expenses":
                     continue
                 value = data[field]
-                expense_id = field.split('-')[0]
-                field = field.split('-')[1]
+                expense_id = field.split("-")[0]
+                field = field.split("-")[1]
                 expense = Expense.objects.get(pk=expense_id)
                 setattr(expense, field, value)
                 expense.save()
@@ -122,17 +121,20 @@ def edit_expenses(request):
     return render(
         request,
         "accounting/edit-expenses.html",
-        {"editForm": edit_form, "loadForm": load_form, "expenses": expenses,
-         "supplier_choices": supplier_choices,
-         "cost_center_choices": cost_center_choices,
-         "isAdmin": is_admin},
+        {
+            "editForm": edit_form,
+            "loadForm": load_form,
+            "expenses": expenses,
+            "supplier_choices": supplier_choices,
+            "cost_center_choices": cost_center_choices,
+            "isAdmin": is_admin,
+        },
     )
 
 
 @login_required
 def home(request):
     is_admin = is_user_admin(request.user)
-    print(request.POST)
     if request.method == "POST":
         form = ExpensesForm(request.POST)
 
@@ -151,8 +153,12 @@ def home(request):
                 return render(
                     request,
                     "accounting/home.html",
-                    {"form": form, "food": goals_report_data["food"],
-                        "liquor": goals_report_data["liquor"], 'metrics': goals_report_data["metrics"], },
+                    {
+                        "form": form,
+                        "food": goals_report_data["food"],
+                        "liquor": goals_report_data["liquor"],
+                        "metrics": goals_report_data["metrics"],
+                    },
                 )
 
             elif "getFinancials" in request.POST:
@@ -180,7 +186,8 @@ def home(request):
             elif "getCashReport" in request.POST:
                 initial_cash = data["cash"]
                 cash_data = get_cash_report(
-                    initial_cash, initial_date, finish_date, restaurant_id)
+                    initial_cash, initial_date, finish_date, restaurant_id
+                )
 
                 return render(
                     request,
