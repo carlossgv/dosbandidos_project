@@ -1,48 +1,46 @@
-{% extends 'accounting/layout.html' %}
-
-{% block body %}
-{% load static %}
-{% load customfilters %}
+{% extends 'accounting/layout.html' %} {% block body %} {% load static %}
 <form name="loadExpenses" method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-    {{ loadForm }}
-    <div class="buttons-div">
-        <button class="btn waves-effect waves-light" type="submit" id="loadExpenses">Load Expenses
-            <i class="material-icons right">send</i>
-        </button>
-    </div>
+  {% csrf_token %} {{ loadForm }}
+  <div class="buttons-div">
+    <button
+      class="btn waves-effect waves-light"
+      type="submit"
+      id="loadExpenses"
+    >
+      Load Expenses
+      <i class="material-icons right">send</i>
+    </button>
+  </div>
 </form>
 <form method="post">
-    {% csrf_token %}
-    <div class="row">
-        <div class="input-field col m3 s12 offset-m3">
-            {{ editForm.initial_date }}
-            {{ editForm.initial_date.label_tag }}
-        </div>
-        <div class="input-field col m3 s12">
-            {{ editForm.finish_date }}
-            {{ editForm.finish_date.label_tag }}
-        </div>
+  {% csrf_token %}
+  <div class="row">
+    <div class="input-field col m3 s12 offset-m3">
+      {{ editForm.initial_date }} {{ editForm.initial_date.label_tag }}
     </div>
-    <div class="row">
-        <div class="input-field col m3 s12 offset-m3">
-            {{ editForm.suppliers }}
-            {{ editForm.suppliers.label_tag }}
-        </div>
-        <div class="input-field col m3 s12">
-            {{ editForm.restaurant }}
-            {{ editForm.restaurant.label_tag }}
-        </div>
+    <div class="input-field col m3 s12">
+      {{ editForm.finish_date }} {{ editForm.finish_date.label_tag }}
     </div>
-    <div class="buttons-div">
-        <button class="btn waves-effect waves-light" type="submit" id="retrieve-expenses" name="retrieve-expenses">Retrieve
-            Expenses
-            <i class="material-icons right">send</i>
-        </button>
+  </div>
+  <div class="row">
+    <div class="input-field col m3 s12 offset-m3">
+      {{ editForm.suppliers }} {{ editForm.suppliers.label_tag }}
     </div>
+    <div class="input-field col m3 s12">
+      {{ editForm.restaurant }} {{ editForm.restaurant.label_tag }}
+    </div>
+  </div>
+  <div class="buttons-div">
+    <button
+      class="btn waves-effect waves-light"
+      type="submit"
+      id="retrieve-expenses"
+      name="retrieve-expenses"
+    >
+      Retrieve Expenses
+      <i class="material-icons right">send</i>
+    </button>
+  </div>
 </form>
 
-
-{% include 'accounting/editable-expenses-table.html' %}
-
-{% endblock body %}
+{% include 'accounting/editable-expenses-table.html' %} {% endblock body %}

@@ -1,10 +1,11 @@
+import datetime
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 
 from accounting.decorators import admins_only, is_user_admin
-from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm, LoadIncomesForm
-from .models import Supplier, Expense
+from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm, LoadIncomesForm, EditCashLogForm
+from .models import CashLog, Supplier, Expense
 from .utils import (
     get_cash_report,
     get_expenses_by_supplier,
@@ -17,6 +18,103 @@ from .utils import (
 from .utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
 from .utils_edit_expenses import get_expenses_by_date
+
+
+@admins_only
+@login_required
+def cash_log(request):
+    """
+    View for the cash log page.
+    """
+
+    edit_form = EditCashLogForm()
+    weekly_entries = ""
+    is_admin = is_user_admin(request.user)
+
+    if request.method == "POST":
+
+        try:
+            request.POST["retrieve-cash-log"]
+        except:
+            pass
+        else:
+            edit_form = EditCashLogForm(request.POST)
+
+            if edit_form.is_valid():
+                data = edit_form.cleaned_data
+                initial_date = data["initial_date"]
+                final_date = data["initial_date"] + datetime.timedelta(days=6)
+
+                current_date = initial_date
+
+                while current_date <= final_date:
+                    try:
+                        entry = CashLog.objects.get(
+                            date=current_date, restaurant_id=data["restaurant_id"]
+                        )
+                    except:
+                        CashLog.objects.create(
+                            date=current_date, comments="new entry", restaurant_id=data["restaurant_id"])
+                    else:
+                        pass
+
+                    current_date += datetime.timedelta(days=1)
+
+                weekly_entries = CashLog.objects.filter(
+                    date__range=[
+                        initial_date, final_date], restaurant_id=data["restaurant_id"]
+                )
+
+                weekly_entries = weekly_entries.order_by("date")
+
+        try:
+            request.POST["update-cash-log"]
+        except:
+            pass
+        else:
+            data = request.POST
+            current_entry = 0
+            field_counter = 0
+            for field in data:
+                if field == "csrfmiddlewaretoken" or field == "update-cash-log":
+                    continue
+
+                entry_id = field.split("-")[0]
+
+                entry = CashLog.objects.get(pk=entry_id)
+
+                if entry_id != current_entry:
+                    current_entry = entry_id
+                    field_counter = 0
+
+                if field_counter == 6:
+                    try:
+                        data[f'{current_entry}-isChecked']
+                    except:
+                        setattr(entry, "isChecked", False)
+                    else:
+                        setattr(entry, "isChecked", True)
+
+                    try:
+                        data[f'{current_entry}-wasSent']
+                    except:
+                        setattr(entry, "wasSent", False)
+                    else:
+                        setattr(entry, "wasSent", True)
+
+                    entry.save()
+
+                elif field_counter == 7:
+                    continue
+                else:
+                    field = field.split("-")[1]
+                    value = data[f'{entry_id}-{field}']
+                    setattr(entry, field, value)
+                    entry.save()
+
+                field_counter += 1
+
+    return render(request, "accounting/cash-log.html", {"editForm": edit_form, "weeklyEntries": weekly_entries, "isAdmin": is_admin})
 
 
 @admins_only
@@ -42,7 +140,8 @@ def incomes(request):
             load_csv_incomes(file_url, delimiter, restaurant_id)
 
     return render(
-        request, "accounting/incomes.html", {"loadForm": load_form, "isAdmin": is_admin}
+        request, "accounting/incomes.html", {
+            "loadForm": load_form, "isAdmin": is_admin}
     )
 
 

@@ -1,6 +1,32 @@
 from django import forms
 from django.db.models.query_utils import Q
-from .models import Supplier
+from .models import Restaurant, Supplier
+
+
+class EditCashLogForm(forms.Form):
+    initial_date = forms.DateField(
+        label="Initial Date",
+        widget=forms.widgets.DateInput(
+            attrs={"type": "date", "class": "validate"}),
+    )
+
+    restaurant_id = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        restaurant_choices = [(None, "-----")]
+        for restaurant in Restaurant.objects.all():
+            restaurant_choices.append((restaurant.pk, restaurant.name))
+
+        super(EditCashLogForm, self).__init__(*args, **kwargs)
+        self.fields["restaurant_id"] = forms.ChoiceField(choices=restaurant_choices,
+                                                         required=True,
+                                                         label="Restaurant",
+                                                         widget=forms.Select(attrs={"class": "validate"}))
 
 
 class EditExpensesForm(forms.Form):
@@ -68,7 +94,7 @@ class LoadIncomesForm(forms.Form):
     )
 
     file = forms.FileField(label="Select file")
-    
+
     delimiter = forms.ChoiceField(choices=[(None, "-----"), (",", ","), (";", ";")],
                                   label="Delimiter",
                                   widget=forms.Select(attrs={"class": "validate"}))
