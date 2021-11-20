@@ -1,0 +1,111 @@
+<form method="POST" id="edit-expenses-table-form">
+  {% csrf_token %}
+  <table class="striped highlight responsive-table">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Sales</th>
+        <th>Auto Gratuity</th>
+        <th>Tips</th>
+        <th>Modifications</th>
+        <th>Comments</th>
+        <th>Checked?</th>
+        <th>Was Sent?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for entry in weeklyEntries %}
+      <tr
+        id="{{entry.pk}}-entry_row"
+        style="height: 150px"
+        name="{{entry.pk}}-entry-row"
+      >
+        <td>
+          <input
+            type="text"
+            name="{{entry.pk}}-date"
+            value="{{ entry.date|date:'Y-m-d' }}"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            name="{{entry.pk}}-cash_sales"
+            value="{{ entry.cash_sales }}"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            name="{{entry.pk}}-card_auto_grat"
+            value="{{ entry.card_auto_grat }}"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            name="{{entry.pk}}-card_tips"
+            value="{{ entry.card_tips }}"
+          />
+        </td>
+        <td>
+          <input
+            type="text"
+            name="{{entry.pk}}-modifications"
+            value="{{ entry.modifications }}"
+          />
+        </td>
+        <td>
+          <textarea
+            name="{{entry.pk}}-comments"
+            rows="5"
+            style="height: 100%"
+            class="materialize-textarea"
+          >
+{{entry.comments}}</textarea
+          >
+        </td>
+        {% if entry.isChecked %}
+        <td>
+          <label
+            ><input
+              type="checkbox"
+              checked
+              name="{{entry.pk}}-isChecked" /><span></span
+          ></label>
+        </td>
+        {% else %}
+        <td>
+          <label
+            ><input type="checkbox" name="{{entry.pk}}-isChecked" /><span></span
+          ></label>
+        </td>
+        {% endif %} {% if entry.wasSent %}
+        <td>
+          <label
+            ><input
+              type="checkbox"
+              checked
+              name="{{entry.pk}}-wasSent" /><span></span
+          ></label>
+        </td>
+        {% else %}
+        <td>
+          <label
+            ><input type="checkbox" name="{{entry.pk}}-wasSent" /><span></span
+          ></label>
+        </td>
+        {% endif %}
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <button
+    class="btn waves-effect waves-light"
+    type="submit"
+    name="update-cash-log"
+  >
+    Update Cash Log
+    <i class="material-icons right">send</i>
+  </button>
+</form>
