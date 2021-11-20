@@ -47,8 +47,6 @@ def cash_log(request):
 
                 current_date = initial_date
 
-                print(data)
-
                 while current_date <= final_date:
                     try:
                         entry = CashLog.objects.get(
