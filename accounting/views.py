@@ -54,7 +54,7 @@ def cash_log(request):
                         )
                     except:
                         CashLog.objects.create(
-                            date=current_date, comments="new entry", restaurant_id=data["restaurant_id"])
+                            date=current_date, restaurant_id=data["restaurant_id"])
                     else:
                         pass
 
