@@ -123,7 +123,7 @@ elif SYSTEM_ENV == "STAGING_ENV":
 
 
 elif SYSTEM_ENV == "PRODUCTION":
-    DEBUG = True
+    DEBUG = False
     SECRET_KEY = SECRET_KEY
     DATABASES = {"default": dj_database_url.config()}
 
