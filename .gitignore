@@ -12,3 +12,4 @@ accounting/.env
 htmlcov
 .coverage
 .env
+todo.txt
