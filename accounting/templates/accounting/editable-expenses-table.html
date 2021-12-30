@@ -13,7 +13,7 @@
         </thead>
         <tbody>
         {% for expense in expenses %}
-        <tr id="{{expense.pk}}-expense-row" style="height: 150px">
+        <tr id="{{expense.pk}}-expense-row" style="min-height: 150px">
             <td><input type="text" name="{{expense.pk}}-date" value="{{ expense.date|date:'Y-m-d' }}"></td>
             <td>
                 <div class="input-field">
@@ -43,7 +43,7 @@
                 </div>
             </td>
             <td><input type="text" name="{{expense.pk}}-reference" value="{{ expense.reference }}"></td>
-            <td><textarea name="{{expense.pk}}-comments" rows="5" style="height: 100%" class="materialize-textarea">{{expense.comments}}</textarea></td>
+            <td><textarea name="{{expense.pk}}-comments" rows="5" style="min-height: 100%" class="materialize-textarea">{{expense.comments}}</textarea></td>
         </tr>
         {% endfor %}
         </tbody>
