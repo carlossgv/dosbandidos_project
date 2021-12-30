@@ -31,7 +31,7 @@ class Supplier(models.Model):
         ordering = ["name"]
 
     def __str__(self) -> str:
-        return f"({self.pk}) {self.name} ({self.get_supplier_type_display()})"
+        return f"({self.name} ({self.get_supplier_type_display()} {self.pk}))"
 
 
 class Rule(models.Model):
