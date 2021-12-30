@@ -27,7 +27,7 @@ def cash_log(request):
     View for the cash log page.
     """
 
-    edit_form = EditCashLogForm(request.Post or None)
+    edit_form = EditCashLogForm()
     weekly_entries = ""
     is_admin = is_user_admin(request.user)
 
@@ -234,8 +234,8 @@ def edit_expenses(request):
 @login_required
 def home(request):
     is_admin = is_user_admin(request.user)
+    form = ExpensesForm(request.POST or None)
     if request.method == "POST":
-        form = ExpensesForm(request.POST)
 
         if form.is_valid():
             data = form.cleaned_data
