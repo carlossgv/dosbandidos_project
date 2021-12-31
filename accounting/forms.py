@@ -56,8 +56,8 @@ class CreateCashLogForm(forms.Form):
         for restaurant in Restaurant.objects.all():
             restaurant_choices.append((restaurant.pk, restaurant.name))
 
-        super(EditCashLogForm, self).__init__(*args, **kwargs)
-        self.fields["restaurant_id"] = forms.ChoiceField(choices=restaurant_choices,
+        super(CreateCashLogForm, self).__init__(*args, **kwargs)
+        self.fields["restaurant"] = forms.ChoiceField(choices=restaurant_choices,
                                                          required=True,
                                                          label="Restaurant",
                                                          widget=forms.Select(attrs={"class": "validate"}))
