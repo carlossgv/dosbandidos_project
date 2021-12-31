@@ -1,12 +1,20 @@
 from django import forms
 from django.db.models.query_utils import Q
 from .models import Restaurant, Supplier
+import datetime
+
 
 class CreateCashLogForm(forms.Form):
     date = forms.DateField(
         label="Date",
         widget=forms.widgets.DateInput(
-            attrs={"type": "date", "class": "validate"}),
+            attrs={
+                "type": "date",
+                "class": "validate",
+                "disabled": True,
+                "value": datetime.date.today(),
+            }
+        ),
     )
 
     restaurant = forms.ChoiceField(
@@ -19,37 +27,35 @@ class CreateCashLogForm(forms.Form):
         label="Cash Sales",
         decimal_places=2,
         required=True,
-        widget=forms.NumberInput(
-            attrs={"class": "validate", "step": "0.01"}),
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
     )
 
     card_auto_grat = forms.DecimalField(
         label="Card Auto Gratuity",
         decimal_places=2,
         required=True,
-        widget=forms.NumberInput(
-            attrs={"class": "validate", "step": "0.01"}),
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
     )
-    
+
     card_tips = forms.DecimalField(
         label="Card Tips",
         decimal_places=2,
         required=True,
-        widget=forms.NumberInput(
-            attrs={"class": "validate", "step": "0.01"}),
-    ) 
-    
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
+    )
 
     modifications = forms.DecimalField(
         label="Modifications",
         decimal_places=2,
         required=True,
-        widget=forms.NumberInput(
-            attrs={"class": "validate", "step": "0.01"}),
-    ) 
-    
-    comments = forms.CharField(label="Comments", required=False, widget=forms.Textarea)
-    
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
+    )
+
+    comments = forms.CharField(
+        label="Comments",
+        required=False,
+        widget=forms.Textarea(attrs={"class": "materialize-textarea"}),
+    )
 
     def __init__(self, *args, **kwargs):
         restaurant_choices = [(None, "-----")]
@@ -57,18 +63,18 @@ class CreateCashLogForm(forms.Form):
             restaurant_choices.append((restaurant.pk, restaurant.name))
 
         super(CreateCashLogForm, self).__init__(*args, **kwargs)
-        self.fields["restaurant"] = forms.ChoiceField(choices=restaurant_choices,
-                                                         required=True,
-                                                         label="Restaurant",
-                                                         widget=forms.Select(attrs={"class": "validate"}))
-
+        self.fields["restaurant"] = forms.ChoiceField(
+            choices=restaurant_choices,
+            required=True,
+            label="Restaurant",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )
 
 
 class EditCashLogForm(forms.Form):
     initial_date = forms.DateField(
         label="Initial Date",
-        widget=forms.widgets.DateInput(
-            attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
 
     restaurant_id = forms.ChoiceField(
@@ -84,22 +90,22 @@ class EditCashLogForm(forms.Form):
             restaurant_choices.append((restaurant.pk, restaurant.name))
 
         super(EditCashLogForm, self).__init__(*args, **kwargs)
-        self.fields["restaurant_id"] = forms.ChoiceField(choices=restaurant_choices,
-                                                         required=True,
-                                                         label="Restaurant",
-                                                         widget=forms.Select(attrs={"class": "validate"}))
+        self.fields["restaurant_id"] = forms.ChoiceField(
+            choices=restaurant_choices,
+            required=True,
+            label="Restaurant",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )
 
 
 class EditExpensesForm(forms.Form):
     initial_date = forms.DateField(
         label="Initial Date",
-        widget=forms.widgets.DateInput(
-            attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
     finish_date = forms.DateField(
         label="Finish Date",
-        widget=forms.widgets.DateInput(
-            attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
 
     suppliers = forms.ChoiceField(
@@ -122,22 +128,30 @@ class EditExpensesForm(forms.Form):
             supplier_choices.append((supplier.pk, supplier.name))
 
         super(EditExpensesForm, self).__init__(*args, **kwargs)
-        self.fields["suppliers"] = forms.ChoiceField(choices=supplier_choices,
-                                                     required=False,
-                                                     label="Suppliers",
-                                                     widget=forms.Select(attrs={"class": "validate"}))
+        self.fields["suppliers"] = forms.ChoiceField(
+            choices=supplier_choices,
+            required=False,
+            label="Suppliers",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )
 
 
 class LoadExpensesForm(forms.Form):
     file = forms.FileField(label="Select file")
-    delimiter = forms.ChoiceField(choices=[(None, "-----"), (",", ","), (";", ";")],
-                                  label="Delimiter",
-                                  widget=forms.Select(attrs={"class": "validate"}))
-    cost_center = forms.ChoiceField(choices=[(None, "-----"),
-                                             ("primaryAccount", "Primary Account"),
-                                             ("expensesAccount", "Expenses Account")],
-                                    label="Cost Center",
-                                    widget=forms.Select(attrs={"class": "validate"}))
+    delimiter = forms.ChoiceField(
+        choices=[(None, "-----"), (",", ","), (";", ";")],
+        label="Delimiter",
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+    cost_center = forms.ChoiceField(
+        choices=[
+            (None, "-----"),
+            ("primaryAccount", "Primary Account"),
+            ("expensesAccount", "Expenses Account"),
+        ],
+        label="Cost Center",
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
     restaurant = forms.ChoiceField(
         required=True,
         label="Restaurant",
@@ -156,21 +170,21 @@ class LoadIncomesForm(forms.Form):
 
     file = forms.FileField(label="Select file")
 
-    delimiter = forms.ChoiceField(choices=[(None, "-----"), (",", ","), (";", ";")],
-                                  label="Delimiter",
-                                  widget=forms.Select(attrs={"class": "validate"}))
+    delimiter = forms.ChoiceField(
+        choices=[(None, "-----"), (",", ","), (";", ";")],
+        label="Delimiter",
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
 
 
 class ExpensesForm(forms.Form):
     initial_date = forms.DateField(
         label="Initial Date",
-        widget=forms.widgets.DateInput(
-            attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
     finish_date = forms.DateField(
         label="Finish Date",
-        widget=forms.widgets.DateInput(
-            attrs={"type": "date", "class": "validate"}),
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
     )
 
     restaurant = forms.ChoiceField(
@@ -193,10 +207,12 @@ class ExpensesForm(forms.Form):
             supplier_choices.append((supplier.pk, supplier.name))
 
         super(ExpensesForm, self).__init__(*args, **kwargs)
-        self.fields["suppliers"] = forms.ChoiceField(choices=supplier_choices,
-                                                     required=False,
-                                                     label="Suppliers",
-                                                     widget=forms.Select(attrs={"class": "validate"}))
+        self.fields["suppliers"] = forms.ChoiceField(
+            choices=supplier_choices,
+            required=False,
+            label="Suppliers",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )
 
     # TODO: populate supplier choices dinamically
     supplier_type_choices = [
@@ -219,5 +235,6 @@ class ExpensesForm(forms.Form):
         decimal_places=2,
         required=False,
         widget=forms.NumberInput(
-            attrs={"class": "validate", "placeholder": "For cash report only"}),
+            attrs={"class": "validate", "placeholder": "For cash report only"}
+        ),
     )

@@ -2,9 +2,29 @@
 {% block body %} 
 {% load static %}
 
-<form method="post">
+<form method="post" style="display: flex; flex-direction: column;">
     {% csrf_token %}
-    {{form}}
+    <div class="row input-field" style="width: 100%;">
+      {{ form.date }} {{ form.date.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.restaurant }} {{ form.restaurant.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.cash_sales }} {{ form.cash_sales.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.card_auto_grat }} {{ form.card_auto_grat.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.card_tips }} {{ form.card_tips.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.modifications }} {{ form.modifications.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.comments }} {{ form.comments.label_tag }}
+    </div>
     <div class="buttons-div">
         <button
           class="btn waves-effect waves-light"
