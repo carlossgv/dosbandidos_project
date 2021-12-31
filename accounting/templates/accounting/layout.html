@@ -1,4 +1,5 @@
 {% load static %}
+{% load has_groups %}
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -27,13 +28,17 @@
   </head>
   <body>
     <ul id="dropdown1" class="dropdown-content">
-      {% if isAdmin %}
+      {% if request.user.is_staff %}
       <li>
         <a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a>
       </li>
       <li><a href="{% url 'incomes'  %}">Incomes</a></li>
       <li><a href="{% url 'cash_log'  %}">Cash Log</a></li>
-      {% endif %} {% if user.is_authenticated %}
+      {% endif %} 
+      {% if request.user|has_group:"managers" or request.user.is_staff %}
+      <li><a href="{% url 'create-daily-cash-log' %}">Create Cash Log</a></li>
+      {% endif %}
+      {% if user.is_authenticated %}
       <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
 
       {% endif %}
@@ -53,6 +58,7 @@
               >Select<i class="material-icons right">arrow_drop_down</i></a
             >
           </li>
+
           <li><a href="{% url 'logout' %}">Sign Out</a></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
@@ -63,11 +69,15 @@
     </nav>
 
     <ul id="mobile-demo" class="sidenav">
-      {% if isAdmin %}
+      {% if request.user.is_staff %}
       <li><a href="{% url 'accounting-edit-expenses'  %}">Edit Expenses</a></li>
       <li><a href="{% url 'incomes'  %}">Incomes</a></li>
       <li><a href="{% url 'cash_log'  %}">Cash Log</a></li>
-      {% endif %} {% if user.is_authenticated %}
+      {% endif %} 
+      {% if request.user|has_group:"managers" or request.user.is_staff %}
+      <li><a href="{% url 'create-daily-cash-log' %}">Create Cash Log</a></li>
+      {% endif %}
+      {% if user.is_authenticated %}
       <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
       <li><a href="{% url 'logout' %}">Sign Out</a></li>
       {% else %}

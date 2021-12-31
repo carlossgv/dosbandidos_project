@@ -1,0 +1,20 @@
+{% extends 'accounting/layout.html' %} 
+{% block body %} 
+{% load static %}
+
+<form method="post">
+    {% csrf_token %}
+    {{form}}
+    <div class="buttons-div">
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+        >
+          Create Daily Cash Log
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+</form>
+
+
+{% endblock body %}

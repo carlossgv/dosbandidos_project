@@ -1,4 +1,6 @@
-{% extends 'accounting/layout.html' %} {% block body %} {% load static %}
+{% extends 'accounting/layout.html' %} 
+{% block body %} 
+{% load static %}
 <form name="loadExpenses" method="post" enctype="multipart/form-data">
   {% csrf_token %} {{ loadForm }}
   <div class="buttons-div">

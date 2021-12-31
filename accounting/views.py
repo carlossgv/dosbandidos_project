@@ -3,8 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 
-from accounting.decorators import admins_only, is_user_admin
-from .forms import ExpensesForm, EditExpensesForm, LoadExpensesForm, LoadIncomesForm, EditCashLogForm
+from accounting.decorators import admins_only, managers_only
+from .forms import CreateCashLogForm, ExpensesForm, EditExpensesForm, LoadExpensesForm, LoadIncomesForm, EditCashLogForm
 from .models import CashLog, Supplier, Expense
 from .utils import (
     get_cash_report,
@@ -19,6 +19,12 @@ from .utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
 from .utils_edit_expenses import get_expenses_by_date
 
+@managers_only
+def create_daily_cash_log(request):
+    form = CreateCashLogForm(request.POST or None)
+
+    return render(request, "accounting/create-daily-cash-log.html", {"form": form})
+
 
 @admins_only
 @login_required
@@ -29,7 +35,6 @@ def cash_log(request):
 
     edit_form = EditCashLogForm()
     weekly_entries = ""
-    is_admin = is_user_admin(request.user)
 
     if request.method == "POST":
 
@@ -114,14 +119,13 @@ def cash_log(request):
 
                 field_counter += 1
 
-    return render(request, "accounting/cash-log.html", {"editForm": edit_form, "weeklyEntries": weekly_entries, "isAdmin": is_admin})
+    return render(request, "accounting/cash-log.html", {"editForm": edit_form, "weeklyEntries": weekly_entries})
 
 
 @admins_only
 @login_required
 def incomes(request):
     load_form = LoadIncomesForm
-    is_admin = is_user_admin(request.user)
 
     if request.method == "POST":
         try:
@@ -141,7 +145,7 @@ def incomes(request):
 
     return render(
         request, "accounting/incomes.html", {
-            "loadForm": load_form, "isAdmin": is_admin}
+            "loadForm": load_form}
     )
 
 
@@ -150,7 +154,6 @@ def incomes(request):
 def edit_expenses(request):
     edit_form = EditExpensesForm(request.POST or None) 
     expenses = ""
-    is_admin = is_user_admin(request.user)
     load_form = LoadExpensesForm
 
     if request.method == "POST":
@@ -226,14 +229,12 @@ def edit_expenses(request):
             "expenses": expenses,
             "supplier_choices": supplier_choices,
             "cost_center_choices": cost_center_choices,
-            "isAdmin": is_admin,
         },
     )
 
 
 @login_required
 def home(request):
-    is_admin = is_user_admin(request.user)
     form = ExpensesForm(request.POST or None)
     if request.method == "POST":
 
@@ -314,7 +315,7 @@ def home(request):
         return render(
             request,
             "accounting/home.html",
-            {"form": form, "isAdmin": is_admin},
+            {"form": form},
         )
 
     else:
@@ -323,5 +324,5 @@ def home(request):
         return render(
             request,
             "accounting/home.html",
-            {"form": form, "isAdmin": is_admin},
+            {"form": form},
         )
