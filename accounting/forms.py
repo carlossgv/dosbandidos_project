@@ -2,6 +2,67 @@ from django import forms
 from django.db.models.query_utils import Q
 from .models import Restaurant, Supplier
 
+class CreateCashLogForm(forms.Form):
+    date = forms.DateField(
+        label="Date",
+        widget=forms.widgets.DateInput(
+            attrs={"type": "date", "class": "validate"}),
+    )
+
+    restaurant = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
+    cash_sales = forms.DecimalField(
+        label="Cash Sales",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(
+            attrs={"class": "validate", "step": "0.01"}),
+    )
+
+    card_auto_grat = forms.DecimalField(
+        label="Card Auto Gratuity",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(
+            attrs={"class": "validate", "step": "0.01"}),
+    )
+    
+    card_tips = forms.DecimalField(
+        label="Card Tips",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(
+            attrs={"class": "validate", "step": "0.01"}),
+    ) 
+    
+
+    modifications = forms.DecimalField(
+        label="Modifications",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(
+            attrs={"class": "validate", "step": "0.01"}),
+    ) 
+    
+    comments = forms.CharField(label="Comments", required=False, widget=forms.Textarea)
+    
+
+    def __init__(self, *args, **kwargs):
+        restaurant_choices = [(None, "-----")]
+        for restaurant in Restaurant.objects.all():
+            restaurant_choices.append((restaurant.pk, restaurant.name))
+
+        super(EditCashLogForm, self).__init__(*args, **kwargs)
+        self.fields["restaurant_id"] = forms.ChoiceField(choices=restaurant_choices,
+                                                         required=True,
+                                                         label="Restaurant",
+                                                         widget=forms.Select(attrs={"class": "validate"}))
+
+
 
 class EditCashLogForm(forms.Form):
     initial_date = forms.DateField(
