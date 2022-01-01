@@ -46,7 +46,7 @@
     <nav>
       <div class="nav-wrapper container">
         <a href="{% url 'accounting-home'  %}" class="brand-logo">
-          Dos Bandidos Accounting
+          DB Acc
         </a>
         <a href="#" data-target="mobile-demo" class="sidenav-trigger"
           ><i class="material-icons">menu</i></a
@@ -84,6 +84,12 @@
       <li><a href="{% url 'login' %}">Log In</a></li>
       {% endif %}
     </ul>
+
+    {% if message %}
+    <div class="message card-panel white-text pink darken-1" style="text-align: center;">
+      <h4>{{message}}</h4>
+    </div>
+    {% endif %}
 
     <div class="container" id="body">{% block body %}{% endblock body %}</div>
 
