@@ -61,6 +61,38 @@ class CreateExpenseForm(forms.Form):
         )
 
 
+class ViewCashLogForm(forms.Form):
+    date = forms.DateField(
+        label="Date",
+        widget=forms.widgets.DateInput(
+            attrs={
+                "type": "date",
+                "class": "validate",
+                "value": datetime.date.today(),
+            }
+        ),
+    )
+
+    restaurant = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        restaurant_choices = [(None, "-----")]
+        for restaurant in Restaurant.objects.all():
+            restaurant_choices.append((restaurant.pk, restaurant.name))
+
+        super(ViewCashLogForm, self).__init__(*args, **kwargs)
+        self.fields["restaurant"] = forms.ChoiceField(
+            choices=restaurant_choices,
+            required=True,
+            label="Restaurant",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )
+
+
 class CreateCashLogForm(forms.Form):
     date = forms.DateField(
         label="Date",

@@ -13,6 +13,7 @@ from .forms import (
     LoadExpensesForm,
     LoadIncomesForm,
     EditCashLogForm,
+    ViewCashLogForm,
 )
 from .models import CashLog, Restaurant, Supplier, Expense
 from .utils import (
@@ -75,6 +76,7 @@ def create_expense(request):
 @login_required
 def create_daily_cash_log(request):
     form = CreateCashLogForm(request.POST or None)
+    review_form = ViewCashLogForm(request.POST or None)
     message: str = ""
     cash_log = False
     user = request.user
@@ -86,45 +88,70 @@ def create_daily_cash_log(request):
         form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
 
     if request.method == "POST":
-        if form.is_valid():
-            data = form.cleaned_data
 
-            """ check if cash log already exists """
-            try:
-                cash_log = CashLog.objects.get(
-                    restaurant=data["restaurant"], date=data["date"]
-                )
-                expenses = Expense.objects.filter(
-                    date=data["date"],
-                    cost_center="cash",
-                    restaurant_id=data["restaurant"],
-                )
-                cash_log.expenses = expenses
-            except:
-                entry = CashLog.objects.create(
-                    date=data["date"],
-                    restaurant=Restaurant.objects.get(pk=data["restaurant"]),
-                    cash_sales=data["cash_sales"],
-                    card_auto_grat=data["card_auto_grat"],
-                    card_tips=data["card_tips"],
-                    modifications=data["modifications"],
-                    comments=data["comments"],
-                    createdBy=user,
-                )
-                entry.save()
-                message = "Daily cash log created successfully"
-                cash_log = CashLog.objects.get(
-                    restaurant=data["restaurant"], date=data["date"]
-                )
-            else:
-                message = f"Cash log for {cash_log.date} already exists"
+        try:
+            request.POST["review-cash-log"]
+        except:
+            pass
         else:
-            message = "Error creating daily cash log"
+            if review_form.is_valid():
+                data = review_form.cleaned_data
+                try:
+                    cash_log = CashLog.objects.get(
+                        restaurant_id=data["restaurant"], date=data["date"]
+                    )
+                except:
+                    message = "No cash log found for this date"
+                else:
+                    message = f"Cash log for {cash_log.date}:"
+
+        try:
+            request.POST["create-cash-log"]
+        except:
+            pass
+        else:
+            if form.is_valid():
+                data = form.cleaned_data
+
+                """ check if cash log already exists """
+                try:
+                    cash_log = CashLog.objects.get(
+                        restaurant=data["restaurant"], date=data["date"]
+                    )
+                    expenses = Expense.objects.filter(
+                        date=data["date"],
+                        cost_center="cash",
+                        restaurant_id=data["restaurant"],
+                    )
+                    cash_log.expenses = expenses
+                except:
+                    entry = CashLog.objects.create(
+                        date=data["date"],
+                        restaurant=Restaurant.objects.get(pk=data["restaurant"]),
+                        cash_sales=data["cash_sales"],
+                        card_auto_grat=data["card_auto_grat"],
+                        card_tips=data["card_tips"],
+                        modifications=data["modifications"],
+                        comments=data["comments"],
+                        createdBy=user,
+                    )
+                    entry.save()
+                    message = "Daily cash log created successfully"
+                    cash_log = CashLog.objects.get(
+                        restaurant=data["restaurant"], date=data["date"]
+                    )
+                else:
+                    message = f"Cash log for {cash_log.date} already exists"
 
     return render(
         request,
         "accounting/create-daily-cash-log.html",
-        {"form": form, "message": message, "cash_log": cash_log},
+        {
+            "form": form,
+            "review_form": review_form,
+            "message": message,
+            "cash_log": cash_log,
+        },
     )
 
 

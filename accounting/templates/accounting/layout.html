@@ -36,7 +36,7 @@
       <li><a href="{% url 'cash_log'  %}">Cash Log</a></li>
       {% endif %} 
       {% if request.user|has_group:"managers" or request.user.is_staff %}
-      <li><a href="{% url 'create-daily-cash-log' %}">Create Cash Log</a></li>
+      <li><a href="{% url 'create-daily-cash-log' %}">Create/Review Cash Log</a></li>
       <li><a href="{% url 'create-expense' %}">Create Expense</a></li>
       {% endif %}
       {% if user.is_authenticated %}
@@ -76,7 +76,7 @@
       <li><a href="{% url 'cash_log'  %}">Cash Log</a></li>
       {% endif %} 
       {% if request.user|has_group:"managers" or request.user.is_staff %}
-      <li><a href="{% url 'create-daily-cash-log' %}">Create Cash Log</a></li>
+      <li><a href="{% url 'create-daily-cash-log' %}">Create/Review Cash Log</a></li>
       <li><a href="{% url 'create-expense' %}">Create Expense</a></li>
       {% endif %}
       {% if user.is_authenticated %}

@@ -3,7 +3,7 @@
 {% load static %}
 
 {% if cash_log %}
-<div class="card-panel grey lighten-4" style="text-align: center; max-width: 600px; margin: auto;">
+<div class="card-panel grey lighten-4" style="text-align: center; max-width: 600px; margin: 0 auto 20px auto;">
   <h5>Date: {{cash_log.date}}</h5>
   <p>Cash Sales: {{cash_log.cash_sales}}</p>
   <p>Cash Card Auto Gratuity: {{cash_log.card_auto_grat}}</p>
@@ -22,8 +22,32 @@
 </div>
 {% else %}
 
+<div class="card-panel" style="max-width: 600px; margin: 0 auto 20px auto;">
+<h4 style="text-align: center;">Review Cash Log</h4>
+<form name="review-cash-log" method="post" style="display: flex; flex-direction: column; ">
+    {% csrf_token %}
+    <div class="row input-field" style="width: 100%;">
+      {{ review_form.date }} {{ review_form.date.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ review_form.restaurant }} {{ review_form.restaurant.label_tag }}
+    </div>
+    <div class="buttons-div">
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+          name="review-cash-log"
+        >
+          Review Cash Log
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+</form>
+</div>
+
+<div class="card-panel" style="max-width: 600px; margin: 0 auto 10px auto;">
 <h4 style="text-align: center;">Create Daily Cash Log</h4>
-<form method="post" style="display: flex; flex-direction: column; max-width: 600px; margin: auto;">
+<form method="post" style="display: flex; flex-direction: column; ">
     {% csrf_token %}
     <div class="row input-field" style="width: 100%;">
       {{ form.date }} {{ form.date.label_tag }}
@@ -50,13 +74,14 @@
         <button
           class="btn waves-effect waves-light"
           type="submit"
+          name="create-cash-log"
         >
           Create Daily Cash Log
           <i class="material-icons right">send</i>
         </button>
       </div>
 </form>
-
+</div>
 
 {% endif %}
 
