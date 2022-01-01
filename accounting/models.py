@@ -108,6 +108,9 @@ class CashLog(models.Model):
     wasSent = models.BooleanField(default=False)
     objects = models.Manager()
 
+    class Meta:
+        unique_together = ("restaurant", "date")
+
     def __str__(self) -> str:
         return f"{self.restaurant} - {self.date}: (Checked: {self.isChecked}) (Sent: {self.wasSent})"
 
