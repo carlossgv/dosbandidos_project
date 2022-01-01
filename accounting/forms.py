@@ -4,6 +4,63 @@ from .models import Restaurant, Supplier
 import datetime
 
 
+class CreateExpenseForm(forms.Form):
+    date = forms.DateField(
+        label="Date",
+        widget=forms.widgets.DateInput(
+            attrs={
+                "type": "date",
+                "class": "validate",
+                "value": datetime.date.today(),
+            }
+        ),
+    )
+
+    restaurant = forms.ChoiceField(
+        required=True,
+        label="Restaurant",
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
+    supplier = forms.ChoiceField(
+        required=False,
+        label="Supplier",
+        choices=(),
+        widget=forms.Select(attrs={"class": "validate"}),
+    )
+
+    amount = forms.DecimalField(
+        label="Amount",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
+    )
+
+    reference = forms.CharField(
+        label="Reference",
+        required=False,
+    )
+
+    comments = forms.CharField(
+        label="Comments",
+        required=False,
+        widget=forms.Textarea(attrs={"class": "materialize-textarea"}),
+    )
+
+    def __init__(self, *args, **kwargs):
+        supplier_choices = [(None, "-----")]
+        for supplier in Supplier.objects.all().order_by("name"):
+            supplier_choices.append((supplier.pk, supplier.name))
+
+        super(CreateExpenseForm, self).__init__(*args, **kwargs)
+        self.fields["supplier"] = forms.ChoiceField(
+            choices=supplier_choices,
+            required=True,
+            label="Supplier",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )
+
+
 class CreateCashLogForm(forms.Form):
     date = forms.DateField(
         label="Date",

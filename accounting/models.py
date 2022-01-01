@@ -64,9 +64,13 @@ class Expense(models.Model):
     )
     amount = models.DecimalField(max_digits=8, decimal_places=2)
     date = models.DateField()
-    cost_center = models.CharField(max_length=20, choices=COST_CENTER)
+    cost_center = models.CharField(
+        max_length=20,
+        choices=COST_CENTER,
+    )
     reference = models.CharField(max_length=100, blank=True)
     comments = models.TextField(blank=True)
+    created_by = models.ForeignKey(User, on_delete=CASCADE)
     objects = models.Manager()
 
     def __str__(self) -> str:

@@ -7,6 +7,7 @@ from accounting.decorators import admins_only, managers_only
 from users.models import Profile
 from .forms import (
     CreateCashLogForm,
+    CreateExpenseForm,
     ExpensesForm,
     EditExpensesForm,
     LoadExpensesForm,
@@ -26,6 +27,48 @@ from .utils import (
 from .utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
 from .utils_edit_expenses import get_expenses_by_date
+
+
+@managers_only
+@login_required
+def create_expense(request):
+    form = CreateExpenseForm(request.POST or None)
+    message: str = ""
+    expense = False
+    user = request.user
+
+    form.fields["restaurant"].choices = [(None, "-----")]
+
+    restaurant_options = Profile.objects.get(user_id=user.pk).restaurant.all()
+    for restaurant in restaurant_options:
+        form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
+
+    if request.method == "POST":
+        print(form.errors)
+        if form.is_valid():
+            data = form.cleaned_data
+
+            expense = Expense.objects.create(
+                restaurant=Restaurant.objects.get(pk=data["restaurant"]),
+                supplier=Supplier.objects.get(pk=data["supplier"]),
+                date=data["date"],
+                amount=data["amount"],
+                cost_center="cash",
+                reference=data["reference"],
+                comments=data["comments"],
+                created_by=user,
+            )
+
+            message = "Expense created successfully"
+
+        else:
+            message = "Error creating expense"
+
+    return render(
+        request,
+        "accounting/create-expense.html",
+        {"form": form, "message": message, "expense": expense},
+    )
 
 
 @managers_only
@@ -57,7 +100,6 @@ def create_daily_cash_log(request):
                     restaurant_id=data["restaurant"],
                 )
                 cash_log.expenses = expenses
-                print(cash_log.expenses)
             except:
                 entry = CashLog.objects.create(
                     date=data["date"],

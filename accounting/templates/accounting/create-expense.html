@@ -1,0 +1,49 @@
+{% extends 'accounting/layout.html' %} 
+{% block body %} 
+{% load static %}
+  
+{% if expense %}
+  <div class="card-panel grey lighten-4" style="text-align: center; max-width: 600px; margin: auto;">
+    <h5>Date: {{expense.date}}</h5>
+    <p>Supplier: {{expense.supplier.name}}</p>
+    <p>Amount: ${{expense.amount}}</p>
+    <p>Reference: {{expense.reference}}</p>
+    <p>Comments: {{expense.comments}}</p>
+  </div>
+ {% endif %}   
+
+<h4 style="text-align: center;">Create New Expense</h4>
+<form method="post" style="display: flex; flex-direction: column; max-width: 600px; margin: auto;">
+    {% csrf_token %}
+    <div class="row input-field" style="width: 100%;">
+      {{ form.date }} {{ form.date.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.restaurant }} {{ form.restaurant.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.supplier }} {{ form.supplier.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.amount }} {{ form.amount.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.reference }} {{ form.reference.label_tag }}
+    </div>
+    <div class="row input-field" style="width: 100%;">
+      {{ form.comments }} {{ form.comments.label_tag }}
+    </div>
+    <div class="buttons-div">
+        <button
+          class="btn waves-effect waves-light"
+          type="submit"
+        >
+          Create Expense
+          <i class="material-icons right">send</i>
+        </button>
+      </div>
+</form>
+
+
+
+{% endblock body %}
