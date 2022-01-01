@@ -40,7 +40,7 @@
       <li><a href="{% url 'create-expense' %}">Create Expense</a></li>
       {% endif %}
       {% if user.is_authenticated %}
-      <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
+      <li><a href="{% url 'accounting-home'  %}">Reports</a></li>
 
       {% endif %}
     </ul>
@@ -80,7 +80,7 @@
       <li><a href="{% url 'create-expense' %}">Create Expense</a></li>
       {% endif %}
       {% if user.is_authenticated %}
-      <li><a href="{% url 'accounting-home'  %}">Expenses</a></li>
+      <li><a href="{% url 'accounting-home'  %}">Reports</a></li>
       <li><a href="{% url 'logout' %}">Sign Out</a></li>
       {% else %}
       <li><a href="{% url 'login' %}">Log In</a></li>

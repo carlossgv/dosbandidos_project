@@ -278,7 +278,6 @@ class ExpensesForm(forms.Form):
     restaurant = forms.ChoiceField(
         required=True,
         label="Restaurant",
-        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
@@ -288,19 +287,6 @@ class ExpensesForm(forms.Form):
         choices=(),
         widget=forms.Select(attrs={"class": "validate"}),
     )
-
-    def __init__(self, *args, **kwargs):
-        supplier_choices = [(None, "-----")]
-        for supplier in Supplier.objects.all().order_by("name"):
-            supplier_choices.append((supplier.pk, supplier.name))
-
-        super(ExpensesForm, self).__init__(*args, **kwargs)
-        self.fields["suppliers"] = forms.ChoiceField(
-            choices=supplier_choices,
-            required=False,
-            label="Suppliers",
-            widget=forms.Select(attrs={"class": "validate"}),
-        )
 
     # TODO: populate supplier choices dinamically
     supplier_type_choices = [
@@ -326,3 +312,26 @@ class ExpensesForm(forms.Form):
             attrs={"class": "validate", "placeholder": "For cash report only"}
         ),
     )
+
+    def __init__(self, *args, **kwargs):
+        supplier_choices = [(None, "-----")]
+        for supplier in Supplier.objects.all().order_by("name"):
+            supplier_choices.append((supplier.pk, supplier.name))
+
+        # restaurant_choices = [(None, "-----")]
+        # for restaurant in Restaurant.objects.all():
+        #     restaurant_choices.append((restaurant.pk, restaurant.name))
+
+        super(ExpensesForm, self).__init__(*args, **kwargs)
+        # self.fields["restaurant"] = forms.ChoiceField(
+        #     choices=restaurant_choices,
+        #     required=True,
+        #     label="Restaurant",
+        #     widget=forms.Select(attrs={"class": "validate"}),
+        # )
+        self.fields["suppliers"] = forms.ChoiceField(
+            choices=supplier_choices,
+            required=False,
+            label="Suppliers",
+            widget=forms.Select(attrs={"class": "validate"}),
+        )

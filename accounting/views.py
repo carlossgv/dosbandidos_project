@@ -45,7 +45,6 @@ def create_expense(request):
         form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
 
     if request.method == "POST":
-        print(form.errors)
         if form.is_valid():
             data = form.cleaned_data
 
@@ -86,6 +85,9 @@ def create_daily_cash_log(request):
     restaurant_options = Profile.objects.get(user_id=user.pk).restaurant.all()
     for restaurant in restaurant_options:
         form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
+        review_form.fields["restaurant"].choices.append(
+            (restaurant.pk, restaurant.name)
+        )
 
     if request.method == "POST":
 
@@ -364,6 +366,14 @@ def edit_expenses(request):
 @login_required
 def home(request):
     form = ExpensesForm(request.POST or None)
+    user = request.user
+
+    form.fields["restaurant"].choices = [(None, "-----")]
+
+    restaurant_options = Profile.objects.get(user_id=user.pk).restaurant.all()
+    for restaurant in restaurant_options:
+        form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
+
     if request.method == "POST":
 
         if form.is_valid():
@@ -440,17 +450,8 @@ def home(request):
                     {"form": form, "supplier_data": supplier_data},
                 )
 
-        return render(
-            request,
-            "accounting/home.html",
-            {"form": form},
-        )
-
-    else:
-        form = ExpensesForm
-
-        return render(
-            request,
-            "accounting/home.html",
-            {"form": form},
-        )
+    return render(
+        request,
+        "accounting/home.html",
+        {"form": form},
+    )
