@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models.deletion import CASCADE, PROTECT
 
+from django.contrib.auth.models import User
+
 
 class Restaurant(models.Model):
     username = models.CharField(max_length=100, unique=True)
@@ -106,6 +108,7 @@ class CashLog(models.Model):
     comments = models.TextField(blank=True)
     isChecked = models.BooleanField(default=False)
     wasSent = models.BooleanField(default=False)
+    createdBy = models.ForeignKey(User, on_delete=CASCADE, null=True, blank=True)
     objects = models.Manager()
 
     class Meta:

@@ -11,7 +11,6 @@ class CreateCashLogForm(forms.Form):
             attrs={
                 "type": "date",
                 "class": "validate",
-                "disabled": True,
                 "value": datetime.date.today(),
             }
         ),

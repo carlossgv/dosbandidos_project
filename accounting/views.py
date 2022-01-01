@@ -4,6 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 
 from accounting.decorators import admins_only, managers_only
+from users.models import Profile
 from .forms import (
     CreateCashLogForm,
     ExpensesForm,
@@ -12,7 +13,7 @@ from .forms import (
     LoadIncomesForm,
     EditCashLogForm,
 )
-from .models import CashLog, Supplier, Expense
+from .models import CashLog, Restaurant, Supplier, Expense
 from .utils import (
     get_cash_report,
     get_expenses_by_supplier,
@@ -31,8 +32,48 @@ from .utils_edit_expenses import get_expenses_by_date
 @login_required
 def create_daily_cash_log(request):
     form = CreateCashLogForm(request.POST or None)
+    message: str = ""
+    cash_log = False
+    user = request.user
 
-    return render(request, "accounting/create-daily-cash-log.html", {"form": form})
+    form.fields["restaurant"].choices = [(None, "-----")]
+
+    restaurant_options = Profile.objects.get(user_id=user.pk).restaurant.all()
+    for restaurant in restaurant_options:
+        form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
+
+    if request.method == "POST":
+        if form.is_valid():
+            data = form.cleaned_data
+
+            """ check if cash log already exists """
+            try:
+                cash_log = CashLog.objects.get(
+                    restaurant=data["restaurant"], date=data["date"]
+                )
+            except:
+                entry = CashLog.objects.create(
+                    date=data["date"],
+                    restaurant=Restaurant.objects.get(pk=data["restaurant"]),
+                    cash_sales=data["cash_sales"],
+                    card_auto_grat=data["card_auto_grat"],
+                    card_tips=data["card_tips"],
+                    modifications=data["modifications"],
+                    comments=data["comments"],
+                    createdBy=user,
+                )
+                entry.save()
+                message = "Daily cash log created successfully"
+            else:
+                message = f"Cash log for {cash_log.date} already exists"
+        else:
+            message = "Error creating daily cash log"
+
+    return render(
+        request,
+        "accounting/create-daily-cash-log.html",
+        {"form": form, "message": message, "cash_log": cash_log},
+    )
 
 
 @admins_only

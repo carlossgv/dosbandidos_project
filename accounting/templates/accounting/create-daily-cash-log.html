@@ -2,7 +2,19 @@
 {% block body %} 
 {% load static %}
 
-<form method="post" style="display: flex; flex-direction: column;">
+{% if cash_log %}
+<div class="card-panel grey lighten-4" style="text-align: center; max-width: 600px; margin: auto;">
+  <h5>Date: {{cash_log.date}}</h5>
+  <p>Cash Sales: {{cash_log.cash_sales}}</p>
+  <p>Cash Card Auto Gratuity: {{cash_log.card_auto_grat}}</p>
+  <p>Card Tips: {{cash_log.card_tips}}</p>
+  <p>Modifications: {{cash_log.modifications}}</p>
+  <p>Comments: {{cash_log.comments}}</p>
+</div>
+{% else %}
+
+<h4 style="text-align: center;">Create Daily Cash Log</h4>
+<form method="post" style="display: flex; flex-direction: column; max-width: 600px; margin: auto;">
     {% csrf_token %}
     <div class="row input-field" style="width: 100%;">
       {{ form.date }} {{ form.date.label_tag }}
@@ -35,6 +47,11 @@
         </button>
       </div>
 </form>
+
+
+{% endif %}
+
+
 
 
 {% endblock body %}
