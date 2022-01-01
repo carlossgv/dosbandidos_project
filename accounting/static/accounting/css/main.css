@@ -1,32 +1,42 @@
 nav {
-    margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 button {
-    margin-bottom: 0.3rem;
+  margin-bottom: 0.3rem;
 }
 
 .buttons-div {
-    text-align: center;
+  text-align: center;
 }
 
 .row-title {
-    font-size: 1.5rem;
-    font-weight: bolder;
-    text-transform: uppercase;
+  font-size: 1.5rem;
+  font-weight: bolder;
+  text-transform: uppercase;
 }
 
 .row-subtitle {
-    font-size: 1.5rem;
-    color: crimson;
+  font-size: 1.5rem;
+  color: crimson;
 }
 
 table {
-    margin-top: 2rem;
-    margin-bottom: 2rem;
-    border-bottom: 4px groove #000000;
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  border-bottom: 4px groove #000000;
 }
 
 td {
-    padding-left: 1rem;
+  padding-left: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+  .buttons-div {
+    display: flex;
+    flex-direction: column;
+  }
+  .btn {
+    width: 100%;
+  }
 }
