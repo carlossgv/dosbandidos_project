@@ -81,6 +81,7 @@ def create_daily_cash_log(request):
     user = request.user
 
     form.fields["restaurant"].choices = [(None, "-----")]
+    review_form.fields["restaurant"].choices = [(None, "-----")]
 
     restaurant_options = Profile.objects.get(user_id=user.pk).restaurant.all()
     for restaurant in restaurant_options:
