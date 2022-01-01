@@ -51,6 +51,13 @@ def create_daily_cash_log(request):
                 cash_log = CashLog.objects.get(
                     restaurant=data["restaurant"], date=data["date"]
                 )
+                expenses = Expense.objects.filter(
+                    date=data["date"],
+                    cost_center="cash",
+                    restaurant_id=data["restaurant"],
+                )
+                cash_log.expenses = expenses
+                print(cash_log.expenses)
             except:
                 entry = CashLog.objects.create(
                     date=data["date"],
@@ -64,6 +71,9 @@ def create_daily_cash_log(request):
                 )
                 entry.save()
                 message = "Daily cash log created successfully"
+                cash_log = CashLog.objects.get(
+                    restaurant=data["restaurant"], date=data["date"]
+                )
             else:
                 message = f"Cash log for {cash_log.date} already exists"
         else:
