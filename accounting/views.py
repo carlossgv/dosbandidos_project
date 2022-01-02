@@ -4,6 +4,7 @@ from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 
 from accounting.decorators import admins_only, managers_only
+from accounting.utils_api_clover import daily_cash_data_clover
 from users.models import Profile
 from .forms import (
     CreateCashLogForm,
@@ -78,6 +79,7 @@ def create_daily_cash_log(request):
     review_form = ViewCashLogForm(request.POST or None)
     message: str = ""
     cash_log = False
+    clover_cash_log = False
     user = request.user
 
     form.fields["restaurant"].choices = [(None, "-----")]
@@ -103,10 +105,33 @@ def create_daily_cash_log(request):
                     cash_log = CashLog.objects.get(
                         restaurant_id=data["restaurant"], date=data["date"]
                     )
+
+                    expenses = Expense.objects.filter(
+                        date=data["date"],
+                        cost_center="cash",
+                        restaurant_id=data["restaurant"],
+                    )
+                    cash_log.expenses = expenses
+
                 except:
                     message = "No cash log found for this date"
                 else:
-                    message = f"Cash log for {cash_log.date}:"
+                    message = f"Cash log for {data['date']}"
+
+                if data["restaurant"] == "2":
+                    try:
+                        clover_data = daily_cash_data_clover(
+                            "459RV00NPJJ11", data["date"], data["restaurant"]
+                        )
+                    except:
+                        pass
+                    else:
+                        clover_cash_log = CashLog()
+                        clover_cash_log.date = data["date"]
+                        clover_cash_log.cash_sales = clover_data["cash_sales"]
+                        clover_cash_log.card_auto_grat = clover_data["card_auto_grat"]
+                        clover_cash_log.card_tips = clover_data["card_tips"]
+                        clover_cash_log.modifications = clover_data["modifications"]
 
         try:
             request.POST["create-cash-log"]
@@ -154,6 +179,7 @@ def create_daily_cash_log(request):
             "review_form": review_form,
             "message": message,
             "cash_log": cash_log,
+            "clover_cash_log": clover_cash_log,
         },
     )
 

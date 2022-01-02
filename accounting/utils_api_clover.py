@@ -4,6 +4,8 @@ import datetime
 import pytz as pytz
 import time
 
+from accounting.models import CashLog
+
 
 def get_orders_clover(merchant_id, initial_date, finish_date):
     initial_date = transform_to_epoch(initial_date, "initial")
@@ -74,14 +76,14 @@ def get_refunds_list(merchant_id, initial_date, finish_date):
     return refunds
 
 
-def daily_cash_data_clover(merchant_id, date):
+def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
     orders = get_orders_clover(merchant_id, date, date)["elements"]
     refunds = get_refunds_list(merchant_id, date, date)["elements"]
 
     # Cash Tender ID: D8ER2CY0D5NX8
 
     cash_sales = 0
-    card_auto = 0
+    card_auto_grat = 0
     card_tips = 0
 
     for order in orders:
@@ -97,7 +99,7 @@ def daily_cash_data_clover(merchant_id, date):
                 for tax_rate in payment_details["taxRates"]["elements"]:
                     taxable_amount = tax_rate["taxableAmount"] / 100
 
-                    card_auto += taxable_amount * service_charge_percentage / 100
+                    card_auto_grat += taxable_amount * service_charge_percentage / 100
 
             if payment["tender"]["id"] == "D8ER2CY0D5NX8":
                 cash_sales += payment["amount"] / 100
@@ -113,12 +115,27 @@ def daily_cash_data_clover(merchant_id, date):
             for tax_rate in refund_details["taxRates"]["elements"]:
                 taxable_amount = tax_rate["taxableAmount"] / 100
 
-                card_auto -= taxable_amount * service_charge_percentage / 100
+                card_auto_grat -= taxable_amount * service_charge_percentage / 100
 
         if refund["payment"]["tender"]["id"] == "D8ER2CY0D5NX8":
             cash_sales -= refund["amount"] / 100
 
-    return {"cash_sales": cash_sales, "card_auto": card_auto, "card_tips": card_tips}
+    cash_sales = round(cash_sales, 2)
+    card_auto_grat = round(card_auto_grat, 2)
+    card_tips = round(card_tips, 2)
+    try:
+        modifications = float(
+            CashLog.objects.get(date=date, restaurant_id=restaurant_id).modifications
+        )
+    except:
+        modifications = 0
+
+    return {
+        "cash_sales": cash_sales,
+        "card_auto_grat": card_auto_grat,
+        "card_tips": card_tips,
+        "modifications": modifications,
+    }
 
 
 def transform_to_epoch(date, date_type, location="US/Central"):

@@ -317,38 +317,32 @@ def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
         if restaurant_id == "1":
             cash_data = CashLog.objects.get(date=date, restaurant_id=restaurant_id)
             cash_sales = cash_data.cash_sales
-            card_auto = cash_data.card_auto_grat
+            card_auto_grat = cash_data.card_auto_grat
             card_tips = cash_data.card_tips
-            cash_modifications = float(cash_data.modifications)
+            modifications = float(cash_data.modifications)
 
         elif restaurant_id == "2":
-            cash_data = daily_cash_data_clover("459RV00NPJJ11", date)
+            cash_data = daily_cash_data_clover("459RV00NPJJ11", date, restaurant_id)
 
-            cash_sales = round(cash_data["cash_sales"], 2)
-            card_auto = round(cash_data["card_auto"], 2)
-            card_tips = round(cash_data["card_tips"], 2)
-            cash_modifications = float(
-                CashLog.objects.get(
-                    date=date, restaurant_id=restaurant_id
-                ).modifications
-            )
+            cash_sales = cash_data["cash_sales"]
+            card_auto_grat = cash_data["card_auto_grat"]
+            card_tips = cash_data["card_tips"]
+            modifications = cash_data["modifications"]
 
-        cash_out = round(float(cash_sales - card_auto - card_tips), 2)
+        cash_out = round(float(cash_sales - card_auto_grat - card_tips), 2)
 
-        final_cash = round(
-            initial_cash + cash_out - cash_purchases + cash_modifications, 2
-        )
+        final_cash = round(initial_cash + cash_out - cash_purchases + modifications, 2)
 
         results.append(
             {
                 "date": date,
                 "initial_cash": initial_cash,
                 "cash_sales": cash_sales,
-                "card_auto": card_auto,
+                "card_auto_grat": card_auto_grat,
                 "card_tips": card_tips,
                 "cash_out": cash_out,
                 "cash_purchases": cash_purchases,
-                "cash_modifications": cash_modifications,
+                "modifications": modifications,
                 "final_cash": final_cash,
             }
         )

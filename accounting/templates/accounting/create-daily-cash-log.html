@@ -3,24 +3,39 @@
 {% load static %}
 
 {% if cash_log %}
-<div class="card-panel grey lighten-4" style="text-align: center; max-width: 600px; margin: 0 auto 20px auto;">
-  <h5>Date: {{cash_log.date}}</h5>
-  <p>Cash Sales: {{cash_log.cash_sales}}</p>
-  <p>Cash Card Auto Gratuity: {{cash_log.card_auto_grat}}</p>
-  <p>Card Tips: {{cash_log.card_tips}}</p>
-  <p>Modifications: {{cash_log.modifications}}</p>
-  <p>Comments: {{cash_log.comments}}</p>
+  <div class="card-panel grey lighten-4" style="text-align: center; max-width: 600px; margin: 0 auto 20px auto;">
+    <h5>Dos Bandidos Cash Log</h5>
+    <h5>Date: {{cash_log.date}}</h5>
+    <p>Cash Sales: {{cash_log.cash_sales}}</p>
+    <p>Cash Card Auto Gratuity: {{cash_log.card_auto_grat}}</p>
+    <p>Card Tips: {{cash_log.card_tips}}</p>
+    <p>Modifications: {{cash_log.modifications}}</p>
+    <p>Comments: {{cash_log.comments}}</p>
 
-  <h5>Expenses:</h5>
-  {% if cash_log.expenses %}
-  {% for expense in cash_log.expenses %}
-    <p>{{expense.supplier.name}}: {{expense.amount}}</p>
-  {% endfor %}
-  {% else %}
-    <p>No expenses</p>
-  {% endif %}
+    <h5>Expenses:</h5>
+    {% if cash_log.expenses %}
+      {% for expense in cash_log.expenses %}
+        <p>{{expense.supplier.name}}: {{expense.amount}}</p>
+      {% endfor %}
+    {% else %}
+      <p>No expenses</p>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% if clover_cash_log %}
+
+<div class="card-panel green accent-2" style="text-align: center; max-width: 600px; margin: 0 auto 20px auto;">
+  <h5>Clover Data</h5>
+  <h5>Date: {{clover_cash_log.date}}</h5>
+  <p>Cash Sales: {{clover_cash_log.cash_sales}}</p>
+  <p>Cash Card Auto Gratuity: {{clover_cash_log.card_auto_grat}}</p>
+  <p>Card Tips: {{clover_cash_log.card_tips}}</p>
 </div>
-{% else %}
+
+{% endif %}
+
+{% if request.method == "GET" %}
 
 <div class="card-panel" style="max-width: 600px; margin: 0 auto 20px auto;">
 <h4 style="text-align: center;">Review Cash Log</h4>
@@ -82,10 +97,7 @@
       </div>
 </form>
 </div>
-
 {% endif %}
-
-
 
 
 {% endblock body %}
