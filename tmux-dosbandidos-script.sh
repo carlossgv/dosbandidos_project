@@ -1,24 +1,24 @@
 #!/bin/bash
 
 SESSION="Dos Bandidos"
-SESSIONEXISTS=$(tmux list-sessions | grep "$SESSION")
+SESSIONEXISTS=$(tmux list-sessions | grep -w "$SESSION")
 
 if [ "$SESSIONEXISTS" = "" ]
 then
 
-  tmux new-session -d -s "$SESSION"
+  tmux new-session -d -s "$SESSION" -d -x "$(tput cols)" -y "$(tput lines)"
 
   tmux rename-window -t 0 'Main'
   tmux send-keys -t 'Main' 'cd ~/projects/dosbandidos_project' C-m
-  tmux send-keys -t 'Main' 'source ~/projects/dosbandidos_project/venv/bin/activate' C-m
-  tmux send-keys -t 'Main' 'tmux source ~/.config/tmux/tmux.conf' C-m
+  tmux send-keys -t 'Main' 'source venv/bin/activate' C-m
+  tmux send-keys -t 'Main' 'code .' C-m
   tmux send-keys -t 'Main' 'clear' C-m
-  tmux splitw -h
+  tmux splitw -h -p 30
 
   tmux send-keys -t 'Main' 'python3 manage.py runserver' C-m
-
+  tmux select-pane -t 0
 
 fi
 
-tmux attach-se
+tmux attach-session -t "$SESSION":0
 
