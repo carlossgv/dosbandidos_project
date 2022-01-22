@@ -38,6 +38,7 @@ def get_payment_details(merchant_id, payment_id):
     )
 
     payment_details = response.json()
+    time.sleep(1)
 
     return payment_details
 
@@ -53,6 +54,7 @@ def get_refund_details(merchant_id, refund_id):
     )
 
     refund_details = response.json()
+    time.sleep(1)
 
     return refund_details
 
