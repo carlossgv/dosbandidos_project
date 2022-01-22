@@ -80,9 +80,9 @@ def get_refunds_list(merchant_id, initial_date, finish_date):
 
 
 def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
-    print(get_orders_clover(merchant_id, date, date))
+    print("ORDERS ", len(get_orders_clover(merchant_id, date, date)["elements"]))
     orders = get_orders_clover(merchant_id, date, date)["elements"]
-    print(get_refunds_list(merchant_id, date, date))
+    print("REFUNDS ", len(get_refunds_list(merchant_id, date, date)["elements"]))
     refunds = get_refunds_list(merchant_id, date, date)["elements"]
 
     # Cash Tender ID: D8ER2CY0D5NX8
