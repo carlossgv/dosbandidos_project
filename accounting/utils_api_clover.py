@@ -22,6 +22,7 @@ def get_orders_clover(merchant_id, initial_date, finish_date):
     )
 
     orders = response.json()
+    time.sleep(1)
 
     return orders
 
