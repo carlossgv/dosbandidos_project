@@ -312,6 +312,13 @@ def edit_expenses(request):
     edit_form = EditExpensesForm(request.POST or None)
     expenses = ""
     load_form = LoadExpensesForm
+    user = request.user
+
+    edit_form.fields["restaurant"].choices = [(None, "-----")]
+
+    restaurant_options = Profile.objects.get(user_id=user.pk).restaurant.all()
+    for restaurant in restaurant_options:
+        edit_form.fields["restaurant"].choices.append((restaurant.pk, restaurant.name))
 
     if request.method == "POST":
         try:
@@ -335,10 +342,10 @@ def edit_expenses(request):
         except:
             pass
         else:
-            form = ExpensesForm(request.POST)
-
+            form = edit_form
             if form.is_valid():
                 data = form.cleaned_data
+                print(data)
                 restaurant_id = request.POST["restaurant"]
                 initial_date = data["initial_date"]
                 finish_date = data["finish_date"]

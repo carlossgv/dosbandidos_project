@@ -193,7 +193,7 @@ class EditExpensesForm(forms.Form):
     restaurant = forms.ChoiceField(
         required=True,
         label="Restaurant",
-        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        # choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
@@ -239,7 +239,7 @@ class LoadIncomesForm(forms.Form):
     restaurant = forms.ChoiceField(
         required=True,
         label="Restaurant",
-        choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        # choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
