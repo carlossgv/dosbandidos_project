@@ -79,12 +79,26 @@ def get_refunds_list(merchant_id, initial_date, finish_date):
     return refunds
 
 
-def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
-    print("ORDERS ", len(get_orders_clover(merchant_id, date, date)["elements"]))
-    orders = get_orders_clover(merchant_id, date, date)["elements"]
-    print("REFUNDS ", len(get_refunds_list(merchant_id, date, date)["elements"]))
-    refunds = get_refunds_list(merchant_id, date, date)["elements"]
+def cash_data_clover(merchant_id: int, initial_date: str, final_date: str):
+    orders = get_orders_clover(merchant_id, initial_date, final_date)["elements"]
+    refunds = get_refunds_list(merchant_id, initial_date, final_date)["elements"]
 
+    initial_epoch_date = transform_to_epoch(initial_date, "initial")
+    final_epoch_date = transform_to_epoch(final_date, "finish")
+
+    ammount_of_days = round((final_epoch_date - initial_epoch_date) / 86_400_000)
+
+    is_range = True
+
+    while is_range == True:
+         
+
+
+
+    return
+
+
+def daily_cash_data_clover(orders, refunds, restaurant_id: int):
     # Cash Tender ID: D8ER2CY0D5NX8
 
     cash_sales = 0
@@ -99,7 +113,9 @@ def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
 
             if "serviceCharge" in order:
                 service_charge_percentage = order["serviceCharge"]["percentage"]
-                payment_details = get_payment_details(merchant_id, payment["id"])
+                payment_details = get_payment_details(
+                    os.environ.get("DOSBANDIDOS_MERCHANT_ID"), payment["id"]
+                )
 
                 for tax_rate in payment_details["taxRates"]["elements"]:
                     taxable_amount = tax_rate["taxableAmount"] / 100
@@ -115,7 +131,9 @@ def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
 
         if "serviceCharge" in refund:
             service_charge_percentage = refund["serviceCharge"]["percentage"]
-            refund_details = get_refund_details(merchant_id, refund["id"])
+            refund_details = get_refund_details(
+                os.environ.get("DOSBANDIDOS_MERCHANT_ID"), refund["id"]
+            )
 
             for tax_rate in refund_details["taxRates"]["elements"]:
                 taxable_amount = tax_rate["taxableAmount"] / 100
@@ -143,7 +161,7 @@ def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
     }
 
 
-def transform_to_epoch(date, date_type, location="US/Central"):
+def transform_to_epoch(date, date_type, location="US/Central") -> int:
     offset = (
         pytz.timezone(location)
         .localize(datetime.datetime(date.year, date.month, date.day))
@@ -154,13 +172,24 @@ def transform_to_epoch(date, date_type, location="US/Central"):
     if date_type == "initial":
         hour = 0
         minute = 0
+        second = 0
     elif date_type == "finish":
         hour = 23
         minute = 59
+        second = 59
 
-    date = datetime.datetime(
-        date.year, date.month, date.day, hour, minute, tzinfo=datetime.timezone.utc
-    ) + datetime.timedelta(hours=offset)
+    date = (
+        datetime.datetime(
+            date.year,
+            date.month,
+            date.day,
+            hour,
+            minute,
+            second,
+            tzinfo=datetime.timezone.utc,
+        )
+        + datetime.timedelta(hours=offset)
+    )
 
     date = int(date.timestamp()) * 1000
 

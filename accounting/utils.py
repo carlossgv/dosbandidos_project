@@ -1,7 +1,8 @@
+import os
 from .models import CashLog, Supplier, Expense, Income, Metric
 from django.db.models import Sum
 from datetime import timedelta
-from .utils_api_clover import daily_cash_data_clover
+from .utils_api_clover import cash_data_clover, daily_cash_data_clover
 
 
 def get_expenses_by_supplier(supplier_id, initial_date, finish_date, user_id):
@@ -300,6 +301,10 @@ def get_financials_report(initial_date, finish_date, user_id):
 
 
 def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
+    cash_data_clover(
+        os.environ.get("DOSBANDIDOS_CLOVER_MERCHANT_ID"), initial_date, finish_date
+    )
+    return
     results = []
     date = initial_date
     initial_cash = round(float(initial_cash), 2)
@@ -322,7 +327,9 @@ def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
             modifications = float(cash_data.modifications)
 
         elif restaurant_id == "2":
-            cash_data = daily_cash_data_clover("459RV00NPJJ11", date, restaurant_id)
+            cash_data = daily_cash_data_clover(
+                os.environ.get("DOSBANDIDOS_CLOVER_MERCHANT_ID"), date, restaurant_id
+            )
 
             cash_sales = cash_data["cash_sales"]
             card_auto_grat = cash_data["card_auto_grat"]
