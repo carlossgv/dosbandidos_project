@@ -24,7 +24,7 @@ def get_orders_clover(merchant_id, initial_date, finish_date):
     orders = response.json()
     time.sleep(1)
 
-    return orders
+    return orders["elements"]
 
 
 def get_payment_details(merchant_id, payment_id):
@@ -76,15 +76,45 @@ def get_refunds_list(merchant_id, initial_date, finish_date):
     refunds = response.json()
     time.sleep(1)
 
-    return refunds
+    return refunds["elements"]
 
 
-def daily_cash_data_clover(merchant_id, date, restaurant_id: int):
-    print("ORDERS ", len(get_orders_clover(merchant_id, date, date)["elements"]))
-    orders = get_orders_clover(merchant_id, date, date)["elements"]
-    print("REFUNDS ", len(get_refunds_list(merchant_id, date, date)["elements"]))
-    refunds = get_refunds_list(merchant_id, date, date)["elements"]
+def clover_cash_data_by_date_range(
+    merchant_id, initial_date, finish_date, restaurant_id: int
+):
+    orders = get_orders_clover(merchant_id, initial_date, finish_date)
+    refunds = get_refunds_list(merchant_id, initial_date, finish_date)
 
+    print("orders: ", len(orders))
+
+    for order in orders:
+        order["createdTime"] = convert_epoch_to_date(order["createdTime"])
+
+    for refund in refunds:
+        refund["createdTime"] = convert_epoch_to_date(refund["createdTime"])
+
+    return {"orders": orders, "refunds": refunds}
+
+
+def filter_cash_data_by_date(orders, refunds, date):
+    orders_filtered = []
+    refunds_filtered = []
+
+    for order in orders:
+        if order["createdTime"] == date.strftime("%Y-%m-%d"):
+
+            orders_filtered.append(order)
+
+    for refund in refunds:
+        if refund["createdTime"] == date.strftime("%Y-%m-%d"):
+            refunds_filtered.append(refund)
+
+    print("filtered orders", len(orders_filtered))
+
+    return {"orders": orders_filtered, "refunds": refunds_filtered}
+
+
+def daily_cash_data_clover(orders, refunds):
     # Cash Tender ID: D8ER2CY0D5NX8
 
     cash_sales = 0
@@ -163,5 +193,15 @@ def transform_to_epoch(date, date_type, location="US/Central"):
     ) + datetime.timedelta(hours=offset)
 
     date = int(date.timestamp()) * 1000
+
+    return date
+
+
+def convert_epoch_to_date(epoch_time, location="US/Central"):
+    tz = pytz.timezone(location)
+    date = datetime.datetime.fromtimestamp(epoch_time / 1000, tz).strftime("%Y-%m-%d")
+    convertedDate = datetime.datetime.fromtimestamp(
+        epoch_time / 1000
+    ) - datetime.timedelta(hours=3)
 
     return date
