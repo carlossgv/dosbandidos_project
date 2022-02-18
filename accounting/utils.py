@@ -306,10 +306,6 @@ def get_financials_report(initial_date, finish_date, user_id):
 
 
 def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
-    cash_data_clover(
-        os.environ.get("DOSBANDIDOS_CLOVER_MERCHANT_ID"), initial_date, finish_date
-    )
-    return
     results = []
     date = initial_date
     initial_cash = round(float(initial_cash), 2)
