@@ -129,7 +129,9 @@ def daily_cash_data_clover(orders, refunds):
 
             if "serviceCharge" in order:
                 service_charge_percentage = order["serviceCharge"]["percentage"]
-                payment_details = get_payment_details(merchant_id, payment["id"])
+                payment_details = get_payment_details(
+                    os.environ.get("DOSBANDIDOS_MERCHANT_ID"), payment["id"]
+                )
 
                 for tax_rate in payment_details["taxRates"]["elements"]:
                     taxable_amount = tax_rate["taxableAmount"] / 100
@@ -145,7 +147,9 @@ def daily_cash_data_clover(orders, refunds):
 
         if "serviceCharge" in refund:
             service_charge_percentage = refund["serviceCharge"]["percentage"]
-            refund_details = get_refund_details(merchant_id, refund["id"])
+            refund_details = get_refund_details(
+                os.environ.get("DOSBANDIDOS_MERCHANT_ID"), refund["id"]
+            )
 
             for tax_rate in refund_details["taxRates"]["elements"]:
                 taxable_amount = tax_rate["taxableAmount"] / 100
@@ -173,7 +177,7 @@ def daily_cash_data_clover(orders, refunds):
     }
 
 
-def transform_to_epoch(date, date_type, location="US/Central"):
+def transform_to_epoch(date, date_type, location="US/Central") -> int:
     offset = (
         pytz.timezone(location)
         .localize(datetime.datetime(date.year, date.month, date.day))
@@ -184,12 +188,20 @@ def transform_to_epoch(date, date_type, location="US/Central"):
     if date_type == "initial":
         hour = 0
         minute = 0
+        second = 0
     elif date_type == "finish":
         hour = 23
         minute = 59
+        second = 59
 
     date = datetime.datetime(
-        date.year, date.month, date.day, hour, minute, tzinfo=datetime.timezone.utc
+        date.year,
+        date.month,
+        date.day,
+        hour,
+        minute,
+        second,
+        tzinfo=datetime.timezone.utc,
     ) + datetime.timedelta(hours=offset)
 
     date = int(date.timestamp()) * 1000
