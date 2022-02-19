@@ -85,8 +85,6 @@ def clover_cash_data_by_date_range(
     orders = get_orders_clover(merchant_id, initial_date, finish_date)
     refunds = get_refunds_list(merchant_id, initial_date, finish_date)
 
-    print("orders: ", len(orders))
-
     for order in orders:
         order["createdTime"] = convert_epoch_to_date(order["createdTime"])
 
@@ -109,12 +107,10 @@ def filter_cash_data_by_date(orders, refunds, date):
         if refund["createdTime"] == date.strftime("%Y-%m-%d"):
             refunds_filtered.append(refund)
 
-    print("filtered orders", len(orders_filtered))
-
     return {"orders": orders_filtered, "refunds": refunds_filtered}
 
 
-def daily_cash_data_clover(orders, refunds):
+def daily_cash_data_clover(orders, refunds, date, restaurant_id: int):
     # Cash Tender ID: D8ER2CY0D5NX8
 
     cash_sales = 0
@@ -128,6 +124,7 @@ def daily_cash_data_clover(orders, refunds):
                 card_tips += payment["tipAmount"] / 100
 
             if "serviceCharge" in order:
+
                 service_charge_percentage = order["serviceCharge"]["percentage"]
                 payment_details = get_payment_details(
                     os.environ.get("DOSBANDIDOS_MERCHANT_ID"), payment["id"]
@@ -162,6 +159,7 @@ def daily_cash_data_clover(orders, refunds):
     cash_sales = round(cash_sales, 2)
     card_auto_grat = round(card_auto_grat, 2)
     card_tips = round(card_tips, 2)
+
     try:
         modifications = float(
             CashLog.objects.get(date=date, restaurant_id=restaurant_id).modifications

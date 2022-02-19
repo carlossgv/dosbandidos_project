@@ -1,6 +1,4 @@
-import datetime
-from pprint import pprint
-from .models import CashLog, Supplier, Expense, Income, Metric
+from .models import Supplier, Expense, Income, Metric
 from django.db.models import Sum
 from datetime import timedelta
 from .utils_api_clover import (
@@ -310,6 +308,7 @@ def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
     date = initial_date
     initial_cash = round(float(initial_cash), 2)
 
+    # TODO: move merchandID to .env
     weekly_cash_data = clover_cash_data_by_date_range(
         "459RV00NPJJ11", initial_date, finish_date, restaurant_id
     )
@@ -327,24 +326,27 @@ def get_cash_report(initial_cash, initial_date, finish_date, restaurant_id):
         else:
             cash_purchases = float(cash_purchases)
 
-        if restaurant_id == "1":
-            cash_data = CashLog.objects.get(date=date, restaurant_id=restaurant_id)
-            cash_sales = cash_data.cash_sales
-            card_auto_grat = cash_data.card_auto_grat
-            card_tips = cash_data.card_tips
-            modifications = float(cash_data.modifications)
+        # if restaurant_id == "1":
+        #     cash_data = CashLog.objects.get(date=date, restaurant_id=restaurant_id)
+        #     cash_sales = cash_data.cash_sales
+        #     card_auto_grat = cash_data.card_auto_grat
+        #     card_tips = cash_data.card_tips
+        #     modifications = float(cash_data.modifications)
 
-        elif restaurant_id == "2":
-            daily_clover_data = filter_cash_data_by_date(orders, refunds, date)
+        # elif restaurant_id == "2":
+        daily_clover_data = filter_cash_data_by_date(orders, refunds, date)
 
-            cash_data = daily_cash_data_clover(
-                daily_clover_data["orders"], daily_clover_data["refunds"]
-            )
+        cash_data = daily_cash_data_clover(
+            daily_clover_data["orders"],
+            daily_clover_data["refunds"],
+            date,
+            restaurant_id,
+        )
 
-            cash_sales = cash_data["cash_sales"]
-            card_auto_grat = cash_data["card_auto_grat"]
-            card_tips = cash_data["card_tips"]
-            modifications = cash_data["modifications"]
+        cash_sales = cash_data["cash_sales"]
+        card_auto_grat = cash_data["card_auto_grat"]
+        card_tips = cash_data["card_tips"]
+        modifications = cash_data["modifications"]
 
         cash_out = round(float(cash_sales - card_auto_grat - card_tips), 2)
 
