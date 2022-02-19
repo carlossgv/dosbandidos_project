@@ -10,7 +10,7 @@ then
 
   tmux rename-window -t 0 'Main'
   tmux send-keys -t 'Main' 'cd ~/projects/dosbandidos_project' C-m
-  tmux send-keys -t 'Main' 'source venv/bin/activate' C-m
+  tmux send-keys -t 'Main' 'source dosbandidos_env/bin/activate' C-m
   tmux send-keys -t 'Main' 'code .' C-m
   tmux send-keys -t 'Main' 'clear' C-m
   tmux splitw -h -p 30
