@@ -50,7 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
       infoButton.disabled = false;
     }
 
-    // TODO: There has to be a better way to do this
     if (suppliers.value != '') {
       nearestInput = supplierType.closest('div').children[0];
       nearestInput.disabled = true;
