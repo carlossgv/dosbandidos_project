@@ -127,7 +127,7 @@ def daily_cash_data_clover(orders, refunds, date, restaurant_id: int):
 
                 service_charge_percentage = order["serviceCharge"]["percentage"]
                 payment_details = get_payment_details(
-                    os.environ.get("DOSBANDIDOS_MERCHANT_ID"), payment["id"]
+                    os.environ.get("BA_CLOVER_MERCHANT_ID"), payment["id"]
                 )
 
                 for tax_rate in payment_details["taxRates"]["elements"]:
@@ -145,7 +145,7 @@ def daily_cash_data_clover(orders, refunds, date, restaurant_id: int):
         if "serviceCharge" in refund:
             service_charge_percentage = refund["serviceCharge"]["percentage"]
             refund_details = get_refund_details(
-                os.environ.get("DOSBANDIDOS_MERCHANT_ID"), refund["id"]
+                os.environ.get("BA_CLOVER_MERCHANT_ID"), refund["id"]
             )
 
             for tax_rate in refund_details["taxRates"]["elements"]:
