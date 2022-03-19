@@ -1,10 +1,12 @@
 import datetime
+import os
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 
 from accounting.decorators import admins_only, managers_only
-from accounting.utils_api_clover import daily_cash_data_clover
+from accounting.utils.utils_api_clover import daily_cash_data_clover
+from accounting.utils.utils_incomes import save_income_and_metrics
 from users.models import Profile
 from .forms import (
     CreateCashLogForm,
@@ -17,18 +19,17 @@ from .forms import (
     ViewCashLogForm,
 )
 from .models import CashLog, Restaurant, Supplier, Expense
-from .utils import (
+from accounting.utils.utils import (
     get_cash_report,
     get_expenses_by_supplier,
     get_expenses_by_supplier_type,
     get_financials_report,
     get_goals_report,
     get_incomes,
-    get_metrics,
 )
-from .utils_csv_handling import load_csv_expenses, load_csv_incomes
+from accounting.utils.utils_csv_handling import load_csv_expenses, load_csv_incomes
 from dosbandidos_project.settings import BASE_DIR
-from .utils_edit_expenses import get_expenses_by_date
+from accounting.utils.utils_edit_expenses import get_expenses_by_date
 
 
 @managers_only
@@ -121,7 +122,9 @@ def create_daily_cash_log(request):
                 if data["restaurant"] == "2":
                     try:
                         clover_data = daily_cash_data_clover(
-                            "459RV00NPJJ11", data["date"], data["restaurant"]
+                            os.environ.get("BA_CLOVER_MERCHANT_ID"),
+                            data["date"],
+                            data["restaurant"],
                         )
                     except:
                         pass
@@ -285,25 +288,33 @@ def cash_log(request):
 @admins_only
 @login_required
 def incomes(request):
-    load_form = LoadIncomesForm
+    incomes_form = LoadIncomesForm(request.POST or None)
+    message: str = ""
 
     if request.method == "POST":
-        try:
-            request.FILES["file"]
-        except:
-            pass
-        else:
-            file = request.FILES["file"]
-            fss = FileSystemStorage()
-            file = fss.save(file.name, file)
 
-            file_url = str(BASE_DIR) + fss.url(file)
-            delimiter = request.POST["delimiter"]
-            restaurant_id = request.POST["restaurant"]
+        if incomes_form.is_valid():
+            print("IM VALID")
+            data = incomes_form.cleaned_data
+            print(data)
+            save_income_and_metrics(
+                data["restaurant"],
+                data["initial_date"],
+                data["finish_date"],
+                data["net_sales"],
+                data["gross_sales"],
+                data["liquor_sales"],
+                data["order_amount"],
+                data["labor"],
+            )
 
-            load_csv_incomes(file_url, delimiter, restaurant_id)
+            message = f"Income and Metrics Saved for {data['restaurant']} from {data['initial_date']} to {data['finish_date']}"
 
-    return render(request, "accounting/incomes.html", {"loadForm": load_form})
+    return render(
+        request,
+        "accounting/incomes.html",
+        {"incomesForm": incomes_form, "message": message},
+    )
 
 
 @admins_only
@@ -345,7 +356,6 @@ def edit_expenses(request):
             form = edit_form
             if form.is_valid():
                 data = form.cleaned_data
-                print(data)
                 restaurant_id = request.POST["restaurant"]
                 initial_date = data["initial_date"]
                 finish_date = data["finish_date"]

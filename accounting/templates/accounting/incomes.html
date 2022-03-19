@@ -3,9 +3,9 @@
 {% block body %}
 {% load static %}
 {% load customfilters %}
-<form name="loadIncomes" method="post" enctype="multipart/form-data">
+<form name="incomes-form" method="post" enctype="multipart/form-data">
     {% csrf_token %}
-    {{ loadForm }}
+    {{ incomesForm }}
     <div class="buttons-div">
         <button class="btn waves-effect waves-light" type="submit">Load Incomes
             <i class="material-icons right">send</i>

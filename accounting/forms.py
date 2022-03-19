@@ -239,16 +239,49 @@ class LoadIncomesForm(forms.Form):
     restaurant = forms.ChoiceField(
         required=True,
         label="Restaurant",
-        # choices=[(None, "-----"), (1, "Bixby"), (2, "BA")],
+        choices=[(None, "-----"), (2, "BA")],
         widget=forms.Select(attrs={"class": "validate"}),
     )
 
-    file = forms.FileField(label="Select file")
+    initial_date = forms.DateField(
+        label="Initial Date",
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
+    )
 
-    delimiter = forms.ChoiceField(
-        choices=[(None, "-----"), (",", ","), (";", ";")],
-        label="Delimiter",
-        widget=forms.Select(attrs={"class": "validate"}),
+    finish_date = forms.DateField(
+        label="Finish Date",
+        widget=forms.widgets.DateInput(attrs={"type": "date", "class": "validate"}),
+    )
+
+    net_sales = forms.DecimalField(
+        label="Net Sales",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
+    )
+    gross_sales = forms.DecimalField(
+        label="Gross Sales",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
+    )
+    liquor_sales = forms.DecimalField(
+        label="Liquor Sales",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
+    )
+    order_amount = forms.DecimalField(
+        label="Order Amount",
+        decimal_places=0,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "1"}),
+    )
+    labor = forms.DecimalField(
+        label="Labor",
+        decimal_places=2,
+        required=True,
+        widget=forms.NumberInput(attrs={"class": "validate", "step": "0.01"}),
     )
 
 
@@ -305,17 +338,7 @@ class ExpensesForm(forms.Form):
         for supplier in Supplier.objects.all().order_by("name"):
             supplier_choices.append((supplier.pk, supplier.name))
 
-        # restaurant_choices = [(None, "-----")]
-        # for restaurant in Restaurant.objects.all():
-        #     restaurant_choices.append((restaurant.pk, restaurant.name))
-
         super(ExpensesForm, self).__init__(*args, **kwargs)
-        # self.fields["restaurant"] = forms.ChoiceField(
-        #     choices=restaurant_choices,
-        #     required=True,
-        #     label="Restaurant",
-        #     widget=forms.Select(attrs={"class": "validate"}),
-        # )
         self.fields["suppliers"] = forms.ChoiceField(
             choices=supplier_choices,
             required=False,
