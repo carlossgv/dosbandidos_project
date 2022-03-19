@@ -2,11 +2,11 @@ import csv
 import datetime
 import os
 
-from .models import Expense, Rule, Income
+from accounting.models import Expense, Rule, Income
 
 
 def load_csv_incomes(filepath: str, delimiter: str, restaurant_id: str, is_test=False):
-    with open(filepath, newline='') as file:
+    with open(filepath, newline="") as file:
         read_file = csv.reader(file, delimiter=delimiter)
         # Skip header:
         next(read_file)
@@ -21,8 +21,10 @@ def load_csv_incomes(filepath: str, delimiter: str, restaurant_id: str, is_test=
     os.remove(filepath)
 
 
-def load_csv_expenses(filepath: str, delimiter: str, restaurant_id: str, cost_center: str):
-    with open(filepath, newline='') as file:
+def load_csv_expenses(
+    filepath: str, delimiter: str, restaurant_id: str, cost_center: str
+):
+    with open(filepath, newline="") as file:
         read_file = csv.reader(file, delimiter=delimiter)
         # Skip header:
         next(read_file)
@@ -38,58 +40,59 @@ def load_csv_expenses(filepath: str, delimiter: str, restaurant_id: str, cost_ce
 
 
 def format_date(date):
-    formatted_date = datetime.datetime.strptime(date, '%m/%d/%Y').strftime('%Y-%m-%d')
+    formatted_date = datetime.datetime.strptime(date, "%m/%d/%Y").strftime("%Y-%m-%d")
     return formatted_date
 
 
 def csv_create_expense(row, restaurant_id, cost_center):
     data = {
-        'date': row[1],
-        'check': row[2],
-        'description': row[3],
-        'debit': row[4],
-        'credit': row[5],
-        'status': row[6],
+        "date": row[1],
+        "check": row[2],
+        "description": row[3],
+        "debit": row[4],
+        "credit": row[5],
+        "status": row[6],
     }
 
     # Exclude incomes
-    if data['debit'] == '':
+    if data["debit"] == "":
         return
 
     rules = Rule.objects.all()
     supplier_id = 100
 
     for rule in rules:
-        if rule.description in data['description']:
+        if rule.description in data["description"]:
             supplier_id = rule.supplier.pk
             break
 
     # TODO: Verificar si el expense existe ya
 
-    expense = Expense(amount=data['debit'],
-                      date=format_date(data['date']),
-                      cost_center=cost_center,
-                      supplier_id=supplier_id,
-                      restaurant_id=restaurant_id,
-                      reference=data['check'],
-                      comments=data['description']
-                      )
+    expense = Expense(
+        amount=data["debit"],
+        date=format_date(data["date"]),
+        cost_center=cost_center,
+        supplier_id=supplier_id,
+        restaurant_id=restaurant_id,
+        reference=data["check"],
+        comments=data["description"],
+    )
 
     expense.save()
 
 
 def csv_create_income(row, restaurant_id: str):
     data = {
-        'date': row[1],
-        'check': row[2],
-        'description': row[3],
-        'debit': row[4],
-        'credit': row[5],
-        'status': row[6],
+        "date": row[1],
+        "check": row[2],
+        "description": row[3],
+        "debit": row[4],
+        "credit": row[5],
+        "status": row[6],
     }
 
     # Exclude expenses
-    if data['credit'] == '':
+    if data["credit"] == "":
         return
 
     rules = Rule.objects.all()
@@ -97,18 +100,18 @@ def csv_create_income(row, restaurant_id: str):
     supplier_id = 100
 
     for rule in rules:
-        if rule.description in data['description']:
+        if rule.description in data["description"]:
             supplier_id = rule.supplier.pk
             break
 
     # TODO: Verificar si el income existe ya
 
     income = Income(
-        amount=data['credit'],
-        date=format_date(data['date']),
-        comments=data['description'],
+        amount=data["credit"],
+        date=format_date(data["date"]),
+        comments=data["description"],
         supplier_id=supplier_id,
-        restaurant_id=restaurant_id
+        restaurant_id=restaurant_id,
     )
 
     income.save()
