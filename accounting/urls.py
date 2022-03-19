@@ -1,4 +1,4 @@
-from .utils import views
+from accounting.utils.utils import views
 from django.urls import path
 
 urlpatterns = [
