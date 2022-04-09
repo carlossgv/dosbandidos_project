@@ -1,19 +1,19 @@
 <form method="POST" id="edit-expenses-table-form">
   {% csrf_token %}
-  <table class="striped highlight responsive-table">
+  <table class="striped highlight responsive-table" style="height: 750px;">
     <thead>
       <tr>
-        <th>Date</th>
-        <th>Sales</th>
-        <th>Auto Gratuity</th>
-        <th>Tips</th>
-        <th>Modifications</th>
-        <th>Comments</th>
-        <th>Checked?</th>
-        <th>Was Sent?</th>
+        <th style="height: 81px;">Date</th>
+        <th style="height: 81px;">Sales</th>
+        <th style="height: 81px;">Auto Gratuity</th>
+        <th style="height: 81px;">Tips</th>
+        <th style="height: 81px;">Modifications</th>
+        <th style="height: 150px;">Comments</th>
+        <th style="height: 81px;">Checked?</th>
+        <th style="height: 81px;">Was Sent?</th>
       </tr>
     </thead>
-    <tbody>
+    <tbody style="height: 100%;">
       {% for entry in weeklyEntries %}
       <tr
         id="{{entry.pk}}-entry_row"
