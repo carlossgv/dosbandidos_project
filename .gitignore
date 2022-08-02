@@ -1,4 +1,5 @@
 dosbandidos_env
+envdosbandidos/*
 *.DS_Store
 *.pyc
 __pycache__
