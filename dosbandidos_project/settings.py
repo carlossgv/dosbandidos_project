@@ -26,7 +26,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
-SYSTEM_ENV = os.environ.get("SYSTEM_ENV", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("IS_DEBUG", False)
