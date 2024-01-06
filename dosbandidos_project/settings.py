@@ -29,12 +29,14 @@ SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get("IS_DEBUG", False)
+URL = os.environ.get("URL") 
 
 ALLOWED_HOSTS = [
     "192.168.1.112",
     "127.0.0.1",
     "192.168.1.7",
-    "localhost"
+    "localhost",
+    os.environ.get("URL")
 ]
 
 
@@ -174,10 +176,14 @@ SIMPLE_JWT = {
     "SLIDING_TOKEN_REFRESH_LIFETIME": timedelta(days=1),
 }
 
+print("https://" + os.environ.get("URL"))
+
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8000",
-    ".herokuapp.com",
-    "dos-bandidos.herokuapp.com",
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "https://" + os.environ.get("URL")
 ]
 
 # Configure Django App for Heroku.
