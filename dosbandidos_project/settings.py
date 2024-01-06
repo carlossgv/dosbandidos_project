@@ -12,8 +12,6 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 from datetime import timedelta
 from pathlib import Path
 import os
-import django_heroku
-import dj_database_url
 
 from dotenv import load_dotenv
 
@@ -31,15 +29,13 @@ SECRET_KEY = os.environ.get("DOSBANDIDOS_KEY")
 SYSTEM_ENV = os.environ.get("SYSTEM_ENV", None)
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = os.environ.get("DOS_BANDIDOS_IS_DEBUG")
+DEBUG = os.environ.get("IS_DEBUG", False)
 
 ALLOWED_HOSTS = [
     "192.168.1.112",
     "127.0.0.1",
     "192.168.1.7",
-    "localhost",
-    ".herokuapp.com",
-    "dos-bandidos.herokuapp.com",
+    "localhost"
 ]
 
 
@@ -93,43 +89,16 @@ WSGI_APPLICATION = "dosbandidos_project.wsgi.application"
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 
-if SYSTEM_ENV == "DEVELOPMENT":
-    DEBUG = True
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql_psycopg2",
-            "NAME": "dosbandidos_local",
-            "USER": "carlossgv",
-            "PASSWORD": "postgres",
-            "HOST": "localhost",
-            "PORT": "5432",
-        }
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": os.environ.get("POSTGRES_DB"),
+        "USER": os.environ.get("POSTGRES_USER"),
+        "PASSWORD": os.environ.get("POSTGRES_PASSWORD"),
+        "HOST": os.environ.get("POSTGRES_HOST"),
+        "PORT": "5432",
     }
-
-elif SYSTEM_ENV == "TESTING_ENV":
-    DEBUG = True
-    SECRET_KEY = SECRET_KEY
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": "dosbandidos_testing",
-            "USER": "postgres",
-            "PASSWORD": "postgres",
-            "HOST": "127.0.0.1",
-            "PORT": "5432",
-        }
-    }
-
-elif SYSTEM_ENV == "STAGING_ENV":
-    DEBUG = True
-    SECRET_KEY = SECRET_KEY
-    DATABASES = {"default": dj_database_url.config()}
-
-
-elif SYSTEM_ENV == "PRODUCTION":
-    DEBUG = os.environ.get("IS_DEBUG")
-    SECRET_KEY = SECRET_KEY
-    DATABASES = {"default": dj_database_url.config()}
+}
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -213,7 +182,7 @@ CORS_ALLOWED_ORIGINS = [
 ]
 
 # Configure Django App for Heroku.
-django_heroku.settings(locals())
+# django_heroku.settings(locals())
 
 WHITENOISE_USE_FINDERS = True
 
