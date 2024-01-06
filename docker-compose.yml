@@ -4,9 +4,6 @@ services:
   web:
     container_name: dosbandidos
     build: ./
-    command: python manage.py runserver 0.0.0.0:8000
-    volumes:
-      - ./dosbandidos_project/:/usr/src/dosbandidos_project/
     ports:
       - 8000:8000
     env_file:
