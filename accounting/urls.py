@@ -1,5 +1,6 @@
 from accounting import views
 from django.urls import path
+from django.contrib import admin
 
 urlpatterns = [
     path("", views.home, name="accounting-home"),
@@ -12,4 +13,5 @@ urlpatterns = [
         name="create-daily-cash-log",
     ),
     path("create-expense", views.create_expense, name="create-expense"),
+    path('admin', admin.site.urls),
 ]

@@ -59,7 +59,9 @@
               >Select<i class="material-icons right">arrow_drop_down</i></a
             >
           </li>
-
+          {% if user.is_superuser %}
+          <li><a href="{% url 'admin:index' %}">Admin</a> </li>
+          {% endif %}
           <li><a href="{% url 'logout' %}">Sign Out</a></li>
           {% else %}
           <li><a href="{% url 'login' %}">Log In</a></li>
@@ -81,6 +83,9 @@
       {% endif %}
       {% if user.is_authenticated %}
       <li><a href="{% url 'accounting-home'  %}">Reports</a></li>
+      {% if user.is_superuser %}
+      <li><a href="{% url 'admin:index' %}">Admin</a> </li>
+      {% endif %}
       <li><a href="{% url 'logout' %}">Sign Out</a></li>
       {% else %}
       <li><a href="{% url 'login' %}">Log In</a></li>

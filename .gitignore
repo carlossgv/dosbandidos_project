@@ -14,3 +14,4 @@ htmlcov
 .coverage
 .env
 todo.txt
+venv
